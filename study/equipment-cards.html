@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Equipment Cards · Master GMDSS</title>
+<meta name="theme-color" content="#15233a">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>/* Layout: stack of A4-proportioned cards; each = title band, 4 key figures, definition, 2x2 spec grid, MMSI strip */
+:root{
+  --bg:#e9edf1; --paper:#ffffff; --ink:#15233a; --muted:#56657a; --line:#d8dee6;
+  --accent:#e2541b; --accent-soft:#fde9df; --sea:#1f5d8c; --sea-soft:#e3eef7; --hi:#fff3c4; --band:#15233a; --band-fg:#f3f5f7;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; --band:#0e1622; --band-fg:#e6edf5; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; --band:#0e1622; --band-fg:#e6edf5; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.05;text-wrap:balance}
+p,ul{margin:0}
+mark{background:var(--hi);color:inherit;padding:0 2px;border-radius:2px}
+.eyebrow{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.intro{display:grid;gap:8px}
+.intro h1{font-size:clamp(2.2rem,6vw,3.2rem);text-transform:uppercase}
+.intro p{color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+nav a{font:600 .85rem var(--f-body);color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:999px}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+
+.card{background:var(--paper);border:1px solid var(--line);display:grid;gap:26px;padding:0 0 30px;scroll-margin-top:16px;box-shadow:0 2px 10px rgba(21,35,58,.08)}
+.card>*:not(.top){margin-inline:32px}
+.top{background:var(--band);color:var(--band-fg);padding:26px 32px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;border-bottom:6px solid var(--accent)}
+.num{font:600 .75rem var(--f-mono);letter-spacing:.1em;color:var(--accent)}
+.top h2{font-size:clamp(2.8rem,9vw,4.4rem);font-weight:700;text-transform:uppercase;letter-spacing:.01em;margin-top:4px}
+.nm{font:500 1.05rem var(--f-body);opacity:.85}
+.role{margin-left:auto;font:600 1.1rem var(--f-display);text-transform:uppercase;letter-spacing:.05em;max-width:22ch;text-align:right;opacity:.9}
+
+.glance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);background:var(--line);gap:1px}
+.glance div{background:var(--paper);padding:14px 12px;display:grid;gap:4px;align-content:start}
+.glance b{font:600 1.35rem/1.1 var(--f-mono);color:var(--accent);font-variant-numeric:tabular-nums}
+.glance span{font-size:.8rem;color:var(--muted)}
+
+.def h3,.sh{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.def p{font-size:1.05rem;line-height:1.65;max-width:68ch;border-left:3px solid var(--sea);padding-left:16px}
+
+.sg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.spec{border:1px solid var(--line);padding:16px 18px;display:grid;gap:10px;align-content:start;min-width:0}
+.spec.wide{grid-column:1/-1}
+.spec h3{font-size:1.25rem;font-weight:600;color:var(--sea)}
+.spec ul{padding-left:18px;display:grid;gap:6px;font-size:.93rem}
+.spec li::marker{color:var(--accent)}
+.spec b{font-weight:600}
+
+.mm{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding:12px 16px;background:var(--bg);font-size:.9rem}
+.mm .lbl{font:600 .75rem var(--f-body);letter-spacing:.14em;color:var(--muted)}
+.digits{display:grid;grid-template-columns:repeat(9,22px);gap:3px}
+.digits span{height:28px;display:grid;place-items:center;font:600 .9rem var(--f-mono);border:1px solid var(--line);background:var(--paper)}
+.digits .p{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+
+@media (max-width:620px){
+  .card>*:not(.top){margin-inline:18px} .top{padding:22px 18px}
+  .role{text-align:left;margin-left:0}
+  .glance{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sg{grid-template-columns:1fr}
+}
+@media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff;font-size:1rem} html{font-size:13px} .wrap{display:block;padding:0;max-width:none}
+  .intro{display:none}
+  .card{box-shadow:none;border:0;break-after:page;break-inside:avoid;gap:28px}
+  .spec{padding:18px 20px} .sg{gap:20px}
+  .card:not(#vhf):not(#sart):not(#ais-sart){zoom:1.08}
+  #sart,#ais-sart{zoom:0.92}
+  #vhf{gap:18px} #vhf .sg{gap:14px} #vhf .spec{padding:12px 16px} #vhf .top h2{font-size:3.4rem}
+  .card:last-child{break-after:auto}
+}
+</style>
+</head>
+<body>
+<nav class="mgbar"><a href="../">← Master GMDSS</a></nav>
+<style>.mgbar{max-width:1100px;margin:0 auto;padding:12px 16px 0;font:600 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mgbar a{color:#e2541b;text-decoration:none}@media print{.mgbar{display:none}}</style>
+<div class="wrap">
+<div class="intro"><span class="eyebrow">GMDSS study cards</span><h1>Equipment Cards</h1><p>One card per device: what it is, then the specs. Each card prints on its own A4 page.</p><nav><a href="#epirb">EPIRB</a><a href="#sart">SART</a><a href="#ais-sart">AIS-SART</a><a href="#ais">AIS</a><a href="#ais-epirb">AIS EPIRB</a><a href="#vhf">Portable VHF</a></nav></div>
+<article class="card" id="epirb">
+  <header class="top"><div><span class="num">1 / 6</span><h2>EPIRB</h2><p class="nm">Emergency Position Indicating Radio Beacon</p></div><p class="role">Alerts rescue centres anywhere in the world</p></header>
+  <div class="glance"><div><b>406 MHz</b><span>satellite alert</span></div><div><b>121.5 MHz</b><span>homing</span></div><div><b>48 h</b><span>min. operation</span></div><div><b>Global</b><span>coverage</span></div></div>
+  <section class="def"><h3>Definition</h3><p>An EPIRB is a satellite-based distress beacon used on vessels to signal a life-threatening emergency to search and rescue authorities. When activated manually or automatically upon submersion, it transmits a <mark>406 MHz</mark> signal containing the ship's unique <strong>MMSI</strong>, allowing rescue centers to locate the vessel globally using the <strong>Cospas-Sarsat</strong> satellite system.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies</h3><ul><li><b>406.0–406.1 MHz</b>: satellite distress alert</li><li><b>121.5 MHz</b>: local homing signal</li><li>Modern EPIRBs also incorporate GNSS/GPS frequencies</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>48 hours</b> of continuous operation once activated</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>Global</b> coverage via the Cospas-Sarsat satellite system (MEOSAR / LEOSAR / GEOSAR)</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Transmits a <b>5 W</b> signal burst every <b>50 seconds</b> containing the vessel's MMSI</li><li>Activated automatically by water contact / hydrostatic release unit (<b>HRU</b>) at <b>1.5–4 m</b> depth, or manually</li></ul></div></div></section>
+  <div class="mm"><span class="lbl">MMSI</span><span>Ship's own MMSI</span></div>
+</article><article class="card" id="sart">
+  <header class="top"><div><span class="num">2 / 6</span><h2>SART</h2><p class="nm">Search and Rescue Radar Transponder</p></div><p class="role">Shows the liferaft on the rescuer's radar</p></header>
+  <div class="glance"><div><b>9 GHz</b><span>X-band radar</span></div><div><b>12 dots</b><span>on radar</span></div><div><b>96 h + 8 h</b><span>standby + active</span></div><div><b>8–10 NM</b><span>to ship radar</span></div></div>
+  <section class="def"><h3>Definition</h3><p>A SART is a localized homing device designed to assist search-and-rescue vessels and aircraft in pinpointing lifeboats or rafts. When painted by a <mark>9 GHz X-band</mark> search radar, it automatically responds by generating a distinctive pattern of <strong>12 dots</strong> (turning into arcs and concentric circles at close range) on the rescuer's radar display.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies</h3><ul><li><b>9.2 GHz to 9.5 GHz</b> (X-band radar range)</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>96 hours</b> in standby, waiting for radar interrogation</li><li>Followed by at least <b>8 hours</b> of active continuous transmission</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>8–10 NM</b> to a ship's radar antenna (15 m high)</li><li>Up to <b>30–40 NM</b> to an airborne radar</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Responds to radar interrogation by sweeping back and forth, generating <b>12 distinct dots</b> on the target ship's radar screen</li></ul></div><div class="spec wide"><h3>How to check</h3><ul><li>Check the <b>battery expiry date</b> and look for damage to the case and bracket</li><li>Switch to <b>test mode</b> near your own ship's <b>X-band (3 cm) radar</b></li><li>Radar should show <b>concentric rings</b> around own ship; the SART light flashes / beeper sounds when it is interrogated</li><li>Keep the test <b>short</b> (a few seconds) so other ships don't take it as a real distress</li><li>Switch off and stow correctly</li></ul></div></div></section>
+  <div class="mm"><span class="lbl">MMSI</span><span>No MMSI: it answers radar, it does not send data</span></div>
+</article><article class="card" id="ais-sart">
+  <header class="top"><div><span class="num">3 / 6</span><h2>AIS-SART</h2><p class="nm">AIS Search and Rescue Transmitter</p></div><p class="role">Shows the liferaft on nearby AIS screens</p></header>
+  <div class="glance"><div><b>970</b><span>MMSI prefix</span></div><div><b>96 h</b><span>min. transmission</span></div><div><b>8 / min</b><span>messages</span></div><div><b>5–10 NM</b><span>to vessel</span></div></div>
+  <section class="def"><h3>Definition</h3><p>An AIS SART is a modern locator device that replaces traditional radar SARTs by broadcasting emergency positioning data over <mark>VHF AIS channels</mark>. Operating on a <strong>970-prefixed MMSI</strong>, it transmits the survival craft's exact GPS coordinates, UTC time, and an alert message directly to nearby AIS-equipped vessels up to 5 nautical miles away.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li><b>AIS 1</b>: Ch 87B</li><li><b>AIS 2</b>: Ch 88B</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>96 hours</b> of continuous operational transmission</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li>Typically <b>5–10 NM</b> to a vessel</li><li>Up to <b>30–40+ NM</b> to SAR aircraft</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Fixed MMSI prefix <b>970XXXXXX</b></li><li>Transmits <b>8 messages per minute</b>, alternating channels every minute</li><li>Built-in GPS, <b>~10 m</b> accuracy</li><li>Water resistant to <b>10 m</b>, drop-tested to <b>20 m</b></li></ul></div><div class="spec wide"><h3>How to check</h3><ul><li>Check the <b>battery expiry date</b> and look for damage to the case and lanyard</li><li>Press the <b>test</b> function: it sends a test message and checks its GPS</li><li>Your own AIS display / chart plotter should show the AIS-SART (970 MMSI) marked as a <b>test</b>, not a live alert</li><li>Check the indicator light shows a successful test, then switch off and stow</li></ul></div></div></section>
+  <div class="mm"><span class="lbl">MMSI</span><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">0</span><span class="">7</span><span class="">2</span><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div><span>Prefix <b>970</b>, e.g. 970721234</span></div>
+</article><article class="card" id="ais">
+  <header class="top"><div><span class="num">4 / 6</span><h2>AIS</h2><p class="nm">Automatic Identification System</p></div><p class="role">Tracks ships to prevent collisions</p></header>
+  <div class="glance"><div><b>Ch 87B</b><span>AIS 1</span></div><div><b>Ch 88B</b><span>AIS 2</span></div><div><b>2–10 s</b><span>report underway</span></div><div><b>3 min</b><span>report at anchor</span></div></div>
+  <section class="def"><h3>Definition</h3><p>AIS is an automated, <mark>VHF-based</mark> maritime tracking system used to prevent collisions and enhance situational awareness near ports and busy waterways. It automatically broadcasts and receives static and dynamic vessel data, such as position, course, speed over ground, heading, and MMSI, <strong>every few seconds</strong> to nearby ships and shore stations.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li><b>AIS 1</b>: Ch 87B</li><li><b>AIS 2</b>: Ch 88B</li></ul></div><div class="spec"><h3>Power / range</h3><ul><li><b>Class A</b> (commercial, 12.5 W): ~<b>20–30 NM</b></li><li><b>Class B</b> (recreational, 2–5 W): ~<b>10–15 NM</b> line-of-sight</li></ul></div><div class="spec"><h3>Reporting intervals</h3><ul><li>Underway: position every <b>2 to 10 seconds</b> (depending on speed and rate of turn)</li><li>At anchor: every <b>3 minutes</b></li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Powered by vessel mains power (no emergency battery limitations)</li><li><b>Static:</b> MMSI, vessel name, call sign</li><li><b>Dynamic:</b> GPS position, SOG, COG, heading</li><li><b>Voyage:</b> destination, ETA</li></ul></div></div></section>
+  <div class="mm"><span class="lbl">MMSI</span><span>Ship's own MMSI</span></div>
+</article><article class="card" id="ais-epirb">
+  <header class="top"><div><span class="num">5 / 6</span><h2>AIS EPIRB</h2><p class="nm">EPIRB with built-in AIS</p></div><p class="role">Global satellite alert plus local AIS homing</p></header>
+  <div class="glance"><div><b>406 MHz</b><span>satellite alert</span></div><div><b>974</b><span>MMSI prefix (AIS)</span></div><div><b>48 h</b><span>min. operation</span></div><div><b>2022</b><span>SOLAS mandate</span></div></div>
+  <section class="def"><h3>Definition</h3><p>An AIS EPIRB is an advanced distress beacon that combines long-range <mark>406 MHz satellite</mark> alerting with a localized <mark>VHF AIS</mark> transmitter. It alerts global Rescue Coordination Centers via satellite while simultaneously transmitting real-time AIS positioning signals to all nearby vessels, providing both <strong>wide-area rescue dispatch</strong> and <strong>immediate local vessel homing</strong>.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies &amp; channels</h3><ul><li><b>406 MHz</b>: satellite distress</li><li><b>121.5 MHz</b>: homing</li><li><b>AIS channels</b>: Ch 87B (AIS 1) and Ch 88B (AIS 2)</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>48 hours</b> of continuous operation across all frequencies</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>Global</b> satellite coverage (406 MHz)</li><li>Plus local VHF line-of-sight range of <b>4–10 NM</b> to surrounding vessels via AIS</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>MMSI prefix <b>974XXXXXX</b> for the AIS component</li><li>Mandated for new <b>SOLAS</b> installations after <b>1 July 2022</b></li><li>Integrates long-range SAR dispatch with instant local-vessel collision avoidance and homing</li></ul></div></div></section>
+  <div class="mm"><span class="lbl">MMSI</span><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">4</span><span class="">7</span><span class="">2</span><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div><span>Prefix <b>974</b>, e.g. 974721234</span></div>
+</article><article class="card" id="vhf">
+  <header class="top"><div><span class="num">6 / 6</span><h2>Portable VHF</h2><p class="nm">Portable (handheld) GMDSS VHF radio</p></div><p class="role">Survival-craft and on-board voice radio</p></header>
+  <div class="glance"><div><b>Ch 16</b><span>must have</span></div><div><b>+1</b><span>other channel minimum</span></div><div><b>8 h</b><span>spare lithium battery</span></div><div><b>IPX7/8</b><span>waterproof</span></div></div>
+  <section class="def"><h3>Definition</h3><p>A portable GMDSS VHF is a handheld marine radio for survival craft and on-board use. It must work on <mark>Channel 16</mark> and at least one other channel, runs on a rechargeable <strong>NiCd battery</strong>, carries a sealed <strong>spare lithium battery</strong> for emergencies, and must be waterproof and tough.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li>Must operate on <b>Ch 16</b> (distress, safety, calling)</li><li>Plus <b>at least one other channel</b>, e.g. Ch 6 (inter-ship / SAR coordination)</li><li>Modern devices include all international VHF channels</li></ul></div><div class="spec"><h3>Output power &amp; modulation</h3><ul><li>Low power: <b>0.25 W</b> (or 1 W)</li><li>High power: <b>1 W to 2.5 W</b></li><li>Frequency Modulation (FM): <b>G3E / F3E</b> for voice</li></ul></div><div class="spec"><h3>Batteries</h3><ul><li><b>Primary:</b> rechargeable <b>NiCd</b> battery</li><li><b>Spare:</b> sealed, non-rechargeable <b>lithium</b> battery for emergency use</li><li>Spare gives a minimum <b>8 hours</b> at 10% transmit / 10% receive / 80% standby (many give 12–16+ h)</li><li>Spare storage life: <b>4 to 5 years</b></li></ul></div><div class="spec"><h3>Communication ranges</h3><ul><li>Handheld to handheld: <b>~3–5 NM</b></li><li>Handheld to vessel (antenna ~9 m): <b>~5–8 NM</b></li><li>Handheld to coast station / SAR aircraft: <b>~10–30+ NM</b></li></ul></div><div class="spec wide"><h3>IMO construction standards</h3><ul><li>Waterproof to <b>IPX7 / IPX8</b>: 1 m depth for at least 5 minutes</li><li>Survives a <b>1 m drop</b> onto a hard surface</li></ul></div></div></section>
+  
+</article>
+</div>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

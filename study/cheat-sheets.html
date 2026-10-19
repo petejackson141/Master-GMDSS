@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GMDSS Cheat Sheets · Master GMDSS</title>
+<meta name="theme-color" content="#15233a">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: study binder — quick-recall strip, then one section per topic; comparison table for beacons, digit-box diagrams for MMSI, channel chips for VHF */
+:root{
+  --bg:#f3f5f7; --paper:#ffffff; --ink:#15233a; --muted:#56657a; --line:#d8dee6;
+  --accent:#e2541b;      /* SOLAS orange */
+  --accent-soft:#fde9df;
+  --sea:#1f5d8c; --sea-soft:#e3eef7;
+  --hi:#fff3c4;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1622; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1622; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.05}
+h1{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:700;letter-spacing:.01em;text-transform:uppercase}
+h2{font-size:1.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:14px;height:14px;background:var(--accent);flex:none}
+h3{font-size:1.3rem;font-weight:600}
+p{margin:0}
+.eyebrow{font:600 .75rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lede{color:var(--muted);max-width:62ch;margin-top:10px}
+header{display:grid;gap:8px;border-bottom:3px solid var(--ink);padding-bottom:18px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+nav a{font:600 .85rem var(--f-body);color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:999px}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+section{display:grid;gap:22px;scroll-margin-top:16px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+mark{background:var(--hi);color:inherit;padding:0 2px;border-radius:2px}
+
+/* Quick recall */
+.recall{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.recall div{background:var(--paper);padding:14px 14px 12px;display:grid;gap:4px;align-content:start}
+.recall b{font:600 1.25rem/1.1 var(--f-mono);color:var(--accent);font-variant-numeric:tabular-nums}
+.recall span{font-size:.85rem;color:var(--muted);line-height:1.35}
+
+/* Device one-liners */
+.devices{display:grid;border:1px solid var(--line);background:var(--paper)}
+.dev{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;padding:16px 18px;border-bottom:1px solid var(--line);align-items:start}
+.dev:last-child{border-bottom:0}
+.devhead{display:grid;gap:6px;justify-items:start}
+.dev .tag{font:600 .72rem var(--f-mono);color:var(--sea);background:var(--sea-soft);padding:2px 7px;border-radius:3px}
+.dev p{max-width:72ch}
+.dev p strong{font-weight:600}
+@media (max-width:640px){.dev{grid-template-columns:1fr;gap:8px}}
+
+/* Comparison table */
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:.88rem}
+th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{font:700 1.05rem var(--f-display);text-transform:uppercase;letter-spacing:.03em;background:var(--ink);color:var(--bg);white-space:nowrap}
+tbody th{font:600 .72rem var(--f-body);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);width:120px;background:var(--bg)}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+td .mono{font-weight:600}
+.pill{display:inline-block;font:600 .8rem var(--f-mono);padding:1px 7px;border-radius:3px;background:var(--accent-soft);color:var(--accent)}
+
+/* Two-col panels */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.panel{background:var(--paper);border:1px solid var(--line);padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.kv{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr);gap:8px 16px;margin:0}
+.kv dt{font-size:.82rem;color:var(--muted)}
+.kv dd{margin:0;font-weight:500}
+.panel ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.panel li::marker{color:var(--accent)}
+.note{font-size:.82rem;color:var(--muted)}
+
+/* Battery bars */
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:130px 1fr auto;gap:10px;align-items:center;font-size:.85rem}
+.bar i{height:10px;background:var(--line);position:relative;display:block}
+.bar i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--accent)}
+.bar .mono{font-weight:600}
+
+/* MMSI */
+.mmsi{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.m{background:var(--paper);border:1px solid var(--line);padding:14px;display:grid;gap:10px;min-width:0}
+.m h3{font-size:1.15rem}
+.digits{display:grid;grid-template-columns:repeat(9,minmax(0,24px));gap:3px}
+.digits span{aspect-ratio:3/4;font-size:.9rem!important;display:grid;place-items:center;font:600 1rem var(--f-mono);border:1px solid var(--line);background:var(--bg)}
+.digits .p{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.digits .mid{background:var(--sea-soft);border-color:var(--sea);color:var(--sea)}
+.m p{font-size:.85rem;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;display:inline-block;border:1px solid}
+.legend .lp{background:var(--accent);border-color:var(--accent)}
+.legend .lm{background:var(--sea-soft);border-color:var(--sea)}
+
+/* VHF channels */
+.chans{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
+.ch{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:10px 14px 10px 10px;min-width:0}
+.ch .n{font:700 1.6rem/1 var(--f-display);min-width:66px;text-align:center;padding:8px 6px;background:var(--sea-soft);color:var(--sea);font-variant-numeric:tabular-nums}
+.ch.key .n{background:var(--accent);color:var(--paper)}
+.ch p{font-size:.88rem}
+.ch small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:.78rem}
+
+
+/* Glossary */
+.gloss{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;background:var(--paper);border:1px solid var(--line);padding:8px 22px;margin:0}
+.gloss div{display:grid;grid-template-columns:118px minmax(0,1fr);gap:14px;padding:10px 0;border-bottom:1px solid var(--line);break-inside:avoid}
+.gloss dt{font:600 .9rem var(--f-mono);color:var(--accent)}
+.gloss dd{margin:0;font-size:.9rem}
+.gloss dd small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+@media (max-width:700px){.gloss{grid-template-columns:1fr}.gloss div{grid-template-columns:96px minmax(0,1fr)}}
+footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+@media (max-width:900px){.recall{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+@media (max-width:520px){
+  .recall{grid-template-columns:repeat(2,1fr)}
+  .bar{grid-template-columns:100px 1fr auto}
+  h2{font-size:1.6rem}
+}
+@media print{
+  body{font-size:12px;background:#fff} .wrap{display:block;padding-block:0} nav{display:none}
+  .wrap>*{margin-bottom:28px} section{display:block} section>*{margin-bottom:16px}
+  .panel,.m,.ch,.dev,.recall div,.gloss div,.tbl,tr{break-inside:avoid}
+  h2,h3{break-after:avoid}
+  #beacons,#vhf,#mmsi,#channels,#glossary{break-before:page}
+  .tbl{overflow:visible;break-before:page} table{min-width:0;font-size:10.5px}
+}
+</style>
+</head>
+<body>
+<nav class="mgbar"><a href="../">← Master GMDSS</a></nav>
+<style>.mgbar{max-width:1100px;margin:0 auto;padding:12px 16px 0;font:600 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mgbar a{color:#e2541b;text-decoration:none}@media print{.mgbar{display:none}}</style>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">GMDSS · Short Range Certificate study notes</span>
+    <h1>Marine Radio Cheat Sheets</h1>
+    <p class="lede">Distress beacons, handheld VHF, MMSI formats and VHF channels on one page. Start with the quick-recall numbers, then use the tables to see how the devices differ.</p>
+    <nav>
+      <a href="#recall">Quick recall</a>
+      <a href="#beacons">Beacons &amp; AIS</a>
+      <a href="#vhf">Portable VHF</a>
+      <a href="#mmsi">MMSI formats</a>
+      <a href="#channels">VHF channels</a>
+      <a href="#glossary">Glossary</a>
+    </nav>
+  </header>
+
+  <!-- QUICK RECALL -->
+  <section id="recall">
+    <h2>Numbers to know by heart</h2>
+    <div class="recall">
+      <div><b>406 MHz</b><span>EPIRB satellite distress alert (Cospas-Sarsat)</span></div>
+      <div><b>121.5 MHz</b><span>EPIRB local homing signal</span></div>
+      <div><b>9 GHz</b><span>SART answers X-band radar (9.2–9.5 GHz)</span></div>
+      <div><b>12 dots</b><span>SART on radar; become arcs, then circles, up close</span></div>
+      <div><b>87B / 88B</b><span>AIS 1 / AIS 2 channels</span></div>
+      <div><b>970 · 972 · 974</b><span>AIS-SART · MOB device · AIS EPIRB</span></div>
+      <div><b>48 h</b><span>EPIRB and AIS EPIRB minimum operation</span></div>
+      <div><b>96 h</b><span>SART standby / AIS-SART transmission minimum</span></div>
+      <div><b>8 h</b><span>SART active and handheld VHF spare battery</span></div>
+      <div><b>Ch 16</b><span>Distress, urgency, safety, calling (156.800 MHz)</span></div>
+      <div><b>Ch 70</b><span>DSC alerts only (156.525 MHz)</span></div>
+      <div><b>428</b><span>Israel's MID (country code in the MMSI)</span></div>
+    </div>
+  </section>
+
+  <!-- BEACONS -->
+  <section id="beacons">
+    <h2>Distress beacons &amp; AIS</h2>
+    <div class="devices">
+      <div class="dev"><div class="devhead"><span class="tag">EPIRB</span><h3>Emergency Position Indicating Radio Beacon</h3></div><p>An EPIRB is a satellite-based distress beacon used on vessels to signal a life-threatening emergency to search and rescue authorities. When activated manually or automatically upon submersion, it transmits a <mark>406 MHz</mark> signal containing the ship's unique MMSI, allowing rescue centers to locate the vessel globally using the <strong>Cospas-Sarsat</strong> satellite system.</p></div>
+      <div class="dev"><div class="devhead"><span class="tag">SART</span><h3>Search and Rescue Radar Transponder</h3></div><p>A SART is a localized homing device designed to assist search-and-rescue vessels and aircraft in pinpointing lifeboats or rafts. When painted by a <mark>9 GHz X-band</mark> search radar, it automatically responds by generating a distinctive pattern of <strong>12 dots</strong> (turning into arcs and concentric circles at close range) on the rescuer's radar display.</p></div>
+      <div class="dev"><div class="devhead"><span class="tag">AIS-SART</span><h3>AIS Search and Rescue Transmitter</h3></div><p>An AIS SART is a modern locator device that replaces traditional radar SARTs by broadcasting emergency positioning data over <mark>VHF AIS channels</mark>. Operating on a <strong>970-prefixed MMSI</strong>, it transmits the survival craft's exact GPS coordinates, UTC time, and an alert message directly to nearby AIS-equipped vessels up to 5 nautical miles away.</p></div>
+      <div class="dev"><div class="devhead"><span class="tag">AIS</span><h3>Automatic Identification System</h3></div><p>AIS is an automated, <mark>VHF-based</mark> maritime tracking system used to prevent collisions and enhance situational awareness near ports and busy waterways. It automatically broadcasts and receives static and dynamic vessel data, such as position, course, speed over ground, heading, and MMSI, <strong>every few seconds</strong> to nearby ships and shore stations.</p></div>
+      <div class="dev"><div class="devhead"><span class="tag">AIS EPIRB</span><h3>AIS EPIRB</h3></div><p>An AIS EPIRB is an advanced distress beacon that combines long-range <mark>406 MHz satellite</mark> alerting with a localized <mark>VHF AIS</mark> transmitter. It alerts global Rescue Coordination Centers via satellite while simultaneously transmitting real-time AIS positioning signals to all nearby vessels, providing both <strong>wide-area rescue dispatch</strong> and <strong>immediate local vessel homing</strong>.</p></div>
+    </div>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th></th><th>EPIRB</th><th>SART</th><th>AIS-SART</th><th>AIS</th><th>AIS EPIRB</th></tr></thead>
+        <tbody>
+          <tr><th>Frequency</th>
+            <td><span class="mono">406.0–406.1 MHz</span> alert<br><span class="mono">121.5 MHz</span> homing<br>+ GNSS/GPS</td>
+            <td><span class="mono">9.2–9.5 GHz</span><br>X-band radar</td>
+            <td>AIS 1: <span class="mono">Ch 87B</span><br>AIS 2: <span class="mono">Ch 88B</span></td>
+            <td>AIS 1: <span class="mono">Ch 87B</span><br>AIS 2: <span class="mono">Ch 88B</span></td>
+            <td><span class="mono">406</span> + <span class="mono">121.5 MHz</span><br>+ AIS <span class="mono">Ch 87B / 88B</span></td></tr>
+          <tr><th>Battery</th>
+            <td><mark>48 h</mark> min. operation<br>Battery life 5 yrs</td>
+            <td><mark>96 h</mark> standby, then <mark>8 h</mark> active<br>Battery life 5 yrs</td>
+            <td><mark>96 h</mark> min. transmission<br>Battery life 5 yrs</td>
+            <td>Ship's mains power<br>No emergency battery</td>
+            <td><mark>48 h</mark> min., all frequencies<br>Battery life 5 yrs</td></tr>
+          <tr><th>Range</th>
+            <td>Global (Cospas-Sarsat: MEOSAR / LEOSAR / GEOSAR)</td>
+            <td>8–10 NM to ship radar (15 m antenna)<br>30–40 NM to aircraft</td>
+            <td>5–10 NM to vessel<br>30–40+ NM to SAR aircraft</td>
+            <td>Class A (12.5 W): ~20–30 NM<br>Class B (2–5 W): ~10–15 NM</td>
+            <td>Global via satellite<br>+ 4–10 NM local AIS</td></tr>
+          <tr><th>MMSI</th>
+            <td>Ship's MMSI</td>
+            <td>None (radar reply)</td>
+            <td><span class="pill">970</span>XXXXXX</td>
+            <td>Ship's MMSI</td>
+            <td><span class="pill">974</span>XXXXXX</td></tr>
+          <tr><th>Key facts</th>
+            <td>5 W burst every 50 s. Hydrostatic release (HRU) frees it at 1.5–4 m depth.</td>
+            <td>Sweeps back and forth to create 12 dots on radar.</td>
+            <td>8 messages/min, alternating channels. GPS ~10 m accuracy. Waterproof to 10 m, drop-tested 20 m.</td>
+            <td>Underway: every 2–10 s. At anchor: every 3 min. Sends static, dynamic and voyage data.</td>
+            <td>Mandatory for new SOLAS installations from 1 July 2022.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <h3>Minimum battery / operating time</h3>
+        <div class="bars">
+          <div class="bar"><span>SART standby</span><i style="--w:100%"></i><span class="mono">96 h</span></div>
+          <div class="bar"><span>AIS-SART</span><i style="--w:100%"></i><span class="mono">96 h</span></div>
+          <div class="bar"><span>EPIRB</span><i style="--w:50%"></i><span class="mono">48 h</span></div>
+          <div class="bar"><span>AIS EPIRB</span><i style="--w:50%"></i><span class="mono">48 h</span></div>
+          <div class="bar"><span>SART active</span><i style="--w:8.33%"></i><span class="mono">8 h</span></div>
+          <div class="bar"><span>Handheld VHF</span><i style="--w:8.33%"></i><span class="mono">8 h</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>What AIS broadcasts</h3>
+        <dl class="kv">
+          <dt>Static</dt><dd>MMSI, vessel name, call sign</dd>
+          <dt>Dynamic</dt><dd>GPS position, SOG, COG, heading</dd>
+          <dt>Voyage</dt><dd>Destination, ETA</dd>
+        </dl>
+        <p class="note">Tell them apart: <strong>EPIRB</strong> tells the world, <strong>SART</strong> shows up on radar, <strong>AIS-SART</strong> shows up on AIS screens, <strong>AIS EPIRB</strong> does both the global alert and the local AIS position.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTABLE VHF -->
+  <section id="vhf">
+    <h2>Portable (handheld) GMDSS VHF</h2>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Channels &amp; power</h3>
+        <dl class="kv">
+          <dt>Must have</dt><dd>Ch 16 plus at least one other channel (e.g. Ch 6)</dd>
+          <dt>Low power</dt><dd class="mono">0.25 W (or 1 W)</dd>
+          <dt>High power</dt><dd class="mono">1–2.5 W</dd>
+          <dt>Modulation</dt><dd>FM voice: <span class="mono">G3E / F3E</span></dd>
+        </dl>
+      </div>
+      <div class="panel">
+        <h3>Batteries</h3>
+        <dl class="kv">
+          <dt>Primary</dt><dd>Rechargeable <strong>NiCd</strong></dd>
+          <dt>Spare</dt><dd>Sealed, non-rechargeable <strong>lithium</strong>. Emergency use only.</dd>
+          <dt>Spare runtime</dt><dd><mark>8 h minimum</mark> at 10% TX / 10% RX / 80% standby (many give 12–16 h)</dd>
+          <dt>Spare shelf life</dt><dd>4–5 years</dd>
+        </dl>
+      </div>
+      <div class="panel">
+        <h3>Typical range</h3>
+        <dl class="kv">
+          <dt>Handheld ↔ handheld</dt><dd class="mono">3–5 NM</dd>
+          <dt>Handheld ↔ vessel (~9 m antenna)</dt><dd class="mono">5–8 NM</dd>
+          <dt>Handheld ↔ coast / aircraft</dt><dd class="mono">10–30+ NM</dd>
+        </dl>
+        <p class="note">VHF is line of sight: the higher the other antenna, the further you reach.</p>
+      </div>
+      <div class="panel">
+        <h3>IMO build standards</h3>
+        <ul>
+          <li>Waterproof <strong>IPX7 / IPX8</strong>: 1 m for at least 5 min</li>
+          <li>Survives a <strong>1 m drop</strong> onto a hard surface</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MMSI -->
+  <section id="mmsi">
+    <h2>MMSI formats</h2>
+    <p class="lede" style="margin-top:0">Always 9 digits. The MID is the 3-digit country code; Israel is <strong>428</strong>. What comes before the MID tells you what kind of station it is.</p>
+    <div class="legend"><span><i class="lp"></i>Prefix</span><span><i class="lm"></i>MID (country)</span></div>
+    <div class="mmsi">
+      <div class="m"><h3>Ship</h3><div class="digits"><span class="mid">4</span><span class="mid">2</span><span class="mid">8</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><p>Starts with the MID. Example 428123456</p></div>
+      <div class="m"><h3>Coast station</h3><div class="digits"><span class="p">0</span><span class="p">0</span><span class="mid">4</span><span class="mid">2</span><span class="mid">8</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>00 + MID. Example 004281234</p></div>
+      <div class="m"><h3>Ship group</h3><div class="digits"><span class="p">0</span><span class="mid">4</span><span class="mid">2</span><span class="mid">8</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div><p>Single 0 + MID. Example 042812345</p></div>
+      <div class="m"><h3>SAR aircraft</h3><div class="digits"><span class="p">1</span><span class="p">1</span><span class="p">1</span><span class="mid">4</span><span class="mid">2</span><span class="mid">8</span><span>1</span><span>2</span><span>3</span></div><p>111 + MID. Example 111428123</p></div>
+      <div class="m"><h3>Nav aid / lightship</h3><div class="digits"><span class="p">9</span><span class="p">9</span><span class="mid">4</span><span class="mid">2</span><span class="mid">8</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>99 + MID. Example 994281234</p></div>
+      <div class="m"><h3>AIS-SART</h3><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">0</span><span>7</span><span>2</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>970, no MID. Example 970721234</p></div>
+      <div class="m"><h3>MOB personal device</h3><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">2</span><span>7</span><span>2</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>972, no MID. Example 972721234</p></div>
+      <div class="m"><h3>AIS EPIRB</h3><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">4</span><span>7</span><span>2</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>974, no MID. Example 974721234</p></div>
+    </div>
+    <p class="note">Memory hook for the 97x devices: <strong>0</strong> = SART, <strong>2</strong> = MOB, <strong>4</strong> = EPIRB.</p>
+  </section>
+
+  <!-- CHANNELS -->
+  <section id="channels">
+    <h2>VHF channels</h2>
+    <div class="chans">
+      <div class="ch key"><span class="n">16</span><p>International distress, urgency, safety and calling<small>156.800 MHz</small></p></div>
+      <div class="ch key"><span class="n">70</span><p>DSC for distress, safety and routine alerts. No voice.<small>156.525 MHz</small></p></div>
+      <div class="ch key"><span class="n">6</span><p>First choice: ship-to-ship and ship-to-aircraft SAR<small>156.300 MHz</small></p></div>
+      <div class="ch"><span class="n">8</span><p>Second choice for ship-to-ship</p></div>
+      <div class="ch"><span class="n">11</span><p>Vessel movements in Israel (Israeli Navy)</p></div>
+      <div class="ch"><span class="n">12 · 14</span><p>Port operations and talking to ports</p></div>
+      <div class="ch"><span class="n">13</span><p>Bridge-to-bridge safety</p></div>
+      <div class="ch"><span class="n">15 · 17</span><p>On-board communications<small>1 W only</small></p></div>
+      <div class="ch"><span class="n">24–27</span><p>Public correspondence / radiotelephone calls<small>duplex</small></p></div>
+      <div class="ch"><span class="n">67 · 73</span><p>Between fishing vessels</p></div>
+      <div class="ch"><span class="n">75 · 76</span><p>Guard bands either side of Ch 16<small>1 W only</small></p></div>
+      <div class="ch"><span class="n">AIS</span><p>AIS 1 and AIS 2 data<small>Ch 87B / 88B</small></p></div>
+    </div>
+  </section>
+
+  <!-- GLOSSARY -->
+  <section id="glossary">
+    <h2>Glossary of acronyms</h2>
+    <dl class="gloss">
+      <div><dt>AIS</dt><dd>Automatic Identification System<small>VHF tracking system that swaps position, course and ID between ships</small></dd></div>
+      <div><dt>AIS-SART</dt><dd>AIS Search and Rescue Transmitter<small>Liferaft locator that shows on AIS screens</small></dd></div>
+      <div><dt>COG</dt><dd>Course Over Ground<small>Actual direction the vessel is moving</small></dd></div>
+      <div><dt>Cospas-Sarsat</dt><dd>Space System for the Search of Vessels in Distress / Search And Rescue Satellite-Aided Tracking<small>International satellite system that picks up 406 MHz beacons</small></dd></div>
+      <div><dt>DSC</dt><dd>Digital Selective Calling<small>Digital alerts on Ch 70</small></dd></div>
+      <div><dt>EPIRB</dt><dd>Emergency Position Indicating Radio Beacon<small>406 MHz satellite distress beacon</small></dd></div>
+      <div><dt>ETA</dt><dd>Estimated Time of Arrival</dd></div>
+      <div><dt>F3E / G3E</dt><dd>Emission designators<small>Codes for FM / phase-modulated voice</small></dd></div>
+      <div><dt>FM</dt><dd>Frequency Modulation<small>How VHF voice is transmitted</small></dd></div>
+      <div><dt>GEOSAR</dt><dd>Geostationary Search and Rescue satellites<small>Fixed over the equator; instant alert, no position fix of their own</small></dd></div>
+      <div><dt>GHz</dt><dd>Gigahertz<small>1,000 MHz</small></dd></div>
+      <div><dt>GMDSS</dt><dd>Global Maritime Distress and Safety System<small>The international system these devices belong to</small></dd></div>
+      <div><dt>GNSS</dt><dd>Global Navigation Satellite System<small>General term covering GPS, Galileo, GLONASS</small></dd></div>
+      <div><dt>GPS</dt><dd>Global Positioning System</dd></div>
+      <div><dt>HRU</dt><dd>Hydrostatic Release Unit<small>Frees the EPIRB automatically at 1.5–4 m depth</small></dd></div>
+      <div><dt>IMO</dt><dd>International Maritime Organization<small>UN body that sets shipping rules</small></dd></div>
+      <div><dt>IPX7 / IPX8</dt><dd>Ingress Protection ratings<small>Waterproofing: 7 = 1 m for 30 min, 8 = beyond 1 m</small></dd></div>
+      <div><dt>LEOSAR</dt><dd>Low Earth Orbit Search and Rescue satellites</dd></div>
+      <div><dt>Li-ion</dt><dd>Lithium-ion<small>Rechargeable battery type</small></dd></div>
+      <div><dt>MEOSAR</dt><dd>Medium Earth Orbit Search and Rescue satellites<small>Newest layer; fastest and most accurate location</small></dd></div>
+      <div><dt>MHz</dt><dd>Megahertz<small>Million cycles per second</small></dd></div>
+      <div><dt>MID</dt><dd>Maritime Identification Digits<small>3-digit country code inside an MMSI (Israel = 428)</small></dd></div>
+      <div><dt>MMSI</dt><dd>Maritime Mobile Service Identity<small>9-digit ID number of a station or device</small></dd></div>
+      <div><dt>MOB</dt><dd>Man Overboard</dd></div>
+      <div><dt>mW</dt><dd>Milliwatt<small>1/1000 of a watt</small></dd></div>
+      <div><dt>NAV-AID</dt><dd>Navigation Aid<small>Buoy, lighthouse, lightship</small></dd></div>
+      <div><dt>NiCd</dt><dd>Nickel-Cadmium<small>Rechargeable battery type</small></dd></div>
+      <div><dt>NM</dt><dd>Nautical Mile<small>1,852 m</small></dd></div>
+      <div><dt>RCC</dt><dd>Rescue Coordination Centre<small>Shore centre that runs a rescue</small></dd></div>
+      <div><dt>RX</dt><dd>Receive</dd></div>
+      <div><dt>SAR</dt><dd>Search and Rescue</dd></div>
+      <div><dt>SART</dt><dd>Search and Rescue Radar Transponder<small>Liferaft locator that shows 12 dots on radar</small></dd></div>
+      <div><dt>SOG</dt><dd>Speed Over Ground<small>Actual speed over the seabed</small></dd></div>
+      <div><dt>SOLAS</dt><dd>Safety Of Life At Sea<small>IMO convention setting equipment rules for ships</small></dd></div>
+      <div><dt>SRC</dt><dd>Short Range Certificate<small>VHF / GMDSS operator licence</small></dd></div>
+      <div><dt>TX</dt><dd>Transmit</dd></div>
+      <div><dt>UTC</dt><dd>Coordinated Universal Time<small>World reference time (≈ GMT)</small></dd></div>
+      <div><dt>VHF</dt><dd>Very High Frequency<small>Marine band around 156–163 MHz</small></dd></div>
+      <div><dt>W</dt><dd>Watt<small>Unit of transmit power</small></dd></div>
+      <div><dt>X-band</dt><dd>Radar band around 9 GHz<small>The band a SART responds to</small></dd></div>
+    </dl>
+  </section>
+
+  <footer>Built from the cheat sheets document. Figures are typical values; check your course material for the exact numbers your exam expects.</footer>
+</div>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Call Signs & NAVTEX · Master GMDSS</title>
+<meta name="theme-color" content="#15233a">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
+<style>/* Layout: two A4 sheets (call signs, NAVTEX); each = title band, key facts, then content blocks in a 2-col grid */
+:root{
+  --bg:#e9edf1; --paper:#ffffff; --ink:#15233a; --muted:#56657a; --line:#d8dee6;
+  --accent:#e2541b; --accent-soft:#fde9df; --sea:#1f5d8c; --sea-soft:#e3eef7; --hi:#fff3c4; --band:#15233a; --band-fg:#f3f5f7; --c-cty:#1f7fc4; --c-let:#c8261f; --c-dig:#1f8a3b; --c-ext:#8a3aa8;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; --band:#0e1622; --band-fg:#e6edf5; --c-cty:#6cb8ef; --c-let:#ff7b72; --c-dig:#5fcf7a; --c-ext:#cf8ef0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42; --hi:#3d3417; --band:#0e1622; --band-fg:#e6edf5; --c-cty:#6cb8ef; --c-let:#ff7b72; --c-dig:#5fcf7a; --c-ext:#cf8ef0; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);margin:0}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.05;text-wrap:balance}
+p,ul,ol{margin:0}
+mark{background:var(--hi);color:inherit;padding:0 2px;border-radius:2px}
+.eyebrow{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.intro{display:grid;gap:8px}
+.intro h1{font-size:clamp(2.2rem,6vw,3.2rem);text-transform:uppercase}
+.intro p{color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+nav a{font:600 .85rem var(--f-body);color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:999px}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+.sheet{background:var(--paper);border:1px solid var(--line);display:grid;gap:24px;padding:0 0 28px;scroll-margin-top:16px;box-shadow:0 2px 10px rgba(21,35,58,.08)}
+.sheet>*:not(.top){margin-inline:30px}
+.top{background:var(--band);color:var(--band-fg);padding:24px 30px 22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;border-bottom:6px solid var(--accent)}
+.num{font:600 .75rem var(--f-mono);letter-spacing:.1em;color:var(--accent)}
+.top h2{font-size:clamp(2.6rem,8vw,4rem);font-weight:700;text-transform:uppercase;margin-top:4px}
+.nm{font:500 1.05rem var(--f-body);opacity:.85}
+.role{margin-left:auto;font:600 1.1rem var(--f-display);text-transform:uppercase;letter-spacing:.05em;max-width:24ch;text-align:right;opacity:.9}
+
+.glance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);background:var(--line);gap:1px}
+.glance div{background:var(--paper);padding:13px 12px;display:grid;gap:4px;align-content:start}
+.glance b{font:600 1.3rem/1.1 var(--f-mono);color:var(--accent)}
+.glance span{font-size:.8rem;color:var(--muted)}
+
+.lbl{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.box{border:1px solid var(--line);padding:16px 18px;display:grid;gap:10px;align-content:start;min-width:0}
+.box.wide{grid-column:1/-1}
+.box h3{font-size:1.25rem;font-weight:600;color:var(--sea)}
+.box ul{padding-left:18px;display:grid;gap:6px;font-size:.93rem}
+.box li::marker{color:var(--accent)}
+.note{font-size:.85rem;color:var(--muted)}
+
+/* call sign breakdown */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.85rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;display:inline-block;border-radius:2px}
+.cty{color:var(--c-cty)} .let{color:var(--c-let)} .dig{color:var(--c-dig)} .ext{color:var(--c-ext)}
+i.cty{background:var(--c-cty)} i.let{background:var(--c-let)} i.dig{background:var(--c-dig)} i.ext{background:var(--c-ext)}
+.cs{display:grid;gap:10px}
+.csrow{display:grid;grid-template-columns:150px 1fr minmax(0,1.3fr);gap:16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.csrow:last-child{border-bottom:0}
+.csrow .code{font:700 1.6rem/1 var(--f-mono);letter-spacing:.04em}
+.csrow .st{font:600 1.15rem var(--f-display);text-transform:uppercase;letter-spacing:.03em}
+.csrow .how{font-size:.88rem;color:var(--muted)}
+.callbox{font-family:var(--f-mono);font-size:.9rem;background:var(--bg);padding:12px 14px;line-height:1.6}
+.pro{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.92rem}
+.pro dt{font-weight:600}
+.pro dd{margin:0;color:var(--muted)}
+
+/* navtex */
+.msg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;font-size:.92rem}
+.msg div{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:baseline;padding:3px 0}
+.msg b{font:700 1rem var(--f-mono);color:var(--sea);text-align:center}
+.msg .keep b{background:var(--accent);color:var(--paper);border-radius:3px}
+.msg .keep span{font-weight:600}
+.msg .soft b{background:var(--accent-soft);color:var(--accent);border-radius:3px}
+.hdr{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.hdr .seg{display:grid;gap:4px;justify-items:center;text-align:center;border:1px solid var(--line);padding:10px 12px;min-width:0;flex:1 1 90px}
+.hdr .seg b{font:700 1.5rem/1 var(--f-mono)}
+.hdr .seg span{font-size:.78rem;color:var(--muted)}
+.hdr .seg.zc b{color:var(--muted)}
+.hdr .seg.b1 b{color:var(--c-let)} .hdr .seg.b2 b{color:var(--c-dig)} .hdr .seg.b34 b{color:var(--c-ext)}
+.urg{display:grid;gap:8px}
+.urg div{display:grid;grid-template-columns:100px 1fr;gap:12px;font-size:.9rem}
+.urg b{font:600 .8rem var(--f-mono);letter-spacing:.05em}
+.cer{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cer div{padding:10px 12px;font-size:.88rem;display:grid;gap:3px}
+.cer b{font:700 1.3rem var(--f-mono)}
+.cer .bad{background:var(--accent-soft)} .cer .bad b{color:var(--accent)}
+.cer .ok{background:var(--sea-soft)} .cer .ok b{color:var(--sea)}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:3px;font:600 1rem var(--f-display);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.zones div{background:var(--sea-soft);color:var(--sea);padding:12px 6px}
+.zones .il{grid-row:1/3;grid-column:3;background:var(--accent);color:var(--paper);display:grid;place-content:center}
+.zones .il small{display:block;font:500 .7rem var(--f-body);letter-spacing:0;text-transform:none;opacity:.9}
+.stations{display:flex;flex-wrap:wrap;gap:6px}
+.stations span{font-size:.85rem;border:1px solid var(--line);padding:3px 8px}
+.stations b{font-family:var(--f-mono);color:var(--c-let)}
+footer{font-size:.8rem;color:var(--muted)}
+
+@media (max-width:640px){
+  .sheet>*:not(.top){margin-inline:16px} .top{padding:22px 16px}
+  .role{text-align:left;margin-left:0}
+  .glance{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid,.msg{grid-template-columns:1fr}
+  .csrow{grid-template-columns:1fr;gap:4px}
+}
+@media print{
+  @page{size:A4;margin:9mm}
+  html{font-size:12px} body{background:#fff} .wrap{display:block;padding:0;max-width:none}
+  .intro,footer{display:none}
+  .sheet{box-shadow:none;border:0;gap:16px}
+  #callsigns{break-after:page;zoom:0.95}
+  #navtex{zoom:0.76}
+}
+</style>
+</head>
+<body>
+<nav class="mgbar"><a href="../">← Master GMDSS</a></nav>
+<style>.mgbar{max-width:1100px;margin:0 auto;padding:12px 16px 0;font:600 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mgbar a{color:#e2541b;text-decoration:none}@media print{.mgbar{display:none}}</style>
+<div class="wrap">
+<div class="intro"><span class="eyebrow">GMDSS study sheets</span><h1>Call Signs &amp; NAVTEX</h1><p>Two one-page sheets, taken only from the Yam Sailing GMDSS course notes. Each prints on its own A4 page.</p><nav><a href="#callsigns">Call signs</a><a href="#navtex">NAVTEX</a></nav></div>
+
+<article class="sheet" id="callsigns">
+  <header class="top"><div><span class="num">Sheet 1</span><h2>Call Signs</h2><p class="nm">Call signs and identification</p></div><p class="role">Tells you what type of station is calling</p></header>
+  <div class="glance">
+    <div><b>4X / 4Y</b><span>Israel's country code</span></div>
+    <div><b>First 2</b><span>characters = country</span></div>
+    <div><b>Letters + numbers</b><span>make up a call sign</span></div>
+    <div><b>≠ 1 or 0</b><span>digits used</span></div>
+  </div>
+  <section>
+    <span class="lbl">The basics</span>
+    <div class="box"><ul>
+      <li>Call signs and identification allow the <b>type of wireless station</b> to be identified</li>
+      <li>The call sign consists of <b>letters and numbers</b></li>
+      <li>The <b>first two components</b> identify the country: two letters, a letter and a number, or a number and a letter. Israel is <b class="cty">4Y</b> or <b class="cty">4X</b></li>
+    </ul></div>
+  </section>
+  <section>
+    <span class="lbl">Reading a call sign</span>
+    <div class="legend"><span><i class="cty"></i>Country code</span><span><i class="let"></i>Additional letters (required)</span><span><i class="dig"></i>Digits, other than 1 or 0</span><span><i class="ext"></i>Additional (lifeboat) digits</span></div>
+    <div class="box cs"><div class="csrow"><div><span class="code"><span class="cty">4X</span><span class="let">0</span></span><small class=note> (RCC Haifa)</small></div><span class="st">Coast station</span><span class="how">Country code 4Y/4X + <span class='dig'>XXX</span> digits (other than 1 or 0) + <span class='let'>X</span> additional letter</span></div><div class="csrow"><div><span class="code"><span class="cty">4X</span><span class="let">BG</span><span class="dig">8</span></span></div><span class="st">Ship</span><span class="how">Country code 4Y/4X + <span class='let'>XX</span> additional letters + <span class='dig'>X</span> digit</span></div><div class="csrow"><div><span class="code"><span class="cty">4X</span><span class="let">BG</span><span class="dig">8</span><span class="ext">57</span></span></div><span class="st">Lifeboat</span><span class="how">Mothership identification + <span class='ext'>XX</span> additional digits</span></div><div class="csrow"><div><span class="code"><span class="cty">4X</span><span class="let">GSK</span></span></div><span class="st">Airplane</span><span class="how">Country code 4Y/4X + <span class='let'>XXX</span> additional letters</span></div><div class="csrow"><div><span class="code"><span class="cty">4X</span><span class="let">GSK</span><span class="ext">6</span></span></div><span class="st">Airplane lifeboat</span><span class="how">Aircraft identification + <span class='ext'>X</span> additional digit</span></div></div>
+    <p class="note">Lifeboats take their parent's call sign and add digits: ship 4XBG8 → lifeboat 4XBG8<b class="ext">57</b>; aircraft 4XGSK → aircraft lifeboat 4XGSK<b class="ext">6</b>.</p>
+  </section>
+  <div class="grid">
+    <div class="box"><h3>Calling on Channel 16</h3>
+      <div class="callbox">TAMI, TAMI, TAMI<br>THIS IS SOLARIS, SOLARIS, SOLARIS<br>OVER</div>
+      <dl class="pro"><dt>Full call</dt><dd>Station called ×3 + own identification ×3</dd><dt>Short call</dt><dd>Station called ×1 + own identification ×2. Used after first contact and in busy areas</dd></dl>
+    </div>
+    <div class="box"><h3>Spelling out a call sign</h3>
+      <dl class="pro"><dt>Correct</dt><dd>“My call sign is 4X33 <b>Correct</b> 4X37”</dd><dt>In figures</dt><dd>What follows is numbers, in phonetic spelling</dd><dt>In letters</dt><dd>What follows is letters, in phonetic spelling</dd><dt>I spell</dt><dd>Switching to phonetic spelling</dd></dl>
+    </div>
+  </div>
+</article>
+
+<article class="sheet" id="navtex">
+  <header class="top"><div><span class="num">Sheet 2</span><h2>NAVTEX</h2><p class="nm">Navigational Telex</p></div><p class="role">Automatic maritime safety information (MSI) from coast stations</p></header>
+  <div class="glance">
+    <div><b>518 kHz</b><span>English, international</span></div>
+    <div><b>490 kHz</b><span>local language, national</span></div>
+    <div><b>400 NM</b><span>reception range</span></div>
+    <div><b>Every 4 h</b><span>up to 10 min per station</span></div>
+  </div>
+  <div class="grid">
+    <div class="box"><h3>What it is</h3><ul>
+      <li>International system for automatic transmission and reception of safety and weather messages (<b>MSI</b>) from coast stations worldwide</li>
+      <li>Introduced in Boston in <b>1983</b>; part of GMDSS since <b>1999</b></li>
+      <li>Carries SAR, navigational and safety warnings, meteorological warnings, ice warnings, weather forecasts, special messages</li>
+      <li>After an EPIRB alert, the RCC may broadcast a distress message on NAVTEX to widen the search</li>
+    </ul></div>
+    <div class="box"><h3>Frequencies &amp; range</h3><ul>
+      <li><b>518 kHz</b>: English, international</li>
+      <li><b>490 kHz</b>: local language, national</li>
+      <li><b>4209.5 kHz</b>: tropical zone, international</li>
+      <li>Received up to <b>400 NM</b>; maximum range at <b>night</b></li>
+      <li>Stations with the same ID letter are ~<b>800 NM</b> apart, so you never receive both</li>
+      <li>Stations time-share and transmit every <b>4 hours</b>, up to <b>10 minutes</b> each</li>
+    </ul></div>
+  </div>
+  <section>
+    <span class="lbl">Message header: ZCZC B1 B2 B3 B4 … NNNN</span>
+    <div class="hdr">
+      <div class="seg zc"><b>ZCZC</b><span>start</span></div>
+      <div class="seg b1"><b>P</b><span>B1: transmitting station (1 letter)</span></div>
+      <div class="seg b2"><b>A</b><span>B2: message type (1 letter)</span></div>
+      <div class="seg b34"><b>13</b><span>B3 B4: message number 01–99</span></div>
+      <div class="seg zc"><b>NNNN</b><span>end</span></div>
+    </div>
+    <p class="note" style="margin-top:8px">Example: <span class="mono">ZCZC PA13 · ROUTINE · 201908 UTC MAR 09</span> (date/time as ddHHmm) = Haifa Radio, navigational warning, number 13.</p>
+    <div class="stations" style="margin-top:8px"><span>Haifa Radio <b>P</b></span><span>Antalya <b>F</b></span><span>Cyprus <b>M</b></span><span>Iraklion <b>H</b></span></div>
+  </section>
+  <section>
+    <span class="lbl">B2 message types</span>
+    <div class="box"><div class="msg"><div class="keep"><b>A</b><span>Navigational warnings</span></div><div class="keep"><b>B</b><span>Meteorological warnings</span></div><div class=""><b>C</b><span>Ice reports</span></div><div class="keep"><b>D</b><span>Search &amp; rescue information</span></div><div class="soft"><b>E</b><span>Meteorological forecasts</span></div><div class=""><b>F</b><span>Pilot service messages</span></div><div class=""><b>G</b><span>Decca messages</span></div><div class=""><b>H</b><span>Loran messages (Long range Nav)</span></div><div class=""><b>I</b><span>Omega messages</span></div><div class=""><b>J</b><span>Satnav messages</span></div><div class=""><b>K</b><span>Other electronic navaid messages</span></div><div class="keep"><b>L</b><span>Additional navigational warnings</span></div><div class=""><b>V</b><span>Special services</span></div><div class=""><b>W</b><span>Special services (possible other languages use)</span></div><div class=""><b>X</b><span>Special services</span></div><div class=""><b>Y</b><span>Special services</span></div><div class=""><b>Z</b><span>No message on hand (QRU)</span></div></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i><b>A, B, D, L</b> cannot be deleted</span><span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i><b>E</b>: recommended not to delete</span></div></div>
+  </section>
+  <div class="grid">
+    <div class="box"><h3>Priority</h3><div class="urg">
+      <div><b class="let">VITAL</b><span>Immediate transmission (message number <b>00</b>)</span></div>
+      <div><b>IMPORTANT</b><span>Immediate when the frequency is free</span></div>
+      <div><b class="note">ROUTINE</b><span>When the frequency is free</span></div></div>
+      <h3 style="margin-top:6px">Character Error Rate (CER)</h3>
+      <div class="cer"><div class="bad"><b>5%+</b>Auto-deleted, received again next broadcast</div><div class="ok"><b>≤4.9%</b>Kept; delete manually if unreadable</div></div>
+    </div>
+    <div class="box"><h3>Areas &amp; using it</h3><ul>
+      <li><b>21 NAVAREAS</b>: 16 + 5 Arctic areas added 01.07.2010; stations in each lettered <b>A–Z</b></li>
+      <li>Before sailing, leave it on <b>4–12 hours</b> to receive a full round of messages</li>
+      <li>Screen-only or printer models; printer alarms when paper runs out</li>
+      <li>Program the station letter and message type (A–Z) to skip unwanted messages</li>
+      <li>In Area A1 but outside NAVTEX coverage: need MSI on HF, Telex or INMARSAT</li>
+    </ul>
+    <span class="lbl" style="margin:4px 0 0">East Med weather zones</span>
+    <div class="zones"><div>Jason</div><div>Taurus</div><div class="il">Crusade<small>off Israel</small></div><div>Matruch</div><div>Delta</div></div>
+    </div>
+  </div>
+</article>
+<footer>Source: GMDSS course notes (Yam Sailing), slides 5–7, 10, 28–32, 77, 93–100.</footer>
+</div>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

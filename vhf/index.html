@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VHF/DSC Simulator · Master GMDSS</title>
+<meta name="description" content="Practise Mayday, Pan Pan, Sécurité and routine calls on a simulated VHF/DSC radio.">
+<meta name="theme-color" content="#15233a">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/vhf.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><a class="eyebrow suite" href="../">← Master GMDSS</a><h1>VHF / DSC Simulator</h1></div>
+    <div class="vessel">
+      <label>Your vessel<input id="vname" value="Sea Breeze" autocomplete="off"></label>
+      <label>Your MMSI<input id="mmsi" value="428123456" inputmode="numeric" maxlength="9" autocomplete="off"></label>
+    </div>
+  </header>
+
+  <div class="level" role="group" aria-label="Level">
+    <span class="lt">Level</span>
+    <button class="lvl" data-lvl="guided" aria-pressed="true">Guided</button>
+    <button class="lvl" data-lvl="adv" aria-pressed="false">Advanced</button>
+    <small id="lvlNote">Step-by-step prompts, checked as you go.</small>
+  </div>
+  <div class="modes" role="group" aria-label="Choose a message type">
+    <button class="mode" data-mode="mayday"><i style="background:#c8261f"></i>Mayday</button>
+    <button class="mode" data-mode="relay"><i style="background:#c8261f"></i>Mayday Relay</button>
+    <button class="mode" data-mode="panpan"><i style="background:#e2941b"></i>Pan Pan</button>
+    <button class="mode" data-mode="medico"><i style="background:#e2941b"></i>Pan Pan Medico</button>
+    <button class="mode" data-mode="securite"><i style="background:#1f7fc4"></i>Sécurité</button>
+    <button class="mode" data-mode="routine"><i style="background:#1f8a3b"></i>Routine (Tango Romeo)</button>
+    <button class="mode" data-mode="abandon"><i style="background:#c8261f"></i>Abandon ship: hand over control</button>
+    <button class="mode" data-mode="raftsart"><i style="background:#c8261f"></i>Life raft: SART beeping</button>
+    <button class="mode" data-mode="raftship"><i style="background:#c8261f"></i>Life raft: ship in sight</button>
+    <button class="mode" data-mode="portctl"><i style="background:#c8261f"></i>Reply to Port Control</button>
+    <button class="mode" data-mode="random"><i style="background:var(--muted)"></i>Surprise me</button>
+  </div>
+
+  <div class="main">
+    <aside class="radio" aria-label="VHF DSC radio">
+      <div class="stage" id="stage">
+        <svg class="art" viewBox="0 0 880 490" aria-hidden="true">
+          <defs>
+            <linearGradient id="gBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f7f7"/><stop offset="1" stop-color="#dcdcdc"/></linearGradient>
+            <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a3d"/><stop offset=".12" stop-color="#26262a"/><stop offset="1" stop-color="#0f0f11"/></linearGradient>
+            <linearGradient id="gFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#232326"/><stop offset="1" stop-color="#151517"/></linearGradient>
+            <linearGradient id="gMic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b3b3e"/><stop offset=".5" stop-color="#1b1b1d"/><stop offset="1" stop-color="#0c0c0d"/></linearGradient>
+            <radialGradient id="gKnob" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#4a4a4e"/><stop offset=".6" stop-color="#1a1a1c"/><stop offset="1" stop-color="#050506"/></radialGradient>
+            <clipPath id="cGrille"><ellipse cx="768" cy="118" rx="66" ry="80"/></clipPath>
+          </defs>
+          <rect width="880" height="490" fill="url(#gBg)"/>
+          <!-- coiled cord (behind) -->
+          <path d="M604 214 C 660 230, 655 300, 600 360 S 520 440, 505 455" fill="none" stroke="#141414" stroke-width="9" stroke-linecap="round"/>
+          <g fill="none" stroke="#111" stroke-width="7">
+            <ellipse cx="505" cy="430" rx="15" ry="40"/><ellipse cx="527" cy="430" rx="15" ry="40"/><ellipse cx="549" cy="431" rx="15" ry="40"/><ellipse cx="571" cy="432" rx="15" ry="40"/><ellipse cx="593" cy="433" rx="15" ry="40"/><ellipse cx="615" cy="433" rx="15" ry="40"/><ellipse cx="637" cy="433" rx="15" ry="40"/><ellipse cx="659" cy="432" rx="15" ry="40"/><ellipse cx="681" cy="430" rx="15" ry="40"/><ellipse cx="703" cy="427" rx="15" ry="40"/><ellipse cx="725" cy="423" rx="15" ry="40"/><ellipse cx="747" cy="418" rx="15" ry="40"/><ellipse cx="769" cy="413" rx="15" ry="40"/><ellipse cx="791" cy="408" rx="15" ry="40"/><ellipse cx="813" cy="404" rx="15" ry="40"/><ellipse cx="835" cy="401" rx="15" ry="40"/>
+          </g>
+          <g fill="none" stroke="#3a3a3a" stroke-width="1.5" opacity=".7">
+            <ellipse cx="505" cy="430" rx="12" ry="37"/><ellipse cx="549" cy="431" rx="12" ry="37"/><ellipse cx="593" cy="433" rx="12" ry="37"/><ellipse cx="637" cy="433" rx="12" ry="37"/><ellipse cx="681" cy="430" rx="12" ry="37"/><ellipse cx="725" cy="423" rx="12" ry="37"/><ellipse cx="769" cy="413" rx="12" ry="37"/><ellipse cx="813" cy="404" rx="12" ry="37"/>
+          </g>
+          <path d="M770 286 L770 312 C 770 340, 830 345, 840 362" fill="none" stroke="#111" stroke-width="10" stroke-linecap="round"/>
+          <!-- mounting bracket + side knob -->
+          <rect x="62" y="352" width="500" height="92" rx="10" fill="#141416"/>
+          <rect x="74" y="372" width="476" height="56" rx="6" fill="#0a0a0b"/>
+          <rect x="6" y="186" width="44" height="130" rx="16" fill="#1d1d1f"/>
+          <g stroke="#060606" stroke-width="3"><line x1="12" y1="200" x2="44" y2="200"/><line x1="12" y1="214" x2="44" y2="214"/><line x1="12" y1="228" x2="44" y2="228"/><line x1="12" y1="242" x2="44" y2="242"/><line x1="12" y1="256" x2="44" y2="256"/><line x1="12" y1="270" x2="44" y2="270"/><line x1="12" y1="284" x2="44" y2="284"/><line x1="12" y1="298" x2="44" y2="298"/></g>
+          <!-- radio body -->
+          <rect x="50" y="90" width="552" height="290" rx="44" fill="url(#gBody)"/>
+          <rect x="62" y="102" width="528" height="266" rx="36" fill="url(#gFace)" stroke="#000" stroke-width="2"/>
+          <!-- speaker slots -->
+          <g fill="#08080a" stroke="#2c2c30" stroke-width="1.5"><rect x="80" y="118" width="18" height="228" rx="9"/><rect x="112" y="118" width="18" height="228" rx="9"/><rect x="144" y="118" width="18" height="228" rx="9"/><rect x="176" y="118" width="18" height="228" rx="9"/></g>
+          <text x="352" y="121" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="17" fill="#e8e8e8" letter-spacing="1">VHF/DSC MARINE</text>
+          <!-- screen bezel -->
+          <rect x="214" y="128" width="280" height="126" rx="18" fill="#060607" stroke="#3a3a3e" stroke-width="2"/>
+          <!-- keypad recess -->
+          <rect x="214" y="258" width="282" height="96" rx="12" fill="#121214" stroke="#2a2a2e"/>
+          <text x="350" y="270" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="12" fill="#e0e0e0">DUAL</text>
+          <!-- right controls -->
+          <text x="512" y="125" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="14" fill="#e0e0e0">VOL</text>
+          <rect x="530" y="210" width="62" height="38" rx="5" fill="#0b0b0c" stroke="#333"/>
+          <text x="561" y="234" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="10" fill="#d8d8d8" letter-spacing="1">DSC</text>
+          <rect x="596" y="190" width="30" height="50" rx="8" fill="#121214"/>
+          <!-- handset -->
+          <path d="M688 22 C 722 2, 832 2, 856 40 C 878 74, 872 162, 852 210 C 838 244, 826 268, 806 286 L 734 286 C 714 268, 700 242, 688 210 C 664 158, 650 82, 688 22 Z" fill="url(#gMic)" stroke="#000" stroke-width="2"/>
+          <ellipse cx="768" cy="118" rx="70" ry="84" fill="#141416" stroke="#000" stroke-width="2"/>
+          <g clip-path="url(#cGrille)" stroke="#050505" stroke-width="6" stroke-linecap="round"><line x1="690" y1="58" x2="846" y2="58"/><line x1="690" y1="72" x2="846" y2="72"/><line x1="690" y1="86" x2="846" y2="86"/><line x1="690" y1="100" x2="846" y2="100"/><line x1="690" y1="114" x2="846" y2="114"/><line x1="690" y1="128" x2="846" y2="128"/><line x1="690" y1="142" x2="846" y2="142"/><line x1="690" y1="156" x2="846" y2="156"/><line x1="690" y1="170" x2="846" y2="170"/><line x1="690" y1="184" x2="846" y2="184"/></g>
+          <text x="738" y="257" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-weight="700" font-size="10" fill="#e8e8e8">CHANNEL</text>
+          <text x="801" y="244" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="700" font-size="13" fill="#e8e8e8">HI/LO</text>
+        </svg>
+
+        <div class="lcd off" id="lcd" aria-live="polite" style="left:28.4%;top:30.6%;width:24.9%;height:19.6%"></div>
+
+        <button class="rk" data-k="up" aria-label="Up" style="left:25.1%;top:55.9%"><span class="arr">▲</span></button>
+        <button class="rk k16" data-k="16" aria-label="Channel 16" style="left:31.1%;top:55.9%"><span>16</span></button>
+        <button class="rk" data-k="ch" style="left:37.2%;top:55.9%">CH</button>
+        <button class="rk" data-k="menu" style="left:43.1%;top:55.9%">MENU</button>
+        <button class="rk" data-k="down" aria-label="Down" style="left:25.1%;top:65.1%"><span class="arr">▼</span></button>
+        <button class="rk" data-k="scan" style="left:31.1%;top:65.1%">SCAN</button>
+        <button class="rk" data-k="clr" style="left:37.2%;top:65.1%">CLR</button>
+        <button class="rk" data-k="ent" style="left:43.1%;top:65.1%">ENT</button>
+
+        <div class="dist" style="left:48.6%;top:51.6%;width:7.1%;height:19%">
+          <span class="push">PUSH<br>5<br>SEC</span>
+          <button class="dbtn" data-dist aria-label="Distress button: open the cover, then hold for 5 seconds"><i></i><span class="fill"></span></button>
+          <button class="cover" data-cover aria-label="Open the distress cover">DISTRESS<br>OPEN<br>PUSH<br>5 SEC</button>
+        </div>
+
+        <button class="knob" data-k="pwr" aria-label="Power on or off" style="left:58.4%;top:25.3%">ON</button>
+        <button class="knob" data-k="sql" aria-label="Squelch" style="left:58.9%;top:57%">SQL</button>
+
+        <button class="mk" data-k="mup" aria-label="Handset channel up" style="left:82.3%;top:43.6%"></button>
+        <button class="mk" data-k="mdn" aria-label="Handset channel down" style="left:82.3%;top:54.3%"></button>
+        <button class="mk hl" data-k="mhl" aria-label="Handset HI/LO power" style="left:89.3%;top:51%"></button>
+        <button class="pttside" id="pttSide" aria-label="Handset push to talk">PTT</button>
+
+        <button class="doc" data-doc="book" style="left:12.5%;top:83%"><i class="ib"></i><span>Instruction Book</span></button>
+        <button class="doc" data-doc="ch" style="left:45.5%;top:83%"><i class="idoc"></i><span>VHF Channels</span></button>
+      </div>
+
+      <div class="zoom">
+        <div class="lcd off" id="lcdZ"></div>
+        <div class="zkeys">
+          <button class="rk" data-k="up"><span class="arr">▲</span></button><button class="rk k16" data-k="16"><span>16</span></button><button class="rk" data-k="ch">CH</button><button class="rk" data-k="menu">MENU</button>
+          <button class="rk" data-k="down"><span class="arr">▼</span></button><button class="rk" data-k="scan">SCAN</button><button class="rk" data-k="clr">CLR</button><button class="rk" data-k="ent">ENT</button>
+          <div class="dist zd"><span class="push">PUSH<br>5<br>SEC</span><button class="dbtn" data-dist aria-label="Distress"><i></i><span class="fill"></span></button><button class="cover" data-cover>DISTRESS<br>OPEN<br>PUSH 5 SEC</button></div>
+        </div>
+        <div class="zrow"><button class="knob" data-k="pwr">ON</button><button class="knob" data-k="sql">SQL</button><span class="zl">Handset</span><button class="mkz" data-k="mup">CH ▲</button><button class="mkz" data-k="mdn">CH ▼</button><button class="mkz" data-k="mhl">HI/LO</button></div>
+        <div class="zdocs"><button class="doc" data-doc="book"><i class="ib"></i><span>Instruction Book</span></button><button class="doc" data-doc="ch"><i class="idoc"></i><span>VHF Channels</span></button></div>
+      </div>
+
+      <div class="pttbar" style="display:grid;gap:6px;justify-items:center"><button class="ptt" id="ptt"><span id="pttLabel">PTT · Talk</span><small id="pttSub">Press, speak, press again</small></button><p class="pttmsg" id="pttMsg" hidden></p></div>
+
+      <dialog class="docdlg" id="docdlg"><div class="dlgbody" id="dlgbody"></div><form method="dialog"><button class="btn primary">Close</button></form></dialog>
+    </aside>
+
+    <div class="side">
+      <div class="rbtns">
+        <button class="rbtn" id="btnVoice" aria-pressed="true" title="Hear the other station's replies">Speaker on</button>
+        <button class="rbtn" id="btnHear">Replay</button>
+        <button class="rbtn" id="btnStop">Stop audio</button>
+      </div>
+      <div class="rset">
+        <label>Voice accent<select id="lang"><option value="en-GB">English (UK)</option><option value="en-US">English (US)</option><option value="en-AU">English (Australia)</option><option value="en-IE">English (Ireland)</option><option value="en-ZA">English (South Africa)</option><option value="en-IN">English (India)</option></select></label>
+        <label class="chk"><input type="checkbox" id="autoSend"> Send as soon as I stop talking</label>
+      </div>
+      <p class="rnote" id="voiceNote">Replies from the other station are read out loud. Speak your part with the talk button, or type it in the box.</p>
+    </div>
+
+    <div class="col">
+      <section class="scen" id="scen" aria-live="polite">
+        <h2>Pick a message type to start</h2>
+        <p>Each scenario gives you a situation. You decide what kind of call it is, send the DSC call on the radio, then make the voice calls. Everything is checked against the course procedure.</p>
+      </section>
+      <section class="task" id="task"></section>
+      <section class="compose" id="compose" hidden></section>
+      <div class="log" id="log" aria-live="polite"></div>
+      <section class="results" id="results" hidden></section>
+      <p class="foot">Procedures follow the Yam Sailing GMDSS course notes. Speech recognition needs Chrome or Edge with microphone access; if it isn't available, type your transmission instead.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/checking.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/radio.js"></script>
+<script src="js/trainer.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

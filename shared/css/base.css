@@ -1,0 +1,30 @@
+/* Master GMDSS — shared colour tokens (light + dark) and base reset, used by every module */
+:root{
+  --bg:#eef1f4; --paper:#ffffff; --ink:#15233a; --muted:#56657a; --line:#d8dee6;
+  --accent:#e2541b; --accent-soft:#fde9df; --sea:#1f5d8c; --sea-soft:#e3eef7;
+  --ok:#1f8a3b; --ok-soft:#e2f4e6; --bad:#c8261f; --bad-soft:#fbe4e2; --hi:#fff3c4;
+  --radio:#1b2330; --radio-edge:#0f141c; --lcd:#243018; --lcd-fg:#d8f27a; --radio-fg:#c9d3e0;
+  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --f-lcd:"Share Tech Mono","IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42;
+  --ok:#5fcf7a; --ok-soft:#173222; --bad:#ff7b72; --bad-soft:#3a1c1b; --hi:#3d3417;
+  --radio:#1e2836; --radio-edge:#070b11; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
+  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42;
+  --ok:#5fcf7a; --ok-soft:#173222; --bad:#ff7b72; --bad-soft:#3a1c1b; --hi:#3d3417;
+  --radio:#1e2836; --radio-edge:#070b11; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);margin:0}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:22px 60px;display:grid;gap:22px}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.05;text-wrap:balance}
+p{margin:0}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
