@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 — 20 October 2026
+- New module: NAVTEX Simulator (navtex/). A receiver that works like the course's Flash simulator: Power, FRQ (518 / 490 / 4209.5 kHz), DIM, DISPL message log, and the full MENU (station selection AUTO/MANUAL, message selection with A, B, D, L fixed, receive alarm, error rate, save message, time display, default setting, delete all / one, test, status, 12/24 hour, all clear).
+- "On the air" broadcasts: transmit a message and the receiver applies the real rules (frequency, station, message type, duplicates, VITAL 00, error rate). The reception log says why each one was or wasn't printed.
+- 8 exercises with step ticks and questions, and a decoding quiz (10 random questions).
+- Instruction book (English version of the course's NAVTEX instructions) and an Eastern Mediterranean station map.
+- Home screen: NAVTEX button and card are now live; app shortcut added.
+
 ## 1.1.3 — 20 October 2026
 - New logo and app icons: a sailboat sending radio waves from the masthead, on a light sky-to-dawn background. Source drawing saved as icons/logo.svg.
 

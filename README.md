@@ -7,7 +7,7 @@ Version 1.1.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; 
 |---|---|---|
 | VHF / DSC Simulator | `vhf/` | Ready |
 | Study cards (cheat sheets, equipment cards, call signs & NAVTEX) | `study/` | Ready |
-| NAVTEX Simulator | `navtex/` | Planned |
+| NAVTEX Simulator (receiver, exercises, decoding quiz) | `navtex/` | Ready |
 | Multiple-choice exams (24 SRC exams, topic practice, mistakes list) | `quiz/` | Ready |
 | Written-answer exams | `written/` | Planned |
 
@@ -34,6 +34,14 @@ master-gmdss/
 │     ├─ voice.js          The other station speaking, and listening to you (PTT)
 │     ├─ radio.js          The radio itself: screens, keys, DSC menus, distress button
 │     └─ trainer.js        Runs a scenario: guided steps, advanced mode, results, reset
+├─ navtex/                 NAVTEX Simulator
+│  ├─ index.html
+│  ├─ css/navtex.css       The receiver drawing, green screens, exercises, quiz
+│  └─ js/                  Loaded in this order:
+│     ├─ data.js           Stations, message types, all message texts, broadcasts
+│     ├─ receiver.js       The receiver: keys, every screen, settings, reception rules
+│     ├─ docs.js           Instruction book and station map
+│     └─ trainer.js        Free practice, exercises, decoding quiz, reception log
 ├─ quiz/                   Multiple-choice exams
 │  ├─ index.html
 │  ├─ css/quiz.css

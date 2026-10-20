@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NAVTEX Simulator · Master GMDSS</title>
+<meta name="description" content="Practise setting up and reading a NAVTEX receiver: stations, message types, error rate and alarms.">
+<meta name="theme-color" content="#16324F">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/navtex.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a></nav>
+  <header class="top">
+    <h1>NAVTEX Simulator</h1>
+    <p class="sub">Set up the receiver, choose stations and message types, and read what comes in.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Mode">
+    <button class="tab" role="tab" data-tab="free" aria-selected="true">Free practice</button>
+    <button class="tab" role="tab" data-tab="ex" aria-selected="false">Exercises</button>
+    <button class="tab" role="tab" data-tab="quiz" aria-selected="false">Decoding quiz</button>
+  </div>
+
+  <div class="main">
+    <section class="rxcol" aria-label="NAVTEX receiver">
+      <div class="unit">
+        <span class="sknob l" aria-hidden="true"></span><span class="sknob r" aria-hidden="true"></span>
+        <div class="body">
+          <div class="bezel">
+            <div class="lcd off" data-lcd aria-live="polite"></div>
+            <div class="docs">
+              <button class="doc" data-doc="book"><i class="ib" aria-hidden="true"></i>Instruction book</button>
+              <button class="doc" data-doc="map"><i class="star" aria-hidden="true"></i>Maps</button>
+            </div>
+          </div>
+          <div class="ctrl">
+            <div class="pad" role="group" aria-label="Arrow keys">
+              <button class="ar u" data-k="up" aria-label="Up"></button>
+              <button class="ar l" data-k="left" aria-label="Left"></button>
+              <button class="ar r" data-k="right" aria-label="Right"></button>
+              <button class="ar d" data-k="down" aria-label="Down"></button>
+              <i class="hub" aria-hidden="true"></i>
+            </div>
+            <div class="keys">
+              <button class="k" data-k="menu">MENU</button><button class="k" data-k="enter">ENTER</button>
+              <button class="k" data-k="displ">DISPL</button><button class="k" data-k="dim">DIM</button>
+              <button class="k wide" data-k="frq">FRQ</button>
+            </div>
+            <div class="pw"><button class="nx" data-k="navtex" title="Show or hide the broadcasts you can receive">Navtex</button><button class="pwr" data-k="power">Power</button></div>
+          </div>
+        </div>
+        <div class="bracket" aria-hidden="true"></div>
+      </div>
+
+      <section class="air" id="air">
+        <div class="airhead"><h2>On the air</h2><span>Tap a broadcast to transmit it. Your receiver only prints it if its settings allow.</span></div>
+        <div class="bcs" id="bcs"></div>
+        <p class="airmsg" id="airMsg" aria-live="polite" hidden></p>
+      </section>
+    </section>
+
+    <section class="side">
+      <div class="panel" id="panel"></div>
+      <section class="rlog">
+        <div class="rlhead"><h3>Reception log</h3><button class="lnk" id="clearLog">Clear</button></div>
+        <ol id="rlog"><li class="empty">Nothing transmitted yet.</li></ol>
+      </section>
+      <p class="foot">Based on the NAVTEX section of the Yam Sailing GMDSS course notes and the course's NAVTEX simulator. Keyboard: arrows, Enter, Esc = MENU, D = DISPL.</p>
+    </section>
+  </div>
+</div>
+
+<dialog class="docdlg" id="docdlg"><div class="dlgbody" id="dlgbody"></div><form method="dialog"><button class="btn primary">Close</button></form></dialog>
+
+<script src="js/data.js"></script>
+<script src="js/receiver.js"></script>
+<script src="js/docs.js"></script>
+<script src="js/trainer.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

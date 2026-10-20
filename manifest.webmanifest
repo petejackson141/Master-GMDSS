@@ -46,6 +46,16 @@
       ]
     },
     {
+      "name": "NAVTEX Simulator",
+      "url": "navtex/",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
       "name": "Multiple-choice exams",
       "url": "quiz/",
       "icons": [
