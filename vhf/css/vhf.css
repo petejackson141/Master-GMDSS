@@ -192,3 +192,34 @@ textarea{width:100%;min-height:120px;border:1px solid var(--line);background:var
 .zdocs .doc .ib{width:10px;height:14px;border-left-width:3px}
 .zdocs .doc .idoc{width:11px;height:14px}
 a.eyebrow.suite{text-decoration:none}
+
+/* ---- Master GMDSS theme (Sail la Vie look) applied to the simulator ---- */
+.eyebrow{font-family:var(--font-display);color:var(--ink-muted)}
+a.eyebrow.suite{color:var(--teal)}
+header.top h1{font-family:var(--font-display);font-weight:700;text-transform:none;letter-spacing:-.01em;color:var(--heading)}
+.scen h2{text-transform:none;letter-spacing:-.01em;font-weight:700;color:var(--heading)}
+.scen,.task,.compose,.results,.log{border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.scen{border-left:6px solid var(--accent)}
+.stage{border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.task h3{color:var(--teal);font-family:var(--font-display);font-weight:700}
+.mode{border-radius:999px;background:var(--surface-ivory)}
+.mode[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.lvl{border-radius:999px;background:var(--surface-ivory)}
+.lvl[aria-pressed="true"]{background:var(--btn-primary);border-color:transparent;color:#fff}
+.btn{border-radius:999px;padding:9px 16px;background:var(--surface-ivory);font-family:var(--font-body)}
+.btn.primary{background:var(--btn-primary);color:#fff;border-color:transparent;box-shadow:0 12px 24px -10px rgba(22,50,79,.5)}
+.btn.ghost{background:transparent}
+.opt{border-radius:var(--radius-sm);background:var(--bg-elevated)}
+.rbtn{border-radius:999px;background:var(--surface-ivory)}
+.vessel input,.rset select,textarea{border-radius:var(--radius-sm)!important;background:var(--bg-elevated)}
+.ptt{border-radius:999px;background:linear-gradient(90deg,var(--coral),var(--sunset-orange));box-shadow:0 12px 24px -10px rgba(194,51,72,.55);font-family:var(--font-display);letter-spacing:.06em}
+.ptt.live{background:var(--coral-deep)}
+.score{font-family:var(--font-display);letter-spacing:.02em}
+.done .big{font-family:var(--font-wordmark);font-style:italic;color:var(--heading)}
+.msg p{border-radius:14px;background:var(--pastel-blue)}
+.msg.me p{background:var(--pastel-rose)}
+.model{border-left-color:var(--teal);border-radius:8px}
+.hint{background:var(--pastel-cream)}
+.explain{border-radius:var(--radius-sm)}
+.docdlg{border-radius:var(--radius-md)}
+.dlgbody h3{color:var(--teal)}

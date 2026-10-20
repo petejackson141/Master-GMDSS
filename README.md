@@ -1,14 +1,15 @@
 # Master GMDSS
 
 A suite of GMDSS training tools, built as one installable web app (PWA).
-Version 1.0.0.
+Version 1.1.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
 
 | Module | Folder | Status |
 |---|---|---|
 | VHF / DSC Simulator | `vhf/` | Ready |
 | Study cards (cheat sheets, equipment cards, call signs & NAVTEX) | `study/` | Ready |
 | NAVTEX Simulator | `navtex/` | Planned |
-| Exam practice | `exam/` | Planned |
+| Multiple-choice exams (24 SRC exams, topic practice, mistakes list) | `quiz/` | Ready |
+| Written-answer exams | `written/` | Planned |
 
 ## What each file does
 
@@ -20,7 +21,8 @@ master-gmdss/
 ├─ .nojekyll               Tells GitHub Pages to serve the files exactly as they are
 ├─ icons/                  App icons (home screen, Android, iPhone)
 ├─ shared/                 Used by every module
-│  ├─ css/base.css         Colours (light and dark mode) and basic page styles
+│  ├─ css/base.css         The theme: fonts, colours (light and dark), background, shared pieces
+│  ├─ img/contour.svg      Faint depth-contour background (same as Sail la Vie)
 │  └─ js/app.js            Registers the service worker, "Install app" button, version number
 ├─ vhf/                    VHF / DSC Simulator
 │  ├─ index.html           The page: radio drawing, buttons, panels
@@ -32,6 +34,11 @@ master-gmdss/
 │     ├─ voice.js          The other station speaking, and listening to you (PTT)
 │     ├─ radio.js          The radio itself: screens, keys, DSC menus, distress button
 │     └─ trainer.js        Runs a scenario: guided steps, advanced mode, results, reset
+├─ quiz/                   Multiple-choice exams
+│  ├─ index.html
+│  ├─ css/quiz.css
+│  └─ js/questions.js      All questions, answer keys, explanations and topics
+│     js/quiz.js           Runs the exams; progress saved on the phone
 └─ study/                  Printable study pages
 ```
 

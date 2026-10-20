@@ -1,16 +1,17 @@
 /* Master GMDSS service worker
    Saves the app on the phone so it opens without internet, and picks up new versions.
    IMPORTANT: change VERSION every time you publish changes, so phones download the new files. */
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.1.0';
 const CACHE = 'master-gmdss-' + VERSION;
 
 // Everything the app needs to start offline (paths are relative to this file)
 const FILES = [
   './', 'index.html', 'manifest.webmanifest',
-  'shared/css/base.css', 'shared/js/app.js',
+  'shared/css/base.css', 'shared/js/app.js', 'shared/img/contour.svg',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png',
   'vhf/', 'vhf/index.html', 'vhf/css/vhf.css',
   'vhf/js/core.js', 'vhf/js/checking.js', 'vhf/js/scenarios.js', 'vhf/js/voice.js', 'vhf/js/radio.js', 'vhf/js/trainer.js',
+  'quiz/', 'quiz/index.html', 'quiz/css/quiz.css', 'quiz/js/questions.js', 'quiz/js/quiz.js',
   'study/cheat-sheets.html', 'study/equipment-cards.html', 'study/callsigns-navtex.html'
 ];
 

@@ -4,80 +4,71 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Master GMDSS</title>
-<meta name="description" content="GMDSS training: VHF/DSC radio simulator, study cards, and more to come.">
-<meta name="theme-color" content="#15233a">
+<meta name="description" content="GMDSS training: VHF/DSC radio simulator, multiple-choice exams and study cards.">
+<meta name="theme-color" content="#16324F">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <link rel="stylesheet" href="shared/css/base.css">
 <style>
-/* Home screen: the suite's front door — one card per module */
-.hero{background:#15233a;color:#f3f5f7;padding:calc(env(safe-area-inset-top,0px) + 28px) 16px 30px;border-bottom:6px solid var(--accent)}
-.hero .in{max-width:960px;margin:0 auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.hero img{width:72px;height:72px;border-radius:18px}
-.hero h1{font-size:clamp(2.4rem,8vw,3.6rem);text-transform:uppercase;letter-spacing:.02em}
-.hero p{opacity:.85;margin-top:4px;max-width:46ch}
-.hero .acts{margin-left:auto;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
-.install{border:0;border-radius:10px;background:var(--accent);color:#fff;font:700 1rem var(--f-display);letter-spacing:.08em;text-transform:uppercase;padding:10px 18px}
-.ioshint{font-size:.82rem;opacity:.85;max-width:30ch;text-align:right}
-main{max-width:960px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.mod{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:10px;align-content:start;color:var(--ink);text-decoration:none}
-a.mod:hover,a.mod:focus-visible{border-color:var(--accent)}
-.mod h2{font-size:1.7rem;text-transform:uppercase;letter-spacing:.02em}
-.mod p{color:var(--muted);font-size:.93rem}
-.tag{justify-self:start;font:600 .7rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--ok-soft);color:var(--ok)}
-.tag.soon{background:var(--bg);color:var(--muted)}
-.mod.soon{opacity:.7}
-.mod ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
-.mod ul a{color:var(--sea);font-weight:600;text-decoration:none}
-.mod ul a:hover{text-decoration:underline}
-footer{color:var(--muted);font-size:.8rem;display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between}
+/* Home screen, laid out like the Sail la Vie home: wordmark, two main buttons, then section dividers with tinted shortcut cards */
+main{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 26px) 20px 48px;display:grid;gap:14px}
+.logo{width:84px;height:84px;margin:4px auto 0;display:block;border-radius:22px;box-shadow:var(--shadow)}
+.mg-wordmark{font-size:40px;text-align:center;margin:8px 0 0}
+.tagline{text-align:center;color:var(--ink-muted);font-size:14px;margin-bottom:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;border:none;border-radius:999px;font:600 15px var(--font-body);text-decoration:none;cursor:pointer}
+.btn-primary{height:52px;width:100%;color:#fff;background:var(--btn-primary);box-shadow:0 12px 24px -10px rgba(22,50,79,.5)}
+.btn-secondary{height:49px;width:80%;margin:0 auto;color:var(--navy);background:rgba(23,117,143,.10);border:1.5px solid var(--navy)}
+.btn svg{width:26px;height:26px}
+.section-divider{margin:16px 2px 0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qcard{background:var(--surface-ivory);border:1.5px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:14px 12px;display:grid;gap:6px;justify-items:center;text-align:center;color:var(--ink);text-decoration:none}
+a.qcard:active{transform:scale(.98)}
+.qcard svg{width:48px;height:48px}
+.qcard b{font:700 14px var(--font-display)}
+.qcard small{font-size:12px;color:var(--ink-muted);line-height:1.35}
+.qcard.soon{opacity:.6}
+.soon-tag{padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--navy);color:#fff}
+.links{display:grid;gap:8px;background:var(--surface-ivory);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:14px 16px}
+.links a{color:var(--teal);font-weight:600;text-decoration:none;display:flex;justify-content:space-between}
+.links a::after{content:"›";color:var(--ink-faint)}
+.install-row{display:grid;justify-items:center;gap:6px}
+.install{height:44px;padding:0 22px;border-radius:999px;border:1.5px solid var(--coral);background:var(--pastel-rose);color:var(--coral-deep);font:700 14px var(--font-body)}
+.ioshint{font-size:12px;color:var(--ink-muted);text-align:center}
+footer{color:var(--ink-muted);font-size:12px;text-align:center;margin-top:10px;display:grid;gap:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mg-wordmark{color:var(--gold)} :root:not([data-theme="light"]) .btn-secondary{color:var(--ink);border-color:var(--navy-soft)}}
+:root[data-theme="dark"] .mg-wordmark{color:var(--gold)}
 </style>
 </head>
 <body>
-<header class="hero">
-  <div class="in">
-    <img src="icons/icon-192.png" alt="">
-    <div>
-      <h1>Master GMDSS</h1>
-      <p>Practise marine radio procedure and study for your GMDSS / SRC exam.</p>
-    </div>
-    <div class="acts">
-      <button class="install" data-install hidden>Install app</button>
-      <span class="ioshint" data-ios-hint hidden>To install on iPhone: tap Share, then “Add to Home Screen”.</span>
-    </div>
-  </div>
-</header>
 <main>
-  <div class="grid">
-    <a class="mod" href="vhf/">
-      <span class="tag">Ready</span>
-      <h2>VHF / DSC Simulator</h2>
-      <p>A working VHF/DSC radio. Send DSC alerts, choose channels and power, and speak Mayday, Pan Pan, Sécurité and routine calls. Guided or advanced level.</p>
-    </a>
-    <div class="mod">
-      <span class="tag">Ready</span>
-      <h2>Study cards</h2>
-      <p>Printable cheat sheets for revision.</p>
-      <ul>
-        <li><a href="study/cheat-sheets.html">GMDSS cheat sheets</a></li>
-        <li><a href="study/equipment-cards.html">Equipment cards: EPIRB, SART, AIS, VHF</a></li>
-        <li><a href="study/callsigns-navtex.html">Call signs and NAVTEX</a></li>
-      </ul>
-    </div>
-    <div class="mod soon">
-      <span class="tag soon">Coming soon</span>
-      <h2>NAVTEX Simulator</h2>
-      <p>Read and decode NAVTEX messages: stations, message types, priorities and character error rate.</p>
-    </div>
-    <div class="mod soon">
-      <span class="tag soon">Coming soon</span>
-      <h2>Exam practice</h2>
-      <p>Multiple-choice and written-answer questions for the GMDSS / SRC exam.</p>
-    </div>
+  <img class="logo" src="icons/icon-192.png" alt="">
+  <h1 class="mg-wordmark">Master GMDSS</h1>
+  <p class="tagline">Marine radio practice and SRC / GMDSS exam revision</p>
+
+  <a class="btn btn-primary" href="vhf/"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="12" width="22" height="32" rx="5" fill="#16324F"/><rect x="17" y="17" width="14" height="9" rx="2" fill="#F0A64A"/><rect x="27" y="3" width="3" height="10" rx="1.5" fill="#16324F"/><circle cx="19" cy="33" r="2.4" fill="#BFE0EA"/><circle cx="29" cy="33" r="2.4" fill="#DE4457"/><rect x="17" y="38" width="14" height="2.5" rx="1.2" fill="#BFE0EA"/><path d="M37 14a8 8 0 0 1 0 11M40 11a12 12 0 0 1 0 17" stroke="#17758F" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>VHF / DSC Simulator</a>
+  <a class="btn btn-secondary" href="quiz/">Multiple-choice exams</a>
+
+  <div class="section-divider"><span>Training</span></div>
+  <div class="cards">
+    <a class="qcard tint-blue" href="vhf/"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="12" width="22" height="32" rx="5" fill="#16324F"/><rect x="17" y="17" width="14" height="9" rx="2" fill="#F0A64A"/><rect x="27" y="3" width="3" height="10" rx="1.5" fill="#16324F"/><circle cx="19" cy="33" r="2.4" fill="#BFE0EA"/><circle cx="29" cy="33" r="2.4" fill="#DE4457"/><rect x="17" y="38" width="14" height="2.5" rx="1.2" fill="#BFE0EA"/><path d="M37 14a8 8 0 0 1 0 11M40 11a12 12 0 0 1 0 17" stroke="#17758F" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><b>VHF / DSC Simulator</b><small>DSC alerts, channels and voice calls, guided or advanced</small></a>
+    <a class="qcard tint-mint" href="quiz/"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="7" width="30" height="37" rx="5" fill="#FBF7EC" stroke="#17758F" stroke-width="2.4"/><rect x="17" y="4" width="14" height="7" rx="3" fill="#17758F"/><path d="M15 20l3 3 5-6" stroke="#1E8A5A" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="26" y="18" width="9" height="3" rx="1.5" fill="#16324F"/><path d="M15 31l6 6M21 31l-6 6" stroke="#DE4457" stroke-width="2.6" stroke-linecap="round"/><rect x="26" y="32" width="9" height="3" rx="1.5" fill="#16324F"/></svg><b>Exams</b><small>24 SRC exams, topic practice, mistakes list</small></a>
+    <a class="qcard tint-cream" href="study/cheat-sheets.html"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 11c6-2 12-2 18 2v28c-6-4-12-4-18-2z" fill="#C9A24B"/><path d="M42 11c-6-2-12-2-18 2v28c6-4 12-4 18-2z" fill="#16324F"/><path d="M10 18c3-.8 6-.6 10 1M10 24c3-.8 6-.6 10 1M28 19c4-1.6 7-1.8 10-1M28 25c4-1.6 7-1.8 10-1" stroke="#FBF7EC" stroke-width="1.8" stroke-linecap="round"/></svg><b>Study cards</b><small>Cheat sheets for revision</small></a>
+    <div class="qcard tint-rose soon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="18" width="34" height="18" rx="4" fill="#16324F"/><path d="M14 4h20v14H14z" fill="#FBF7EC" stroke="#93A9B8" stroke-width="1.6"/><path d="M17 9h14M17 13h10" stroke="#17758F" stroke-width="2" stroke-linecap="round"/><path d="M13 32h22v12H13z" fill="#FBF7EC" stroke="#93A9B8" stroke-width="1.6"/><path d="M16 37h16M16 41h11" stroke="#DE4457" stroke-width="2" stroke-linecap="round"/><circle cx="35" cy="24" r="2" fill="#5fcf7a"/></svg><b>NAVTEX</b><span class="soon-tag">Coming soon</span></div>
+  </div>
+
+  <div class="section-divider"><span>Study cards</span></div>
+  <div class="links">
+    <a href="study/cheat-sheets.html">GMDSS cheat sheets</a>
+    <a href="study/equipment-cards.html">Equipment cards: EPIRB, SART, AIS, VHF</a>
+    <a href="study/callsigns-navtex.html">Call signs and NAVTEX</a>
+  </div>
+
+  <div class="install-row">
+    <button class="install" data-install hidden>Install app</button>
+    <span class="ioshint" data-ios-hint hidden>To install on iPhone: tap Share, then “Add to Home Screen”.</span>
   </div>
   <footer><span>Master GMDSS <span data-version></span></span><span>Based on the Yam Sailing GMDSS course notes.</span></footer>
 </main>

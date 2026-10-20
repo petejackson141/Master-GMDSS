@@ -1,30 +1,84 @@
-/* Master GMDSS — shared colour tokens (light + dark) and base reset, used by every module */
+/* Master GMDSS — shared theme, taken from the Sail la Vie "Nautical" look:
+   Space Grotesk headings, Inter text, Playfair Display italic wordmark,
+   navy/teal/coral palette, ivory cards, pill buttons, reef gradient + depth-contour background.
+   Every module links this file first, then its own stylesheet. */
+
 :root{
-  --bg:#eef1f4; --paper:#ffffff; --ink:#15233a; --muted:#56657a; --line:#d8dee6;
-  --accent:#e2541b; --accent-soft:#fde9df; --sea:#1f5d8c; --sea-soft:#e3eef7;
-  --ok:#1f8a3b; --ok-soft:#e2f4e6; --bad:#c8261f; --bad-soft:#fbe4e2; --hi:#fff3c4;
-  --radio:#1b2330; --radio-edge:#0f141c; --lcd:#243018; --lcd-fg:#d8f27a; --radio-fg:#c9d3e0;
-  --f-display:"Barlow Condensed","Arial Narrow",sans-serif;
-  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
-  --f-lcd:"Share Tech Mono","IBM Plex Mono",ui-monospace,monospace;
+  /* Sail la Vie palette */
+  --bg:#EAF6F5; --bg-elevated:#FFFFFF; --bg-sunk:#E3EBF0;
+  --ink:#142B44; --ink-muted:#5C7A8F; --ink-faint:#93A9B8;
+  --navy:#16324F; --navy-deep:#0E2338; --navy-soft:#2C5F91;
+  --gold:#C9A24B; --water:#BFE0EA; --coral:#DE4457; --coral-deep:#C23348;
+  --teal:#17758F; --sunset-orange:#FB8258;
+  --pastel-blue:#E9F5FD; --pastel-mint:#E7F7F2; --pastel-cream:#FEF5E1; --pastel-rose:#FDEDF0;
+  --surface-ivory:#FBF7EC; --sheet-bg:#EFEAE0;
+  --border:#DAE4EA; --shadow:0 10px 30px -12px rgba(20,43,68,0.25);
+  --radius-lg:26px; --radius-md:18px; --radius-sm:12px;
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-wordmark:'Playfair Display',Georgia,serif;
+  --bg-gradient:linear-gradient(180deg,#C7ECFC 0%,#D7EFEC 22%,#F0D2BA 46%,#A9E3CE 68%,#24BCB0 88%,#1CA79B 100%);
+  --contour-opacity:.08;
+
+  /* names used inside the modules, mapped onto the palette above */
+  --paper:var(--surface-ivory); --muted:var(--ink-muted); --line:var(--border);
+  --accent:var(--coral); --accent-soft:#FBE3E6; --sea:var(--teal); --sea-soft:#E1F1F4;
+  --ok:#1E8A5A; --ok-soft:#E3F4EC; --bad:var(--coral-deep); --bad-soft:#FBE4E6; --hi:var(--pastel-cream);
+  --f-display:var(--font-display); --f-body:var(--font-body); --f-mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --btn-primary:linear-gradient(90deg,var(--navy),var(--teal));
+  --heading:var(--navy);
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
-  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42;
-  --ok:#5fcf7a; --ok-soft:#173222; --bad:#ff7b72; --bad-soft:#3a1c1b; --hi:#3d3417;
-  --radio:#1e2836; --radio-edge:#070b11; color-scheme:dark}}
+  --bg:#0A1622; --bg-elevated:#122236; --bg-sunk:#0E1B2A;
+  --ink:#E9F0F5; --ink-muted:#8FA8BC; --ink-faint:#5C7488;
+  --navy:#2C5F91; --navy-deep:#16324F; --navy-soft:#3E76AC;
+  --gold:#D9BB6E; --water:#1D3A4E; --coral:#E1725F; --coral-deep:#C85742;
+  --teal:#3FA9C2; --sunset-orange:#E1725F;
+  --pastel-blue:#132C42; --pastel-mint:#0F3030; --pastel-cream:#2C2819; --pastel-rose:#33202A;
+  --surface-ivory:var(--bg-elevated); --sheet-bg:var(--bg);
+  --border:#1E3448; --shadow:0 10px 30px -12px rgba(0,0,0,0.5);
+  --bg-gradient:var(--bg); --contour-opacity:.032;
+  --accent-soft:#3a2219; --sea-soft:#14303f; --ok:#5fcf7a; --ok-soft:#173222; --bad-soft:#3a1c1b;
+  --heading:var(--ink);
+  color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0b121c; --paper:#152131; --ink:#e6edf5; --muted:#9fb0c4; --line:#2a3a50;
-  --accent:#ff7a45; --accent-soft:#3a2219; --sea:#7fb6e3; --sea-soft:#1a2d42;
-  --ok:#5fcf7a; --ok-soft:#173222; --bad:#ff7b72; --bad-soft:#3a1c1b; --hi:#3d3417;
-  --radio:#1e2836; --radio-edge:#070b11; color-scheme:dark}
+  --bg:#0A1622; --bg-elevated:#122236; --bg-sunk:#0E1B2A;
+  --ink:#E9F0F5; --ink-muted:#8FA8BC; --ink-faint:#5C7488;
+  --navy:#2C5F91; --navy-deep:#16324F; --navy-soft:#3E76AC;
+  --gold:#D9BB6E; --water:#1D3A4E; --coral:#E1725F; --coral-deep:#C85742;
+  --teal:#3FA9C2; --sunset-orange:#E1725F;
+  --pastel-blue:#132C42; --pastel-mint:#0F3030; --pastel-cream:#2C2819; --pastel-rose:#33202A;
+  --surface-ivory:var(--bg-elevated); --sheet-bg:var(--bg);
+  --border:#1E3448; --shadow:0 10px 30px -12px rgba(0,0,0,0.5);
+  --bg-gradient:var(--bg); --contour-opacity:.032;
+  --accent-soft:#3a2219; --sea-soft:#14303f; --ok:#5fcf7a; --ok-soft:#173222; --bad-soft:#3a1c1b;
+  --heading:var(--ink);
+  color-scheme:dark}
 
+/* background: reef gradient with the faint depth contours of a nautical chart on top */
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);margin:0}
-.wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:22px 60px;display:grid;gap:22px}
-h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.05;text-wrap:balance}
+html{background-color:var(--bg);min-height:100%}
+html::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:var(--bg-gradient)}
+body{margin:0;background:transparent;color:var(--ink);font:15px/1.5 var(--font-body);-webkit-font-smoothing:antialiased;isolation:isolate;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("../img/contour.svg") center/cover no-repeat;opacity:var(--contour-opacity)}
+@media print{html{background:#fff}html::before,body::before{display:none}}
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
 p{margin:0}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* shared pieces */
+.mg-wordmark{font-family:var(--font-wordmark);font-style:italic;font-weight:700;color:var(--navy)}
+.eyebrow{font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
+.section-divider{display:flex;align-items:center;gap:12px;color:var(--navy)}
+.section-divider::before,.section-divider::after{content:"";flex:1;height:1.5px;background:currentColor;opacity:.5}
+.section-divider span{font-family:var(--font-display);font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.tint-blue{background:var(--pastel-blue)!important;border-color:var(--navy-soft)!important}
+.tint-mint{background:var(--pastel-mint)!important;border-color:var(--teal)!important}
+.tint-cream{background:var(--pastel-cream)!important;border-color:var(--gold)!important}
+.tint-rose{background:var(--pastel-rose)!important;border-color:var(--coral)!important}
+.mg-back{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);text-decoration:none}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .section-divider{color:var(--ink-muted)}}
+:root[data-theme="dark"] .section-divider{color:var(--ink-muted)}

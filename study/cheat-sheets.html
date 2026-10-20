@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GMDSS Cheat Sheets · Master GMDSS</title>
-<meta name="theme-color" content="#15233a">
+<meta name="theme-color" content="#16324F">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../icons/favicon-32.png">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
 /* Layout: study binder — quick-recall strip, then one section per topic; comparison table for beacons, digit-box diagrams for MMSI, channel chips for VHF */
 :root{
@@ -140,10 +140,17 @@ footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);paddi
   .tbl{overflow:visible;break-before:page} table{min-width:0;font-size:10.5px}
 }
 </style>
+<link rel="stylesheet" href="../shared/css/base.css">
+<style>/* Master GMDSS theme on top of this sheet's own layout */
+:root{--band:var(--navy);--band-fg:#fff}
+h1,h2{color:var(--heading);letter-spacing:0}
+.top h2,.top .nm,.top .role{color:#fff}
+.sheet,.card,.panel,.box,.m,.ch,.dev,.recall div,.gloss,.tbl{border-radius:var(--radius-sm)}
+</style>
 </head>
 <body>
 <nav class="mgbar"><a href="../">← Master GMDSS</a></nav>
-<style>.mgbar{max-width:1100px;margin:0 auto;padding:12px 16px 0;font:600 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mgbar a{color:#e2541b;text-decoration:none}@media print{.mgbar{display:none}}</style>
+<style>.mgbar{max-width:1100px;margin:0 auto;padding:12px 16px 0;font:600 .8rem system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}.mgbar a{color:var(--teal,#17758F);text-decoration:none}@media print{.mgbar{display:none}}</style>
 <div class="wrap">
   <header>
     <span class="eyebrow">GMDSS · Short Range Certificate study notes</span>
