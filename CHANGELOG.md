@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 20 October 2026
+- Home: Multiple-choice exams button now the same style and size as the VHF/DSC Simulator button.
+- VHF page: restored the side margins and spacing (header, vessel/MMSI fields, scenario box).
+
 ## 1.1.0 — 20 October 2026
 - Whole app restyled to match Sail la Vie: fonts, colours, ivory cards, pill buttons, reef background with depth contours, light and dark mode.
 - New home screen in the Sail la Vie layout.

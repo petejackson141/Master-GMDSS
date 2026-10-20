@@ -1,4 +1,5 @@
 /* VHF/DSC simulator: page layout, radio drawing, LCD screens, prompts and results */
+.wrap{max-width:1440px;margin:0 auto;padding-inline:16px;padding-block:calc(env(safe-area-inset-top,0px) + 18px) 60px;display:grid;gap:18px}
 header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
 .eyebrow{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 header.top h1{font-size:clamp(2rem,5vw,2.8rem);text-transform:uppercase;letter-spacing:.01em}
@@ -223,3 +224,8 @@ header.top h1{font-family:var(--font-display);font-weight:700;text-transform:non
 .explain{border-radius:var(--radius-sm)}
 .docdlg{border-radius:var(--radius-md)}
 .dlgbody h3{color:var(--teal)}
+
+.vessel{gap:10px 14px}
+.vessel label{gap:6px}
+.level{margin-top:2px}
+.scen{gap:12px}
