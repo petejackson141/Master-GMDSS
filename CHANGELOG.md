@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.2 — 20 October 2026
+- Clear Home button (house icon) at the top of the simulator, exams and study pages; it stays visible while scrolling.
+
 ## 1.1.1 — 20 October 2026
 - Home: Multiple-choice exams button now the same style and size as the VHF/DSC Simulator button.
 - VHF page: restored the side margins and spacing (header, vessel/MMSI fields, scenario box).

@@ -37,7 +37,6 @@ function home() {
   app.innerHTML = `
   <div class="stack">
     <header>
-      <a class="mg-back" href="../">← Master GMDSS</a>
       <h1>Multiple-choice exams</h1>
       <div class="sub">SRC-GMDSS · Part A/2 · ${EXAMS.length} exams · ${EXAMS.flat().length} questions · pass mark <span class="mono">75</span></div>
     </header>
