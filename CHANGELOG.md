@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.3 — 20 October 2026
+- New logo and app icons: a sailboat sending radio waves from the masthead, on a light sky-to-dawn background. Source drawing saved as icons/logo.svg.
+
 ## 1.1.2 — 20 October 2026
 - Clear Home button (house icon) at the top of the simulator, exams and study pages; it stays visible while scrolling.
 
