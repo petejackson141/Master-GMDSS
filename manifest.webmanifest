@@ -1,7 +1,7 @@
 {
   "name": "Master GMDSS",
   "short_name": "Master GMDSS",
-  "description": "GMDSS training: VHF/DSC radio simulator, multiple-choice exams and study cards.",
+  "description": "GMDSS training: study sheets, VHF/DSC, NAVTEX and EPIRB simulators, and SRC exams.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -36,8 +36,8 @@
   ],
   "shortcuts": [
     {
-      "name": "VHF/DSC Simulator",
-      "url": "vhf/",
+      "name": "Simulators",
+      "url": "simulators/",
       "icons": [
         {
           "src": "icons/icon-192.png",
@@ -46,8 +46,8 @@
       ]
     },
     {
-      "name": "NAVTEX Simulator",
-      "url": "navtex/",
+      "name": "Exams",
+      "url": "exams/",
       "icons": [
         {
           "src": "icons/icon-192.png",
@@ -56,8 +56,18 @@
       ]
     },
     {
-      "name": "Multiple-choice exams",
-      "url": "quiz/",
+      "name": "Study",
+      "url": "study/",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "EPIRB Simulator",
+      "url": "epirb/",
       "icons": [
         {
           "src": "icons/icon-192.png",

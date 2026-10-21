@@ -1,17 +1,19 @@
 /* Master GMDSS service worker
    Saves the app on the phone so it opens without internet, and picks up new versions.
    IMPORTANT: change VERSION every time you publish changes, so phones download the new files. */
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.3.0';
 const CACHE = 'master-gmdss-' + VERSION;
 
 // Everything the app needs to start offline (paths are relative to this file)
 const FILES = [
   './', 'index.html', 'manifest.webmanifest',
-  'shared/css/base.css', 'shared/js/app.js', 'shared/img/contour.svg',
+  'shared/css/base.css', 'shared/css/study.css', 'shared/js/app.js', 'shared/js/study.js', 'shared/img/contour.svg',
+  'study/', 'study/index.html', 'simulators/', 'simulators/index.html', 'exams/', 'exams/index.html', 'scenarios/', 'scenarios/index.html',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png',
   'vhf/', 'vhf/index.html', 'vhf/css/vhf.css',
   'vhf/js/core.js', 'vhf/js/checking.js', 'vhf/js/scenarios.js', 'vhf/js/voice.js', 'vhf/js/radio.js', 'vhf/js/trainer.js',
   'navtex/', 'navtex/index.html', 'navtex/css/navtex.css', 'navtex/js/data.js', 'navtex/js/receiver.js', 'navtex/js/docs.js', 'navtex/js/trainer.js',
+  'epirb/', 'epirb/index.html', 'epirb/css/epirb.css', 'epirb/js/epirb.js',
   'quiz/', 'quiz/index.html', 'quiz/css/quiz.css', 'quiz/js/questions.js', 'quiz/js/quiz.js',
   'study/cheat-sheets.html', 'study/equipment-cards.html', 'study/callsigns-navtex.html'
 ];

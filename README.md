@@ -1,29 +1,36 @@
 # Master GMDSS
 
 A suite of GMDSS training tools, built as one installable web app (PWA).
-Version 1.1.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
+Version 1.3.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
 
-| Module | Folder | Status |
+The home screen has four sections, each with its own menu page:
+
+| Section | Menu page | Modules |
 |---|---|---|
-| VHF / DSC Simulator | `vhf/` | Ready |
-| Study cards (cheat sheets, equipment cards, call signs & NAVTEX) | `study/` | Ready |
-| NAVTEX Simulator (receiver, exercises, decoding quiz) | `navtex/` | Ready |
-| Multiple-choice exams (24 SRC exams, topic practice, mistakes list) | `quiz/` | Ready |
-| Written-answer exams | `written/` | Planned |
+| Study | `study/` | Cheat sheets (one section at a time), equipment cards, call signs & NAVTEX |
+| Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`). Coming soon: SART, portable VHF, AIS-SART / AIS-EPIRB / AIS |
+| Exams | `exams/` | Multiple-choice exams (`quiz/`). Coming soon: written-answer exams |
+| Scenarios | `scenarios/` | Coming soon: Mayday, abandon ship |
 
 ## What each file does
 
 ```
 master-gmdss/
-├─ index.html              Home screen: one card per module
+├─ index.html              Home screen: the four section buttons, then shortcuts
 ├─ manifest.webmanifest    App name, icons and colours. This is what makes the phone offer "Install"
 ├─ sw.js                   Service worker: saves the app on the phone for offline use and picks up updates
 ├─ .nojekyll               Tells GitHub Pages to serve the files exactly as they are
 ├─ icons/                  App icons (home screen, Android, iPhone)
 ├─ shared/                 Used by every module
-│  ├─ css/base.css         The theme: fonts, colours (light and dark), background, shared pieces
+│  ├─ css/base.css         The theme: fonts, colours (light and dark), background, Home button, menu rows
+│  ├─ css/study.css        Puts the study pages onto the theme (loaded after their own styles)
 │  ├─ img/contour.svg      Faint depth-contour background (same as Sail la Vie)
-│  └─ js/app.js            Registers the service worker, "Install app" button, version number
+│  ├─ js/app.js            Registers the service worker, "Install app" button, version number
+│  └─ js/study.js          Study pages: shows one section at a time, with Previous / Next
+├─ study/index.html        Study menu
+├─ simulators/index.html   Simulators menu
+├─ exams/index.html        Exams menu
+├─ scenarios/index.html    Scenarios menu (coming soon)
 ├─ vhf/                    VHF / DSC Simulator
 │  ├─ index.html           The page: radio drawing, buttons, panels
 │  ├─ css/vhf.css          Layout, radio, LCD screens, results
@@ -42,12 +49,16 @@ master-gmdss/
 │     ├─ receiver.js       The receiver: keys, every screen, settings, reception rules
 │     ├─ docs.js           Instruction book and station map
 │     └─ trainer.js        Free practice, exercises, decoding quiz, reception log
+├─ epirb/                  EPIRB Simulator (float-free 406 MHz beacon, Cospas-Sarsat alert chain)
+│  ├─ index.html           The page: scene, unit controls, status strip, tabs
+│  ├─ css/epirb.css        Phone-first layout; two columns from 900px
+│  └─ js/epirb.js          The beacon, alert chain, scenarios and screen updates
 ├─ quiz/                   Multiple-choice exams
 │  ├─ index.html
 │  ├─ css/quiz.css
 │  └─ js/questions.js      All questions, answer keys, explanations and topics
 │     js/quiz.js           Runs the exams; progress saved on the phone
-└─ study/                  Printable study pages
+└─ study/                  Study pages (read on the phone one section at a time, or print)
 ```
 
 ## Making changes
@@ -61,9 +72,12 @@ master-gmdss/
 
 ## Adding a new module
 
-Create a folder (for example `navtex/`) with its own `index.html`. In its `<head>` link
+Create a folder (for example `sart/`) with its own `index.html`. In its `<head>` link
 `../manifest.webmanifest`, `../shared/css/base.css`, and at the end of `<body>` load `../shared/js/app.js`.
-Then add a card for it on the home `index.html`, and add its files to `FILES` in `sw.js`.
+Start the page with the Home button and the back pill to its section (copy the `<nav class="mg-topnav">` from `epirb/index.html`).
+Use only the theme's colour names from `base.css` (no new fonts or colours), and check it at phone width in light and dark.
+Then add a row for it on its section menu (for example `simulators/index.html`, replacing the "Coming soon" row),
+and add its files to `FILES` in `sw.js`.
 
 ## Content
 

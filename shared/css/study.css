@@ -1,0 +1,58 @@
+/* Master GMDSS — study pages (cheat sheets, equipment cards, call signs & NAVTEX).
+   Loaded after each page's own styles, so the study pages use the same theme as the rest of the app:
+   Space Grotesk headings, Inter text, ivory cards, navy bands, teal accents, reef background. */
+:root{
+  --f-display:var(--font-display); --f-body:var(--font-body);
+  --band:var(--navy); --band-fg:#FFFFFF;
+  --c-cty:#1F6FB0; --c-let:#C23348; --c-dig:#1E8A5A; --c-ext:#7A3FA0;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--band:#16324F;--c-cty:#6CB8EF;--c-let:#FF7B72;--c-dig:#5FCF7A;--c-ext:#CF8EF0}}
+:root[data-theme="dark"]{--band:#16324F;--c-cty:#6CB8EF;--c-let:#FF7B72;--c-dig:#5FCF7A;--c-ext:#CF8EF0}
+
+body{background:transparent;font-family:var(--font-body)}
+.wrap{padding-block:14px 56px;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+.mgbar{padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-top:calc(env(safe-area-inset-top,0px) + 14px)}
+
+/* headings: no shouting capitals, theme colours */
+h1,.intro h1,header h1{font-family:var(--font-display);font-weight:700;text-transform:none;letter-spacing:-.01em;color:var(--heading);font-size:clamp(1.9rem,6vw,2.6rem)}
+h2{font-family:var(--font-display);text-transform:none;letter-spacing:-.01em;color:var(--heading);font-size:clamp(1.35rem,4.5vw,1.7rem)}
+h2::before{background:var(--teal)!important;border-radius:4px}
+h3{font-family:var(--font-display)}
+.eyebrow{font-family:var(--font-display);color:var(--teal)}
+.lede,.intro p{color:var(--ink-muted)}
+header{border-bottom:0!important;padding-bottom:0!important}
+mark{background:var(--pastel-cream)}
+
+/* cards, panels and tables: rounded ivory with a soft shadow */
+.card,.sheet,.panel,.devices,.tbl,.gloss,.m,.ch,.recall,.glance{border-radius:var(--radius-md);overflow:hidden}
+.card,.sheet,.panel,.devices,.tbl,.gloss,.m,.ch{background:var(--surface-ivory);box-shadow:var(--shadow);border-color:var(--border)}
+.box,.spec{border-radius:var(--radius-sm);border-color:var(--border);background:var(--bg-elevated)}
+.top{border-bottom-color:var(--teal)!important}
+.top h2{text-transform:none;letter-spacing:-.01em;color:var(--band-fg);font-size:clamp(2rem,8vw,3rem)}
+.top h2::before{content:none}
+.num{color:var(--gold)}
+.role,.csrow .st{text-transform:none;letter-spacing:0}
+.glance b,.recall b{color:var(--teal);font-family:var(--font-display);font-weight:700}
+.def p{border-left-color:var(--teal)}
+thead th{background:var(--navy);color:#fff;font-family:var(--font-display);text-transform:none;letter-spacing:.01em}
+tbody th{background:var(--bg-elevated)}
+.pill,.msg .soft b{background:var(--pastel-rose);color:var(--coral-deep)}
+.ch .n{border-radius:var(--radius-sm)}
+.ch.key .n,.digits .p,.legend .lp,.msg .keep b,.zones .il{background:var(--coral);border-color:var(--coral);color:#fff}
+.zones div{border-radius:6px}
+footer{color:var(--ink);opacity:.8}
+
+/* section chooser: the page's own contents links become pill tabs, one section shows at a time */
+.wrap nav{gap:8px}
+.wrap nav a{min-height:38px;display:inline-flex;align-items:center;border-radius:999px;border:1.5px solid var(--border);background:var(--surface-ivory);color:var(--ink);font:600 .88rem var(--font-body)}
+.wrap nav a:hover{border-color:var(--teal);color:var(--teal)}
+.wrap nav a[aria-current="true"]{background:var(--btn-primary);border-color:transparent;color:#fff}
+section,.card,.sheet{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 72px)!important}
+.st-pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.st-pager a{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 18px;border-radius:999px;text-decoration:none;font:600 14px var(--font-body);
+  background:var(--btn-primary);color:#fff;box-shadow:0 12px 24px -10px rgba(22,50,79,.5);max-width:100%}
+.st-pager a.prev{background:var(--surface-ivory);color:var(--heading);border:1.5px solid var(--navy);box-shadow:none}
+.st-pager a[hidden]{display:none}
+.st-pager .sp{flex:1}
+@media screen{.sec-off{display:none!important}}
+@media print{.st-pager,.wrap nav{display:none!important}.card,.sheet{box-shadow:none;border-radius:0}}

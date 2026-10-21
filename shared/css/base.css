@@ -90,3 +90,31 @@ button{cursor:pointer}
 .mg-home svg{width:20px;height:20px;color:var(--teal)}
 .mg-home:active{transform:scale(.97)}
 @media print{.mg-topnav{display:none}}
+
+/* a second pill next to Home that goes back to the section menu (Simulators, Exams, Study) */
+.mg-topnav{gap:8px}
+.mg-up{padding:0 16px 0 12px;border-color:var(--border)}
+.mg-up span[aria-hidden]{font-size:20px;line-height:1;color:var(--teal);margin-top:-2px}
+
+/* section menu pages (Study, Simulators, Exams, Scenarios): a heading, then one row per item */
+.mg-hub{max-width:560px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:calc(env(safe-area-inset-top,0px) + 18px) 48px;display:grid;gap:14px}
+.mg-hub header h1{font-size:clamp(1.9rem,6vw,2.4rem);color:var(--heading)}
+.mg-hub header p{color:var(--ink-muted);margin-top:6px}
+.mg-list{display:grid;gap:10px}
+.mg-item{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;min-height:76px;padding:12px 14px;border-radius:var(--radius-md);
+  background:var(--surface-ivory);border:1.5px solid var(--border);box-shadow:var(--shadow);color:var(--ink);text-decoration:none}
+.mg-item svg{width:52px;height:52px}
+.mg-item b{display:block;font:700 16px var(--font-display);color:var(--heading)}
+.mg-item small{display:block;font-size:13px;color:var(--ink-muted);line-height:1.35;margin-top:2px}
+.mg-item::after{content:"›";font-size:26px;color:var(--teal);line-height:1}
+a.mg-item:active{transform:scale(.985)}
+.mg-item.soon{opacity:.62;box-shadow:none}
+.mg-item.soon::after{content:none}
+.mg-tag{padding:3px 9px;border-radius:999px;font:700 10px var(--font-display);letter-spacing:.06em;text-transform:uppercase;background:var(--navy);color:#fff;white-space:nowrap}
+.mg-note{font-size:13px;color:var(--ink-muted);text-align:center}
+.mg-note a{color:var(--teal);font-weight:600}
+
+/* menu icons are drawn in the light palette; in dark mode they sit on a light chip so the navy parts stay visible */
+.mg-item svg,.qcard svg{border-radius:14px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .mg-item svg,:root:not([data-theme="light"]) .qcard svg{background:#DCE8EF;padding:4px}}
+:root[data-theme="dark"] .mg-item svg,:root[data-theme="dark"] .qcard svg{background:#DCE8EF;padding:4px}
