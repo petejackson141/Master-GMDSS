@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0 — 21 October 2026
+- New module: Radar SART Simulator (sart/). A 9 GHz radar SART drawn like the real orange unit: OFF / ON switch under a safety tab, press-and-hold self-test, Standby / Radar / Pass / Fault lights. Take it from the bracket into the liferaft, onto its pole or into the sea; height changes how far away it can be seen (about 2 nm floating, 6 nm on the pole).
+- Live X-band radar screen with a 3 / 6 / 12 nm range: the SART shows as a line of 12 dots, then arcs within about 1 nm, then circles when very close. A rescue ship searches, picks it up and homes in. Tap the screen to mark the SART.
+- Six scenarios: free practice, monthly test (rings on your own radar), abandon ship, get it higher, on the rescue ship's radar, pre-departure label inspection.
+- Simulators menu: SART is now live (was "Coming soon"). App shortcut added.
+
 ## 1.3.0 — 21 October 2026
 - New home screen with four sections: Study, Simulators, Exams and Scenarios. Each opens its own menu page; planned modules show as "Coming soon".
 - New module: EPIRB Simulator (epirb/). Float-free 406 MHz Cat I beacon: guarded OFF / READY / ON switch, press-and-hold self-test and GNSS test, HRU release at 1.5–4 m, sea switch, 406 MHz bursts every ~50 s, 121.5 MHz homing, strobe, GNSS fix, and the Cospas-Sarsat chain (satellite, LUT, MCC, RCC, rescue). Six scenarios: free practice, monthly self-test, abandon ship, vessel sinks, accidental activation (with cancelling the false alert), pre-departure label inspection. Built for phones first.

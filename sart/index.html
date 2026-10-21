@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Radar SART Simulator · Master GMDSS</title>
+<meta name="description" content="Switch on and mount a 9 GHz radar SART, then see what the rescue ship's radar shows as it closes in: 12 dots, arcs and circles.">
+<meta name="theme-color" content="#16324F">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/sart.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a><a class="mg-home mg-up" href="../simulators/"><span aria-hidden="true">‹</span><span>Simulators</span></a></nav>
+  <header class="top">
+    <h1>Radar SART Simulator</h1>
+    <p class="sub">Switch on and mount a 9 GHz radar SART, then see what the rescue ship's radar shows as it closes in.</p>
+  </header>
+
+<div id="sart-sim">
+
+  <div class="es-settings">
+    <label class="es-sr" for="ss-scenario">Scenario</label>
+    <select id="ss-scenario" class="es-select">
+      <option value="free">Free practice</option>
+      <option value="selftest">Monthly test</option>
+      <option value="abandon">Abandon ship</option>
+      <option value="height">Get it higher</option>
+      <option value="search">On the rescue ship's radar</option>
+      <option value="inspect">Pre-departure inspection</option>
+    </select>
+    <div class="es-settings-row">
+      <div class="es-seg" role="group" aria-label="Simulation speed" id="ss-speed">
+        <button type="button" data-v="10">10×</button><button type="button" data-v="60">60×</button><button type="button" data-v="300">300×</button><button type="button" id="ss-pause" data-v="pause" aria-label="Pause">❚❚</button>
+      </div>
+      <button type="button" class="btn ghost small" id="ss-sound" aria-pressed="false">Sound off</button>
+    </div>
+  </div>
+
+  <div class="es-main">
+    <div class="es-device" id="ss-device">
+      <section class="es-card es-scene" aria-label="Scene">
+        <svg id="ss-svg" viewBox="0 0 420 300" role="img" aria-labelledby="ss-scene-cap">
+          <defs>
+            <linearGradient id="ss-g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sky1)"/><stop offset="1" style="stop-color:var(--es-sky2)"/></linearGradient>
+            <linearGradient id="ss-g-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sea1)"/><stop offset="1" style="stop-color:var(--es-sea2)"/></linearGradient>
+            <linearGradient id="ss-g-body" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e2561a"/><stop offset=".35" stop-color="#ff7d35"/><stop offset="1" stop-color="#e0581b"/></linearGradient>
+            <radialGradient id="ss-g-dome" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset="1" stop-color="#cfe3ef" stop-opacity=".7"/></radialGradient>
+            <radialGradient id="ss-g-flash"><stop offset="0" stop-color="#ffd27a"/><stop offset=".4" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="420" height="300" fill="url(#ss-g-sky)"/>
+
+          <!-- own vessel (bridge wing) -->
+          <g id="ss-own">
+            <path d="M-10 170 H160 L148 230 H-10 Z" style="fill:var(--es-hull)"/>
+            <rect x="-10" y="164" width="172" height="8" style="fill:var(--es-deck)"/>
+            <rect x="-10" y="62" width="110" height="104" rx="4" style="fill:var(--es-bracket)"/>
+            <rect x="-10" y="70" width="40" height="22" rx="3" style="fill:var(--es-sea2)" opacity=".55"/>
+            <line x1="20" y1="62" x2="20" y2="24" style="stroke:var(--es-antenna)" stroke-width="3"/>
+            <rect x="6" y="18" width="28" height="6" rx="2" style="fill:var(--es-antenna)"/>
+            <rect x="47" y="86" width="34" height="80" rx="6" style="fill:var(--es-bracket-dark)"/>
+            <text x="64" y="80" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="8" font-weight="700" style="fill:var(--es-hull)">SART</text>
+            <g style="stroke:var(--es-deck)" stroke-width="3"><line x1="100" y1="164" x2="100" y2="132"/><line x1="156" y1="164" x2="156" y2="132"/><line x1="100" y1="132" x2="160" y2="132"/></g>
+          </g>
+
+          <!-- rescue ship (moves with distance) -->
+          <g id="ss-rship" style="transform:translate(420px,200px) scale(.25)">
+            <path d="M0 -2 L10 -16 H104 L100 0 Z" style="fill:var(--es-hull)"/>
+            <rect x="60" y="-36" width="32" height="20" rx="2" style="fill:var(--es-bracket)"/>
+            <rect x="64" y="-32" width="24" height="5" style="fill:var(--es-sea2)" opacity=".6"/>
+            <line x1="76" y1="-36" x2="76" y2="-54" style="stroke:var(--es-antenna)" stroke-width="2.5"/>
+            <rect id="ss-scanner" x="64" y="-60" width="24" height="5" rx="2" style="fill:var(--es-antenna)"/>
+            <rect x="96" y="-30" width="7" height="14" style="fill:var(--coral)"/>
+          </g>
+          <text id="ss-ship-t" x="410" y="22" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)"></text>
+          <line id="ss-ping" x1="0" y1="0" x2="0" y2="0" style="stroke:var(--gold)" stroke-width="2.5" stroke-dasharray="5 5" opacity="0"/>
+
+          <!-- liferaft, back part -->
+          <g id="ss-raft-back">
+            <path d="M204 192 Q250 128 296 192 Z" fill="#f26a2e" stroke="#c4501c" stroke-width="1.5"/>
+            <path d="M236 192 V176 Q250 160 264 176 V192 Z" fill="#3a1a0c"/>
+            <g id="ss-pole"><rect x="248.5" y="116" width="3" height="48" fill="#9aa7b0"/><text x="268" y="146" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="700" fill="#ffffff" style="paint-order:stroke;stroke:#16324F;stroke-width:2.5px">1 m+</text></g>
+          </g>
+
+          <!-- SART -->
+          <g id="ss-sart" style="transform:translate(52px,92px) rotate(0deg)">
+            <g id="ss-bob">
+              <circle id="ss-flash" cx="12" cy="67" r="20" fill="url(#ss-g-flash)" opacity="0"/>
+              <rect x="10.5" y="0" width="3" height="6" rx="1.5" fill="#ff8a45" stroke="#b9470f" stroke-width=".6"/>
+              <rect x="7" y="4" width="10" height="24" rx="3" fill="url(#ss-g-body)" stroke="#b9470f" stroke-width=".8"/>
+              <path d="M7 26 H17 L22 34 H2 Z" fill="url(#ss-g-body)" stroke="#b9470f" stroke-width=".8"/>
+              <path d="M2.5 37 H-1.5 V57 H2.5" fill="none" stroke="#d4541a" stroke-width="2.2" stroke-linejoin="round"/>
+              <rect x="2" y="33" width="20" height="28" rx="2" fill="url(#ss-g-body)" stroke="#b9470f" stroke-width=".8"/>
+              <rect x="4" y="36.5" width="14.5" height="13" rx="1" fill="#ffffff"/>
+              <text x="11.2" y="41.6" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="4.6" font-weight="700" fill="#1b1b1b">SART</text>
+              <g stroke="#9aa3a9" stroke-width=".55"><line x1="5.2" y1="43.6" x2="17.2" y2="43.6"/><line x1="5.2" y1="45.4" x2="17.2" y2="45.4"/><line x1="5.2" y1="47.2" x2="14.5" y2="47.2"/></g>
+              <rect x="4.2" y="51" width="6.3" height="5" rx=".8" fill="#1b1b1b"/><rect x="11.8" y="51" width="6.3" height="5" rx=".8" fill="#1b1b1b"/>
+              <path d="M5.4 55.2 L7.35 52 L9.3 55.2 Z M13 55.2 L14.95 52 L16.9 55.2 Z" fill="#ffffff"/>
+              <circle cx="21.4" cy="46" r="3.1" fill="#d4541a" stroke="#9e3c0d" stroke-width=".6"/>
+              <line x1="21.4" y1="43.6" x2="21.4" y2="46" stroke="#5a2207" stroke-width=".8"/>
+              <rect x="2.5" y="60" width="19" height="4" rx="1" fill="#d4541a"/>
+              <rect x="3" y="63" width="18" height="9" rx="3" fill="#2a2f33"/>
+              <rect id="ss-lamp" x="5" y="65" width="14" height="3.4" rx="1.7" fill="#152027"/>
+              <g stroke="#3d4448" stroke-width=".7"><line x1="6" y1="69.5" x2="6" y2="71.5"/><line x1="9" y1="69.5" x2="9" y2="71.5"/><line x1="12" y1="69.5" x2="12" y2="71.5"/><line x1="15" y1="69.5" x2="15" y2="71.5"/><line x1="18" y1="69.5" x2="18" y2="71.5"/></g>
+            </g>
+          </g>
+
+          <!-- liferaft, front tube -->
+          <rect x="198" y="188" width="104" height="18" rx="9" fill="#2a3540"/>
+          <rect x="204" y="191" width="92" height="4" rx="2" fill="#4d5b66"/>
+
+          <g id="ss-fx"></g>
+          <rect x="0" y="200" width="420" height="100" fill="url(#ss-g-sea)" opacity=".9"/>
+          <path id="ss-waves" d="M0 200 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V208 H0 Z" style="fill:var(--es-sea1)" opacity=".95"/>
+          <g>
+            <rect x="12" y="262" width="150" height="26" rx="13" style="fill:var(--surface)" opacity=".94"/>
+            <text id="ss-height-t" x="87" y="279" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)">Height ≈ 10 m</text>
+          </g>
+          <text id="ss-loc-t" x="408" y="283" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="1">IN BRACKET</text>
+        </svg>
+        <p class="es-sr" id="ss-scene-cap">Your vessel's bridge with the SART in its bracket, a liferaft on the sea, and a rescue ship on the horizon.</p>
+        <div class="es-actions">
+          <button type="button" class="btn ghost" id="ss-btn-remove">Remove from bracket</button>
+          <button type="button" class="btn ghost" id="ss-btn-raft">Take into liferaft</button>
+          <button type="button" class="btn ghost" id="ss-btn-pole">Mount on pole</button>
+          <button type="button" class="btn ghost" id="ss-btn-water">Into the water</button>
+          <button type="button" class="btn ghost ss-wide" id="ss-btn-reset">Reset</button>
+        </div>
+        <p class="es-feedback" id="ss-feedback" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="es-panel" aria-label="Unit controls">
+        <span class="es-mini" id="ss-sw-lbl">Switch</span>
+        <div class="es-switch" role="radiogroup" aria-labelledby="ss-sw-lbl" id="ss-switch">
+          <span class="es-knob" id="ss-knob"></span>
+          <button type="button" class="es-pos" role="radio" data-pos="OFF" aria-checked="true">OFF</button>
+          <button type="button" class="es-pos" role="radio" data-pos="ON" aria-checked="false">ON</button>
+          <button type="button" class="es-guard" id="ss-guard" aria-label="Pull the safety tab off ON">SAFETY TAB</button>
+        </div>
+        <div class="es-sw-help"><span id="ss-sw-help">OFF: the SART will not answer any radar.</span><button type="button" class="es-link" id="ss-guard-close" hidden>Refit tab</button></div>
+        <div class="es-panel-row">
+          <div class="es-leds" aria-label="Indicator lights">
+            <span class="es-led" data-c="green" id="ss-l-stby"><i></i>Standby</span>
+            <span class="es-led" data-c="amber" id="ss-l-radar"><i></i>Radar</span>
+            <span class="es-led" data-c="white" id="ss-l-pass"><i></i>Pass</span>
+            <span class="es-led" data-c="red" id="ss-l-fault"><i></i>Fault</span>
+          </div>
+          <div class="es-test">
+            <button type="button" class="es-test-btn" id="ss-test" aria-describedby="ss-test-help">TEST</button>
+            <small id="ss-test-help">Hold 1 s: self-test</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="es-card ss-radar-card" aria-label="Radar display">
+        <div class="ss-radar-head">
+          <h2 class="es-label" id="ss-radar-h">Rescue ship's radar</h2>
+          <div class="ss-radar-meta"><span id="ss-radar-sub">North up</span><span id="ss-radar-hdg">HDG 090°</span></div>
+        </div>
+        <div class="ss-scope">
+          <canvas id="ss-radar" aria-label="Radar screen. Tap to mark the SART position." role="img"></canvas>
+          <span class="ss-scope-tag tl" id="ss-tag-band">X-BAND</span>
+          <span class="ss-scope-tag tr" id="ss-tag-range">12 NM</span>
+          <span class="ss-scope-tag bl" id="ss-tag-rings">RINGS 4 NM</span>
+          <span class="ss-scope-tag br" id="ss-tag-mark">MARK</span>
+        </div>
+        <div class="ss-rctl one">
+          <div><span class="es-mini">Range</span><div class="es-seg" role="group" aria-label="Range scale" data-ctl="range"><button type="button" data-v="3">3 nm</button><button type="button" data-v="6">6 nm</button><button type="button" data-v="12">12 nm</button></div></div>
+        </div>
+        <p class="ss-hint" id="ss-hint">Tap the screen to mark where you think the SART is.</p>
+      </section>
+    </div>
+
+    <div class="es-strip" aria-label="SART state">
+      <span class="es-chip" id="ss-mode" data-s="off">Off</span>
+      <span class="es-strip-info"><span>Ship <b id="ss-strip-ship">—</b></span><span><b id="ss-clock">T+0:00</b></span></span>
+      <button type="button" class="btn ghost es-strip-up" id="ss-up" aria-label="Back to the SART">↑ SART</button>
+    </div>
+
+    <div class="es-info">
+      <div class="es-tabs" role="tablist" aria-label="Simulator panels">
+        <button type="button" class="es-tab" role="tab" data-tab="steps" aria-selected="true">Steps<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="status" aria-selected="false">Status<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="rescue" aria-selected="false">Rescue<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="log" aria-selected="false">Log<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="label" aria-selected="false">Label<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="facts" aria-selected="false">Facts<span class="dot"></span></button>
+      </div>
+      <div class="es-panes">
+        <section class="es-card es-pane" data-pane="steps" role="tabpanel">
+          <h2 class="es-label" id="ss-sc-h">Free practice</h2>
+          <p class="es-brief" id="ss-brief"></p>
+          <ol class="es-steps" id="ss-steps"></ol>
+          <div id="ss-banner" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="status" role="tabpanel">
+          <h2 class="es-label">SART status</h2>
+          <div class="es-stats">
+            <div class="es-stat"><b id="ss-r-resp">0</b><span>Radar sweeps answered</span></div>
+            <div class="es-stat"><b id="ss-r-ship">—</b><span>Rescue ship</span></div>
+            <div class="es-stat"><b id="ss-r-det">—</b><span>Detection range</span></div>
+            <div class="es-stat"><b id="ss-r-batt">100%</b><span>Battery</span></div>
+          </div>
+          <dl class="es-dl">
+            <div><dt>Location</dt><dd id="ss-r-loc">In bracket</dd></div>
+            <div><dt>Height above sea</dt><dd id="ss-r-height">≈ 10 m</dd></div>
+            <div><dt>Mode</dt><dd id="ss-r-mode">Off</dd></div>
+            <div><dt>Self-tests run</dt><dd id="ss-r-tests">0</dd></div>
+          </dl>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="rescue" role="tabpanel">
+          <h2 class="es-label">Rescue progress</h2>
+          <ol class="es-chain" id="ss-chain"></ol>
+          <p class="es-note" id="ss-chain-note">The SART is off.</p>
+          <h3 class="es-sub-h">What the rescue radar shows</h3>
+          <div class="ss-guide" id="ss-guide">
+            <div data-g="dots"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#04170f"/><circle cx="28" cy="48" r="2" fill="#7dffa8"/><g fill="#7dffa8"><circle cx="28" cy="38" r="2"/><circle cx="28" cy="30" r="2"/><circle cx="28" cy="22" r="2"/><circle cx="28" cy="14" r="2"/><circle cx="28" cy="6" r="2"/></g></svg><b>12 dots</b>more than 1 nm away</div>
+            <div data-g="arcs"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#04170f"/><g fill="none" stroke="#7dffa8" stroke-width="2.4"><path d="M18 40 A14 14 0 0 1 38 40"/><path d="M12 32 A22 22 0 0 1 44 32"/><path d="M8 22 A30 30 0 0 1 48 22"/><path d="M5 12 A38 38 0 0 1 51 12"/></g><circle cx="28" cy="52" r="2" fill="#fff"/></svg><b>Arcs</b>within about 1 nm</div>
+            <div data-g="circles"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#04170f"/><g fill="none" stroke="#7dffa8" stroke-width="2.2"><circle cx="28" cy="28" r="6"/><circle cx="28" cy="28" r="13"/><circle cx="28" cy="28" r="20"/></g></svg><b>Circles</b>very close</div>
+          </div>
+          <h3 class="es-sub-h">Radar picture</h3>
+          <div id="ss-pic"></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="log" role="tabpanel">
+          <div class="es-log-head"><h2 class="es-label">Event log</h2></div>
+          <button type="button" class="btn small" id="ss-record" style="margin-bottom:10px">Record in radio log</button>
+          <ul class="es-log" id="ss-log"></ul>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="label" role="tabpanel">
+          <h2 class="es-label">Unit label</h2>
+          <p class="es-brief">Tap a line to check it.</p>
+          <div class="es-plate">
+            <div class="es-plate-top"><span>RADAR SART · 9 GHz</span><span>SV AMALIA · 428 123 456</span></div>
+            <div id="ss-label-rows"></div>
+          </div>
+          <div id="ss-report-wrap" class="es-report" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="facts" role="tabpanel">
+          <h2 class="es-label">Key facts</h2>
+          <dl class="es-facts">
+            <div><dt>9 GHz (X-band)</dt><dd>A radar SART answers only 3 cm (X-band) radar, 9.2–9.5 GHz. An S-band (10 cm) radar does not trigger it.</dd></div>
+            <div><dt>12 dots</dt><dd>On the searcher's radar it shows as a line of 12 dots about 0.6 nm apart, pointing away from the SART along its bearing. The SART is at the dot nearest the radar's own ship.</dd></div>
+            <div><dt>Arcs and circles</dt><dd>Within about 1 nm the dots spread into arcs. Very close, they become circles round the centre of the screen.</dd></div>
+            <div><dt>Range</dt><dd>At least 5 nm from a ship's radar (scanner 15 m up, SART 1 m above the sea). About 30 nm from an aircraft at 3,000 ft. Height matters: hold it at least 1 m up, on its pole.</dd></div>
+            <div><dt>Battery</dt><dd>96 hours on standby, then at least 8 hours answering radar. Replace by the expiry date on the label.</dd></div>
+            <div><dt>Indicator</dt><dd>The light or beeper changes when a radar reaches the SART, so survivors know a ship or aircraft is close.</dd></div>
+            <div><dt>Radar range</dt><dd>Use the 6 or 12 nm range so the line of dots fits on the screen. On 3 nm the SART may be off the edge.</dd></div>
+            <div><dt>Carriage</dt><dd>SOLAS cargo ships of 300–500 GT carry one SART; passenger ships and cargo ships of 500 GT and over carry two. An AIS-SART (ID starting 970) can be carried instead.</dd></div>
+            <div><dt>Testing</dt><dd>Test briefly with your own X-band radar: you should see rings round the centre of the screen. Keep tests short, as nearby ships see the rings too.</dd></div>
+            <div><dt>Switched on by mistake</dt><dd>Switch it off. Other ships' radars will show it as a distress signal.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="js/sart.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

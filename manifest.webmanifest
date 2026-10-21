@@ -1,7 +1,7 @@
 {
   "name": "Master GMDSS",
   "short_name": "Master GMDSS",
-  "description": "GMDSS training: study sheets, VHF/DSC, NAVTEX and EPIRB simulators, and SRC exams.",
+  "description": "GMDSS training: study sheets, VHF/DSC, NAVTEX, EPIRB and SART simulators, and SRC exams.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -68,6 +68,16 @@
     {
       "name": "EPIRB Simulator",
       "url": "epirb/",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Radar SART Simulator",
+      "url": "sart/",
       "icons": [
         {
           "src": "icons/icon-192.png",

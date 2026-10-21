@@ -1,14 +1,14 @@
 # Master GMDSS
 
 A suite of GMDSS training tools, built as one installable web app (PWA).
-Version 1.3.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
+Version 1.4.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
 
 The home screen has four sections, each with its own menu page:
 
 | Section | Menu page | Modules |
 |---|---|---|
 | Study | `study/` | Cheat sheets (one section at a time), equipment cards, call signs & NAVTEX |
-| Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`). Coming soon: SART, portable VHF, AIS-SART / AIS-EPIRB / AIS |
+| Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`), Radar SART (`sart/`). Coming soon: portable VHF, AIS-SART / AIS-EPIRB / AIS |
 | Exams | `exams/` | Multiple-choice exams (`quiz/`). Coming soon: written-answer exams |
 | Scenarios | `scenarios/` | Coming soon: Mayday, abandon ship |
 
@@ -53,6 +53,10 @@ master-gmdss/
 │  ├─ index.html           The page: scene, unit controls, status strip, tabs
 │  ├─ css/epirb.css        Phone-first layout; two columns from 900px
 │  └─ js/epirb.js          The beacon, alert chain, scenarios and screen updates
+├─ sart/                   Radar SART Simulator (9 GHz SART and the rescue ship's radar)
+│  ├─ index.html           The page: scene, unit controls, radar screen, status strip, tabs
+│  ├─ css/sart.css         Same layout as the EPIRB module, plus the radar screen
+│  └─ js/sart.js           The SART, rescue ship, radar drawing, scenarios and screen updates
 ├─ quiz/                   Multiple-choice exams
 │  ├─ index.html
 │  ├─ css/quiz.css
