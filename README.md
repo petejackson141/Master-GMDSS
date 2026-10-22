@@ -8,7 +8,7 @@ The home screen has four sections, each with its own menu page:
 | Section | Menu page | Modules |
 |---|---|---|
 | Study | `study/` | Cheat sheets (one section at a time), equipment cards, call signs & NAVTEX |
-| Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`), Radar SART (`sart/`). Coming soon: portable VHF, AIS-SART / AIS-EPIRB / AIS |
+| Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`), Radar SART (`sart/`), portable VHF (`portable/`). Coming soon: AIS-SART / AIS-EPIRB / AIS |
 | Exams | `exams/` | Multiple-choice exams (`quiz/`). Coming soon: written-answer exams |
 | Scenarios | `scenarios/` | Coming soon: Mayday, abandon ship |
 
@@ -57,6 +57,10 @@ master-gmdss/
 │  ├─ index.html           The page: scene, unit controls, radar screen, status strip, tabs
 │  ├─ css/sart.css         Same layout as the EPIRB module, plus the radar screen
 │  └─ js/sart.js           The SART, rescue ship, radar drawing, scenarios and screen updates
+├─ portable/               Portable VHF Simulator (survival craft VHF, liferaft, rescue ship NESHER)
+│  ├─ index.html           The page: scene, handheld radio, status strip, tabs
+│  ├─ css/portable.css     Same layout as the EPIRB and SART modules, plus the radio front panel
+│  └─ js/portable.js       The radio, liferaft, rescue ship, scenarios and screen updates
 ├─ quiz/                   Multiple-choice exams
 │  ├─ index.html
 │  ├─ css/quiz.css

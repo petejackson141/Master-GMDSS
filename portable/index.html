@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portable VHF Simulator · Master GMDSS</title>
+<meta name="description" content="Use a GMDSS survival craft VHF: test it with the bridge, take it into the liferaft, and talk to the rescue ship.">
+<meta name="theme-color" content="#16324F">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/portable.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a><a class="mg-home mg-up" href="../simulators/"><span aria-hidden="true">‹</span><span>Simulators</span></a></nav>
+  <header class="top">
+    <h1>Portable VHF Simulator</h1>
+    <p class="sub">Use a GMDSS survival craft VHF: test it with the bridge, take it into the liferaft, and talk to the rescue ship.</p>
+  </header>
+
+<div id="pvhf-sim">
+
+  <div class="es-settings">
+    <label class="es-sr" for="pv-scenario">Scenario</label>
+    <select id="pv-scenario" class="es-select">
+      <option value="free">Free practice</option>
+      <option value="monthly">Monthly check</option>
+      <option value="abandon">Abandon ship</option>
+      <option value="hear">Can't hear a thing</option>
+      <option value="inspect">Pre-departure inspection</option>
+    </select>
+    <div class="es-settings-row">
+      <div class="es-seg" role="group" aria-label="Simulation speed" id="pv-speed">
+        <button type="button" data-v="1">1×</button><button type="button" data-v="10">10×</button><button type="button" data-v="60">60×</button><button type="button" id="pv-pause" data-v="pause" aria-label="Pause">❚❚</button>
+      </div>
+      <button type="button" class="btn ghost small" id="pv-sound" aria-pressed="false">Sound off</button>
+    </div>
+  </div>
+
+  <div class="es-main">
+    <div class="es-device" id="pv-device">
+      <section class="es-card es-scene" aria-label="Scene">
+        <svg id="pv-svg" viewBox="0 0 420 300" role="img" aria-labelledby="pv-scene-cap">
+          <defs>
+            <linearGradient id="pv-g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sky1)"/><stop offset="1" style="stop-color:var(--es-sky2)"/></linearGradient>
+            <linearGradient id="pv-g-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sea1)"/><stop offset="1" style="stop-color:var(--es-sea2)"/></linearGradient>
+            <linearGradient id="pv-g-body" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8b400"/><stop offset=".4" stop-color="#ffd23a"/><stop offset="1" stop-color="#e3ad00"/></linearGradient>
+          </defs>
+          <rect width="420" height="300" fill="url(#pv-g-sky)"/>
+
+          <!-- own vessel (bridge) -->
+          <g id="pv-own">
+            <path d="M-10 170 H160 L148 230 H-10 Z" style="fill:var(--es-hull)"/>
+            <rect x="-10" y="164" width="172" height="8" style="fill:var(--es-deck)"/>
+            <rect x="-10" y="62" width="110" height="104" rx="4" style="fill:var(--es-bracket)"/>
+            <rect x="-10" y="70" width="40" height="22" rx="3" style="fill:var(--es-sea2)" opacity=".55"/>
+            <line x1="20" y1="62" x2="20" y2="24" style="stroke:var(--es-antenna)" stroke-width="3"/>
+            <line x1="20" y1="24" x2="20" y2="6" style="stroke:var(--es-antenna)" stroke-width="1.5"/>
+            <rect x="45" y="92" width="34" height="62" rx="6" style="fill:var(--es-bracket-dark)"/>
+            <text x="62" y="86" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="8" font-weight="700" style="fill:var(--es-hull)">VHF 2</text>
+            <rect x="69" y="134" width="8" height="16" rx="1.5" fill="#d4541a"/>
+            <g style="stroke:var(--es-deck)" stroke-width="3"><line x1="100" y1="164" x2="100" y2="132"/><line x1="156" y1="164" x2="156" y2="132"/><line x1="100" y1="132" x2="160" y2="132"/></g>
+          </g>
+
+          <!-- rescue ship -->
+          <g id="pv-rship" style="transform:translate(420px,200px) scale(.25)">
+            <path d="M0 -2 L10 -16 H104 L100 0 Z" style="fill:var(--es-hull)"/>
+            <rect x="60" y="-36" width="32" height="20" rx="2" style="fill:var(--es-bracket)"/>
+            <rect x="64" y="-32" width="24" height="5" style="fill:var(--es-sea2)" opacity=".6"/>
+            <line x1="76" y1="-36" x2="76" y2="-70" style="stroke:var(--es-antenna)" stroke-width="2.5"/>
+            <rect x="96" y="-30" width="7" height="14" style="fill:var(--coral)"/>
+          </g>
+          <text id="pv-ship-t" x="410" y="22" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)"></text>
+
+          <!-- liferaft, back part -->
+          <g>
+            <path d="M204 192 Q250 128 296 192 Z" fill="#f26a2e" stroke="#c4501c" stroke-width="1.5"/>
+            <path d="M236 192 V176 Q250 160 264 176 V192 Z" fill="#3a1a0c"/>
+          </g>
+          <g id="pv-arm"><path d="M246 190 L246 150 Q246 144 252 144 L258 144" fill="none" stroke="#f0a35e" stroke-width="7" stroke-linecap="round"/><path d="M246 190 L246 168" stroke="#16324F" stroke-width="9" stroke-linecap="round"/></g>
+
+          <!-- the radio: origin at the antenna tip -->
+          <g id="pv-radio-g" style="transform:translate(58px,96px) rotate(0deg)">
+            <line x1="0" y1="0" x2="0" y2="20" stroke="#1d2328" stroke-width="2.6" stroke-linecap="round"/>
+            <rect x="-4" y="17" width="5" height="5" rx="1" fill="#1d2328"/>
+            <rect x="-7" y="20" width="16" height="32" rx="3.5" fill="url(#pv-g-body)" stroke="#a87e00" stroke-width=".8"/>
+            <rect x="-4.5" y="23" width="11" height="7" rx="1" fill="#2a3036"/>
+            <rect id="pv-lcd-svg" x="-3.5" y="24" width="9" height="5" rx=".6" fill="#3a4448"/>
+            <g fill="#2a3036"><circle cx="-2" cy="34" r=".9"/><circle cx="1" cy="34" r=".9"/><circle cx="4" cy="34" r=".9"/><circle cx="-2" cy="37" r=".9"/><circle cx="1" cy="37" r=".9"/><circle cx="4" cy="37" r=".9"/></g>
+            <rect x="-4" y="41" width="10" height="3" rx="1" fill="#c22a1f"/>
+            <rect x="-8.6" y="27" width="2" height="9" rx="1" fill="#2a3036"/>
+            <rect x="-6" y="49" width="14" height="3" rx="1" fill="#2a3036"/>
+            <circle id="pv-txdot" cx="6" cy="21.8" r="1.2" fill="#5a2207"/>
+          </g>
+
+          <!-- liferaft, front tube -->
+          <rect x="198" y="188" width="104" height="18" rx="9" fill="#2a3540"/>
+          <rect x="204" y="191" width="92" height="4" rx="2" fill="#4d5b66"/>
+
+          <g id="pv-fx"></g>
+          <rect x="0" y="200" width="420" height="100" fill="url(#pv-g-sea)" opacity=".9"/>
+          <path id="pv-waves" d="M0 200 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V208 H0 Z" style="fill:var(--es-sea1)" opacity=".95"/>
+          <g>
+            <rect x="12" y="262" width="168" height="26" rx="13" style="fill:var(--surface)" opacity=".94"/>
+            <text id="pv-range-t" x="96" y="279" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)">Reaches ≈ 6 nm</text>
+          </g>
+          <text id="pv-loc-t" x="408" y="283" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="1">IN BRACKET</text>
+        </svg>
+        <p class="es-sr" id="pv-scene-cap">Your vessel's bridge with the survival craft VHF in its bracket, a liferaft on the sea, and a rescue ship on the horizon.</p>
+        <div class="es-actions">
+          <button type="button" class="btn ghost" id="pv-btn-remove">Remove from bracket</button>
+          <button type="button" class="btn ghost" id="pv-btn-raft">Take into liferaft</button>
+          <button type="button" class="btn ghost" id="pv-btn-spare">Take spare battery</button>
+          <button type="button" class="btn ghost" id="pv-btn-reset">Reset</button>
+        </div>
+        <p class="es-feedback" id="pv-feedback" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="es-panel pv-radio" aria-label="Radio controls">
+        <div class="pv-lcd off" id="pv-lcd" aria-live="off">
+          <div class="pv-lcd-top">
+            <span class="pv-flag" id="pv-f-hi">HI</span><span class="pv-flag" id="pv-f-lo">LO</span>
+            <span class="pv-flag" id="pv-f-busy">BUSY</span><span class="pv-flag tx" id="pv-f-tx">TX</span>
+            <span class="pv-batt" id="pv-batt-ico" aria-label="Battery"><i></i><i></i><i></i></span>
+          </div>
+          <div class="pv-lcd-mid">
+            <span class="pv-ch"><small>CH</small><span id="pv-lcd-ch">16</span></span>
+            <span class="pv-chname" id="pv-lcd-name">Distress, safety and calling</span>
+          </div>
+          <div class="pv-lcd-bot"><span id="pv-lcd-vol">VOL 5</span><span id="pv-lcd-batt">RECH</span><span id="pv-lcd-sq">SQ 3</span></div>
+        </div>
+
+        <div class="pv-row">
+          <div class="pv-left">
+            <div>
+              <span class="es-mini" id="pv-sw-lbl">Power</span>
+              <div class="es-switch" role="radiogroup" aria-labelledby="pv-sw-lbl" id="pv-switch">
+                <span class="es-knob" id="pv-knob"></span>
+                <button type="button" class="es-pos" role="radio" data-pos="OFF" aria-checked="true">OFF</button>
+                <button type="button" class="es-pos" role="radio" data-pos="ON" aria-checked="false">ON</button>
+              </div>
+            </div>
+            <div>
+              <span class="es-mini" id="pv-bt-lbl">Battery fitted</span>
+              <div class="pv-battsel" role="group" aria-labelledby="pv-bt-lbl" id="pv-battsel">
+                <button type="button" data-b="rech" aria-pressed="true">Rechargeable</button>
+                <button type="button" data-b="prim" aria-pressed="false">Sealed emergency</button>
+              </div>
+            </div>
+          </div>
+          <div class="pv-ptt-wrap">
+            <button type="button" class="pv-ptt" id="pv-ptt" aria-pressed="false">PTT</button>
+            <small id="pv-ptt-help">Tap to talk</small>
+          </div>
+        </div>
+
+        <div class="pv-keys" aria-label="Keypad">
+          <button type="button" class="pv-key" data-k="up" aria-label="Channel up">CH ▲</button>
+          <button type="button" class="pv-key" data-k="down" aria-label="Channel down">CH ▼</button>
+          <button type="button" class="pv-key k16" data-k="16">16<small>DISTRESS</small></button>
+          <button type="button" class="pv-key" data-k="hl">H/L<small>POWER</small></button>
+          <button type="button" class="pv-key" data-k="vol-" aria-label="Volume down">VOL −</button>
+          <button type="button" class="pv-key" data-k="vol+" aria-label="Volume up">VOL +</button>
+          <button type="button" class="pv-key" data-k="sq-" aria-label="Squelch down">SQ −</button>
+          <button type="button" class="pv-key" data-k="sq+" aria-label="Squelch up">SQ +</button>
+        </div>
+      </section>
+
+      <section class="es-card pv-traffic" aria-label="Radio traffic">
+        <div class="pv-traffic-head">
+          <h2 class="es-label">Radio traffic</h2>
+          <div class="pv-traffic-meta"><span id="pv-tr-ch">CH 16</span><span id="pv-tr-state">Radio off</span></div>
+        </div>
+        <ul class="pv-msgs" id="pv-msgs" aria-live="polite"></ul>
+        <div class="pv-say" id="pv-say" hidden>
+          <h3 id="pv-say-h">Transmitting. What do you say?</h3>
+          <div class="pv-opts" id="pv-opts"></div>
+          <button type="button" class="pv-release" id="pv-release">Release PTT without speaking</button>
+        </div>
+        <p class="pv-hint" id="pv-hint">Listen first. Then tap PTT, choose what to say, and listen for the reply.</p>
+      </section>
+    </div>
+
+    <div class="es-strip" aria-label="Radio state">
+      <span class="es-chip" id="pv-mode" data-s="off">Off</span>
+      <span class="es-strip-info"><span>Ship <b id="pv-strip-ship">—</b></span><span><b id="pv-clock">T+0:00</b></span></span>
+      <button type="button" class="btn ghost es-strip-up" id="pv-up" aria-label="Back to the radio">↑ Radio</button>
+    </div>
+
+    <div class="es-info">
+      <div class="es-tabs" role="tablist" aria-label="Simulator panels">
+        <button type="button" class="es-tab" role="tab" data-tab="steps" aria-selected="true">Steps<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="status" aria-selected="false">Status<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="log" aria-selected="false">Log<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="label" aria-selected="false">Label<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="facts" aria-selected="false">Facts<span class="dot"></span></button>
+      </div>
+      <div class="es-panes">
+        <section class="es-card es-pane" data-pane="steps" role="tabpanel">
+          <h2 class="es-label" id="pv-sc-h">Free practice</h2>
+          <p class="es-brief" id="pv-brief"></p>
+          <ol class="es-steps" id="pv-steps"></ol>
+          <div id="pv-banner" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="status" role="tabpanel">
+          <h2 class="es-label">Radio status</h2>
+          <div class="es-stats">
+            <div class="es-stat"><b id="pv-r-ch">16</b><span>Channel</span></div>
+            <div class="es-stat"><b id="pv-r-batt">100%</b><span>Battery</span></div>
+            <div class="es-stat"><b id="pv-r-tx">≈ 6 nm</b><span>Ship hears you</span></div>
+            <div class="es-stat"><b id="pv-r-rx">≈ 15 nm</b><span>You hear the ship</span></div>
+          </div>
+          <dl class="es-dl">
+            <div><dt>Location</dt><dd id="pv-r-loc">In bracket</dd></div>
+            <div><dt>Battery fitted</dt><dd id="pv-r-bt">Rechargeable</dd></div>
+            <div><dt>Emergency battery seal</dt><dd id="pv-r-seal">Intact</dd></div>
+            <div><dt>Sealed spare battery</dt><dd id="pv-r-spare">On board</dd></div>
+            <div><dt>Power</dt><dd id="pv-r-pw">High</dd></div>
+            <div><dt>Squelch</dt><dd id="pv-r-sq">3</dd></div>
+            <div><dt>Time transmitting</dt><dd id="pv-r-txt">0 s</dd></div>
+          </dl>
+          <h3 class="es-sub-h">Contact with the rescue ship</h3>
+          <ol class="es-chain" id="pv-chain"></ol>
+          <p class="es-note" id="pv-chain-note">The radio is off.</p>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="log" role="tabpanel">
+          <div class="es-log-head"><h2 class="es-label">Event log</h2></div>
+          <button type="button" class="btn small" id="pv-record" style="margin-bottom:10px">Record in radio log</button>
+          <ul class="es-log" id="pv-log"></ul>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="label" role="tabpanel">
+          <h2 class="es-label">Unit label</h2>
+          <p class="es-brief">Tap a line to check it.</p>
+          <div class="es-plate">
+            <div class="es-plate-top"><span>SURVIVAL CRAFT VHF · NO. 2</span><span>AMALIA · 428 123 456</span></div>
+            <div id="pv-label-rows"></div>
+          </div>
+          <div id="pv-report-wrap" class="es-report" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="facts" role="tabpanel">
+          <h2 class="es-label">Key facts</h2>
+          <dl class="es-facts">
+            <div><dt>Channels 16 and 06</dt><dd>Every survival craft VHF works on channel 16 (156.800 MHz) and at least one other simplex channel. Channel 06 is the on-scene channel for search and rescue, and for talking to SAR aircraft.</dd></div>
+            <div><dt>Power</dt><dd>At least 0.25 W. A set stronger than 1 W must have a switch to cut it to 1 W or less. Use low power when the other station is close: it saves the battery.</dd></div>
+            <div><dt>Range</dt><dd>VHF is line of sight. From a liferaft, low to the water, a handheld reaches a ship about 5 nm away. The ship, with more power and a higher aerial, can usually be heard much further off. Keep the antenna upright.</dd></div>
+            <div><dt>Sealed emergency battery</dt><dd>A non-rechargeable battery kept for emergencies, sealed so you can see it hasn't been used. It gives 8 hours at full power with a duty cycle of 1:9 and has a shelf life of at least 2 years. Check the expiry date; once the seal is broken, replace it.</dd></div>
+            <div><dt>Rechargeable battery</dt><dd>For tests and routine use, so the sealed battery stays unused. Keep it charged.</dd></div>
+            <div><dt>Built for the raft</dt><dd>Watertight to 1 m for at least 5 minutes, survives a 1 m drop onto a hard surface, works from −20 °C to +55 °C, usable with gloves, and coloured yellow or orange (or marked with a yellow or orange strip).</dd></div>
+            <div><dt>Carriage</dt><dd>SOLAS passenger ships and cargo ships of 500 GT and over carry at least 3; cargo ships of 300–500 GT carry at least 2. Stow them where they can be taken quickly to the survival craft.</dd></div>
+            <div><dt>Switching on</dt><dd>Check three things, in this order: squelch, then channel 16, then HIGH power.</dd></div>
+            <div><dt>Squelch</dt><dd>Turn it down until you hear the hiss, then up until the hiss just stops. Set too high, it cuts out weak stations, often the ones you need.</dd></div>
+            <div><dt>Spare battery</dt><dd>In an exercise or abandon ship, take the sealed spare battery with you. Leave it sealed and fit it only when the radio's own battery runs low.</dd></div>
+            <div><dt>Channels 15 and 17</dt><dd>On-board communication, at 1 W or less. Test with the bridge on these, never on channel 16.</dd></div>
+            <div><dt>Talking</dt><dd>Listen first. Press PTT, pause a moment, speak clearly, release and listen. In distress traffic, start every message with MAYDAY. Keep it short, and end with Over or Out, never both.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="js/portable.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.1 — 22 October 2026
+- Portable VHF: range from the liferaft raised to about 5 nm on high power (you hear the ship from about 10 nm). NESHER back at 4 nm in free practice and 4.5 nm in "Can't hear a thing".
+
+## 1.5.0 — 22 October 2026
+- New module: Portable VHF Simulator (portable/). A GMDSS survival craft VHF: power switch, rechargeable or sealed emergency battery, channel keys, 16 key, H/L power, volume, squelch with hiss, PTT with choose-what-to-say. Take it from the bracket, onto deck and into the liferaft; range depends on where you are and on high or low power.
+- Five scenarios: free practice, monthly check with the bridge (channel 15 or 17, low power), abandon ship (talk to the rescue ship NESHER on 16, then 06), can't hear a thing (squelch set too high), pre-departure label inspection.
+- Abandon ship follows the course: take the sealed spare battery with you (don't fit it), and on switching on check squelch first, then channel 16, then HIGH power. No holding the radio up at the canopy door.
+- Simulators menu: Portable VHF is now live (was "Coming soon"). App shortcut added.
+
 ## 1.4.1 — 22 October 2026
 - Radar SART facts corrected to match how the course teaches it: range from a ship about 8–10 nm, from an aircraft about 30–40 nm, dots become arcs somewhere between 1 and 5 nm.
 - Simulator ranges raised to match: about 9 nm on the pole, 3–4 nm in the canopy, about 3 nm floating. Arcs now appear from 2 nm.
