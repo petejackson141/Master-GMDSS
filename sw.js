@@ -1,7 +1,7 @@
 /* Master GMDSS service worker
    Saves the app on the phone so it opens without internet, and picks up new versions.
    IMPORTANT: change VERSION every time you publish changes, so phones download the new files. */
-const VERSION = 'v1.4.0';
+const VERSION = 'v1.4.1';
 const CACHE = 'master-gmdss-' + VERSION;
 
 // Everything the app needs to start offline (paths are relative to this file)

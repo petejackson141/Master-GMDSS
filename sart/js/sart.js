@@ -10,7 +10,7 @@
   var TAU = Math.PI * 2;
   var ROT = 2.4;               // radar scanner: seconds per revolution (real time)
   var DOT_GAP = 0.64, FIRST = 0.08;
-  var DET = {bracket:8, hand:7, raft:2.5, pole:6, water:2};
+  var DET = {bracket:10, hand:9, raft:4, pole:9, water:3};
   var HEIGHT = {bracket:"≈ 10 m (bridge)", hand:"≈ 3 m (deck)", raft:"≈ 0.5 m (in the canopy)", pole:"1 m+ (on its pole)", water:"≈ 0.1 m (floating)"};
   var HEIGHT_SHORT = {bracket:"Height ≈ 10 m", hand:"Height ≈ 3 m", raft:"Height ≈ 0.5 m", pole:"Height 1 m+", water:"Height ≈ 0.1 m"};
   var LOC_NAMES = {bracket:"In bracket", hand:"In hand, on deck", raft:"Inside the liferaft", pole:"On the pole", water:"Floating in the sea"};
@@ -95,7 +95,7 @@
     return view === "own" ? true : shipDist() <= DET[st.loc];
   }
   function radarRecent(){ return now() - st.lastInterr < 3000; }
-  function respKind(r){ return r >= 1 ? "dots" : r > 0.2 ? "arcs" : "circles"; }
+  function respKind(r){ return r >= 2 ? "dots" : r > 0.2 ? "arcs" : "circles"; }
 
   // ---------- scenarios ----------
   var SCEN = {
@@ -116,7 +116,7 @@
     abandon:{
       name:"Abandon ship",
       brief:"You are abandoning ship into the liferaft and can take the SART with you. A rescue ship is searching a few miles away.",
-      setup:function(){ st.ship = mkShip(-11, 3.5, 10); },
+      setup:function(){ st.ship = mkShip(-13, 4, 10); },
       steps:[
         {t:"Remove the SART from its bracket", ev:function(e){ return e.type==="loc" && e.loc==="hand"; }},
         {t:"Switch it ON: pull the safety tab first", ev:function(e){ return e.type==="switch" && e.pos==="ON"; }},
@@ -125,11 +125,11 @@
         {t:"Watch the Radar light: a ship's radar has reached you", ev:function(e){ return e.type==="interrogated"; }},
         {t:"The rescue ship homes in and comes alongside", ev:function(e){ return e.type==="recovered"; }}
       ],
-      win:"Rescued. On its pole the SART answered the rescue ship's X-band radar from about 6 nm. Inside the canopy or floating in the sea, that drops to 2–3 nm."
+      win:"Rescued. On its pole the SART answered the rescue ship's X-band radar from about 9 nm. Inside the canopy or floating in the sea, that drops to 3–4 nm."
     },
     height:{
       name:"Get it higher",
-      brief:"You're in the liferaft. The SART is on, but it is floating in the sea beside you, only a few centimetres above the water. A rescue ship is searching about 4 nm away.",
+      brief:"You're in the liferaft. The SART is on, but it is floating in the sea beside you, only a few centimetres above the water. A rescue ship is searching a few miles away.",
       setup:function(){ st.ship = mkShip(-6.5, 4, 10); st.loc = "water"; st.guardUp = true; st.sw = "ON"; st.everOn = true; st.c.on = 0; },
       steps:[
         {t:"Lift the SART out of the water into the raft", ev:function(e){ return e.type==="loc" && e.loc==="raft"; }},
@@ -137,7 +137,7 @@
         {t:"The rescue ship's radar reaches you: the Radar light flashes", ev:function(e){ return e.type==="interrogated"; }},
         {t:"The rescue ship homes in and comes alongside", ev:function(e){ return e.type==="recovered"; }}
       ],
-      win:"Height made the difference. Floating, the SART could only be seen from about 2 nm, so the ship would have passed by. On its pole it was picked up from about 6 nm."
+      win:"Height made the difference. Floating, the SART could only be seen from about 3 nm, so the ship would have passed by. On its pole it was picked up from about 9 nm."
     },
     search:{
       name:"On the rescue ship's radar",
@@ -260,9 +260,9 @@
   }
   var LOC_SAY = {
     hand:"Out of the bracket.",
-    raft:"Inside the canopy it sits low and the canopy is in the way: range drops to 2–3 nm.",
-    pole:"Up on its pole, about 1 m above the sea: a ship's radar can pick it up from about 5–6 nm.",
-    water:"Floating, it is only a few centimetres above the water. Waves block it and range drops to about 2 nm.",
+    raft:"Inside the canopy it sits low and the canopy is in the way: range drops to 3–4 nm.",
+    pole:"Up on its pole, about 1 m above the sea: a ship's radar can pick it up from about 8–10 nm.",
+    water:"Floating, it is only a few centimetres above the water. Waves block it and range drops to about 3 nm.",
     bracket:"Back in its bracket."
   };
   var LOC_LOG = {
@@ -516,7 +516,7 @@
     {k:"interr", n:"Radar reaches it", s:"Light and beeper change"},
     {k:"dots", n:"12 dots on radar", s:"Rescue ship sees the line"},
     {k:"homing", n:"Ship alters course", s:"Heads for the nearest dot"},
-    {k:"arcs", n:"Arcs", s:"Within about 1 nm"},
+    {k:"arcs", n:"Arcs", s:"Within about 1–5 nm"},
     {k:"circles", n:"Circles", s:"Very close"},
     {k:"rec", n:"Alongside", s:"Survivors recovered"}
   ];
@@ -756,7 +756,7 @@
       updateShip(sd);
       if (st.ship && !st.ship.recovered && radarView() === "rescue" && answering("rescue")){
         var d = shipDist();
-        if (d < 1 && st.c.arcs == null){ st.c.arcs = st.simT; news("rescue"); addLog("The SART's dots have spread into arcs: the rescue ship is within about 1 nm.", "tx"); emit({type:"arcs"}); }
+        if (d < 2 && st.c.arcs == null){ st.c.arcs = st.simT; news("rescue"); addLog("The SART's dots have spread into arcs: the rescue ship is close (arcs show somewhere between 1 and 5 nm).", "tx"); emit({type:"arcs"}); }
         if (d < 0.2 && st.c.circles == null){ st.c.circles = st.simT; news("rescue"); addLog("Arcs have closed into circles round the centre of the radar: the SART is very close.", "tx"); emit({type:"circles"}); }
         if (d < 1.5 && st.radar.sea === "high" && st.ship.homing && !st.warnedSea){ st.warnedSea = true; say("Sea clutter suppression is on High: the SART's dots near your ship are being wiped out. Turn it down.", "warn"); }
       }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 — 22 October 2026
+- Radar SART facts corrected to match how the course teaches it: range from a ship about 8–10 nm, from an aircraft about 30–40 nm, dots become arcs somewhere between 1 and 5 nm.
+- Simulator ranges raised to match: about 9 nm on the pole, 3–4 nm in the canopy, about 3 nm floating. Arcs now appear from 2 nm.
+
 ## 1.4.0 — 21 October 2026
 - New module: Radar SART Simulator (sart/). A 9 GHz radar SART drawn like the real orange unit: OFF / ON switch under a safety tab, press-and-hold self-test, Standby / Radar / Pass / Fault lights. Take it from the bracket into the liferaft, onto its pole or into the sea; height changes how far away it can be seen (about 2 nm floating, 6 nm on the pole).
 - Live X-band radar screen with a 3 / 6 / 12 nm range: the SART shows as a line of 12 dots, then arcs within about 1 nm, then circles when very close. A rescue ship searches, picks it up and homes in. Tap the screen to mark the SART.
