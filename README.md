@@ -1,7 +1,7 @@
 # Master GMDSS
 
 A suite of GMDSS training tools, built as one installable web app (PWA).
-Version 1.4.1. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
+Version 1.6.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
 
 The home screen has four sections, each with its own menu page:
 
@@ -9,7 +9,7 @@ The home screen has four sections, each with its own menu page:
 |---|---|---|
 | Study | `study/` | Cheat sheets (one section at a time), equipment cards, call signs & NAVTEX |
 | Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`), Radar SART (`sart/`), portable VHF (`portable/`). Coming soon: AIS-SART / AIS-EPIRB / AIS |
-| Exams | `exams/` | Multiple-choice exams (`quiz/`). Coming soon: written-answer exams |
+| Exams | `exams/` | Multiple-choice exams (`quiz/`), written-answer exams (`written/`) |
 | Scenarios | `scenarios/` | Coming soon: Mayday, abandon ship |
 
 ## What each file does
@@ -66,6 +66,11 @@ master-gmdss/
 │  ├─ css/quiz.css
 │  └─ js/questions.js      All questions, answer keys, explanations and topics
 │     js/quiz.js           Runs the exams; progress saved on the phone
+├─ written/                Written-answer (scenario) exams
+│  ├─ index.html
+│  ├─ css/written.css
+│  └─ js/data.js           The 8 exam papers and model answers (as on the answer sheets), Learn-mode "why" notes
+│     js/written.js        Exam mode (timer, writing, marking), Learn mode, model answer; progress saved on the phone
 └─ study/                  Study pages (read on the phone one section at a time, or print)
 ```
 

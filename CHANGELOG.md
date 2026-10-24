@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 — 24 October 2026
+- New module: Written-answer exams (written/). The 8 scenario exams from the course (DEVORA, JASMIN, JASMIN mast fell, NESHER, TABOR, RAFSODY, AMALIA Strait of Gibraltar, PACIFIC / HORIZON), with the model answers exactly as on the answer sheets.
+- Exam mode: the exam paper, a 15-minute timer (keeps counting over time), a writing box per part (saved as you type, so you can leave and come back). Then "Finish and mark": your answer next to the model answer, tick each line you got for a score. Best score saved.
+- Learn mode: read the scenario, put the steps in order, see each step with a short "why" and a link to the matching simulator, then put each radio message together line by line.
+- "Show the model answer" for each exam.
+- Exams menu: Written-answer exams is now live (was "Coming soon"). App shortcut added.
+
 ## 1.5.1 — 22 October 2026
 - Portable VHF: range from the liferaft raised to about 5 nm on high power (you hear the ship from about 10 nm). NESHER back at 4 nm in free practice and 4.5 nm in "Can't hear a thing".
 

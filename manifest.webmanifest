@@ -94,6 +94,16 @@
           "sizes": "192x192"
         }
       ]
+    },
+    {
+      "name": "Written-answer exams",
+      "url": "written/",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

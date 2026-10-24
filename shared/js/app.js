@@ -1,6 +1,6 @@
 /* Master GMDSS — shared app code used by every page:
    registers the service worker (offline + install) and handles the "Install app" button. */
-const MG_VERSION = '1.5.1';
+const MG_VERSION = '1.6.0';
 
 (function () {
   // Work out where the app's root folder is, so this works at any web address
