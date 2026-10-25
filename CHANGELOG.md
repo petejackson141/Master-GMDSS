@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0 — 25 October 2026
+- New module: AIS-SART Simulator (ais-sart/). Built on the Radar SART simulator: OFF / ON switch under a safety tab, hold-1-second TEST, GNSS / Transmit / Pass / Fault lights. Take it into the liferaft, onto its pole or into the sea. The rescue ship's AIS display shows the SART ACTIVE alarm (ACK button) and a circle-with-cross target; tap it for MMSI 970, position, bearing and range. Six scenarios: free practice, monthly test (SART TEST on your own AIS), abandon ship, get it higher, on the rescue ship's AIS, pre-departure inspection.
+- New module: AIS-EPIRB Simulator (ais-epirb/). The EPIRB simulator with an AIS locator: EPIRB ACTIVE once a minute on the two AIS channels, a nearby ship (MV CARMEL STAR) that sees it, alters course and comes alongside, and a second "AIS: nearby ships" chain beside the satellite chain. Seven scenarios, including accidental activation (the nearby ship stands down when you cancel) and a new "On a nearby ship's AIS".
+- New page: AIS (ais/). How AIS works: an example AIS display you can tap (ships, a dangerous target, a lost target, an AIS-SART and an AIS-EPIRB), what each ship sends, Class A and B, reading the MMSI, distress devices, and why not to rely on AIS alone. Links to both simulators.
+- Simulators menu: AIS, AIS-SART and AIS-EPIRB are now live (were "Coming soon").
+
 ## 1.7.0 — 25 October 2026
 - Multiple-choice exams: new **Random exam**. 20 questions from the whole bank (405 different questions), with every topic included: at least 2 from each of EPIRB, VHF, SART, DSC, NAVTEX, Voice procedures and General GMDSS, the rest shared by topic size. A new mix each time, with a score by topic at the end.
 - The 24 fixed exams are hidden (still in the app, set SHOW_FIXED_EXAMS to true in quiz/js/quiz.js to bring them back). Topic banks stay as they were.

@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AIS-EPIRB Simulator · Master GMDSS</title>
+<meta name="description" content="A 406 MHz EPIRB with a built-in AIS locator: follow the alert through Cospas-Sarsat to the rescue centre, and see EPIRB ACTIVE on nearby ships' AIS displays.">
+<meta name="theme-color" content="#16324F">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/ais-epirb.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a><a class="mg-home mg-up" href="../simulators/"><span aria-hidden="true">‹</span><span>Simulators</span></a></nav>
+  <header class="top">
+    <h1>AIS-EPIRB Simulator</h1>
+    <p class="sub">A float-free 406 MHz EPIRB with a built-in AIS locator. The alert goes to the rescue centre by satellite, and nearby ships see it on their AIS.</p>
+  </header>
+
+<div id="ais-epirb-sim">
+
+  <div class="es-settings">
+    <label class="es-sr" for="es-scenario">Scenario</label>
+    <select id="es-scenario" class="es-select">
+      <option value="free">Free practice</option>
+      <option value="selftest">Monthly self-test</option>
+      <option value="abandon">Abandon ship (manual)</option>
+      <option value="floatfree">Vessel sinks (float-free)</option>
+      <option value="false">Accidental activation</option>
+      <option value="nearby">On a nearby ship's AIS</option>
+      <option value="inspect">Pre-departure inspection</option>
+    </select>
+    <div class="es-settings-row">
+      <div class="es-seg" role="group" aria-label="Simulation speed" id="es-speed">
+        <button type="button" data-v="1">1×</button><button type="button" data-v="10">10×</button><button type="button" data-v="60">60×</button><button type="button" id="es-pause" data-v="pause" aria-label="Pause">❚❚</button>
+      </div>
+      <button type="button" class="btn ghost small" id="es-sound" aria-pressed="false">Sound off</button>
+    </div>
+  </div>
+
+  <div class="es-main">
+    <div class="es-device" id="es-device">
+      <section class="es-card es-scene" aria-label="Scene">
+        <svg id="es-svg" viewBox="0 0 420 440" role="img" aria-labelledby="es-scene-cap">
+          <defs>
+            <linearGradient id="es-g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sky1)"/><stop offset="1" style="stop-color:var(--es-sky2)"/></linearGradient>
+            <linearGradient id="es-g-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--es-sea1)"/><stop offset="1" style="stop-color:var(--es-sea2)"/></linearGradient>
+            <linearGradient id="es-g-body" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d99a00"/><stop offset=".35" stop-color="#ffd23a"/><stop offset="1" stop-color="#e3a400"/></linearGradient>
+            <radialGradient id="es-g-dome" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff" stop-opacity=".9"/><stop offset="1" stop-color="#cfe3ef" stop-opacity=".55"/></radialGradient>
+            <radialGradient id="es-g-flash"><stop offset="0" stop-color="#ffffff"/><stop offset=".4" stop-color="#ffffff" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="420" height="440" fill="url(#es-g-sky)"/>
+          <g id="es-sat" transform="translate(352 46)">
+            <rect x="-26" y="-6" width="18" height="12" style="fill:var(--es-sat-panel)" opacity=".9"/>
+            <rect x="8" y="-6" width="18" height="12" style="fill:var(--es-sat-panel)" opacity=".9"/>
+            <line x1="-8" y1="0" x2="8" y2="0" style="stroke:var(--es-sat)" stroke-width="2"/>
+            <rect x="-6" y="-8" width="12" height="16" rx="2" style="fill:var(--es-sat)"/>
+            <line x1="0" y1="8" x2="0" y2="14" style="stroke:var(--es-sat)" stroke-width="2"/>
+            <text x="0" y="30" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" style="fill:var(--es-sat)" letter-spacing="1">MEOSAR</text>
+          </g>
+          <line id="es-beam" x1="0" y1="0" x2="352" y2="58" style="stroke:var(--gold)" stroke-width="2.5" stroke-dasharray="5 5" opacity="0"/>
+          <g id="es-ship">
+            <rect x="-10" y="318" width="250" height="12" style="fill:var(--es-deck)"/>
+            <path d="M-10 330 H240 L226 470 H-10 Z" style="fill:var(--es-hull)"/>
+            <g style="stroke:var(--es-deck)" stroke-width="3">
+              <line x1="0" y1="318" x2="0" y2="262"/><line x1="200" y1="318" x2="200" y2="262"/><line x1="-10" y1="262" x2="232" y2="262"/><line x1="-10" y1="290" x2="232" y2="290" stroke-width="2"/>
+            </g>
+            <rect x="56" y="40" width="98" height="282" rx="10" style="fill:var(--es-bracket)"/>
+            <rect x="62" y="300" width="86" height="18" rx="4" style="fill:var(--es-bracket-dark)"/>
+            <rect x="56" y="40" width="98" height="11" rx="5" style="fill:var(--es-bracket-dark)"/>
+            <text x="105" y="312" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="8" font-weight="700" style="fill:var(--es-hull)">FLOAT-FREE</text>
+          </g>
+          <g id="es-beacon" style="transform:translate(65px,52px) scale(1)">
+            <g id="es-bob">
+              <line x1="40" y1="2" x2="40" y2="58" style="stroke:var(--es-antenna)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="40" cy="3" r="3.2" style="fill:var(--es-antenna)"/>
+              <path d="M18 92 Q18 56 40 56 Q62 56 62 92 Z" fill="url(#es-g-dome)" stroke="#9fb2bf" stroke-width="1.5"/>
+              <rect x="34" y="70" width="12" height="18" rx="3" fill="#dfe8ee" stroke="#9fb2bf"/>
+              <circle id="es-strobe" cx="40" cy="76" r="34" fill="url(#es-g-flash)" opacity="0"/>
+              <rect x="14" y="90" width="52" height="10" rx="3" fill="#2a3540"/>
+              <rect x="10" y="98" width="60" height="150" rx="12" fill="url(#es-g-body)" stroke="#b07c00" stroke-width="1.5"/>
+              <rect x="10" y="106" width="60" height="8" fill="#d6dde2"/>
+              <rect x="10" y="232" width="60" height="8" fill="#d6dde2"/>
+              <rect x="17" y="120" width="46" height="40" rx="3" fill="#ffffff"/>
+              <text x="40" y="136" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" fill="#16324F">406</text>
+              <text x="40" y="149" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="8.5" font-weight="700" fill="#16324F">EPIRB</text>
+              <text x="40" y="157" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="5.5" fill="#5C7A8F">CAT I · GNSS · AIS</text>
+              <rect x="16" y="166" width="48" height="60" rx="6" fill="#23303b"/>
+              <rect x="22" y="174" width="36" height="9" rx="4.5" fill="#0e151b"/>
+              <circle id="es-knob-svg" cx="40" cy="178.5" r="4.6" fill="#e8eef1"/>
+              <rect id="es-guard-svg" x="47.5" y="171" width="13" height="15" rx="2.5" fill="#cf3a2f"/>
+              <circle cx="30" cy="203" r="7.5" fill="#46596a" stroke="#0e151b"/>
+              <text x="30" y="205.5" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="6" font-weight="700" fill="#e8eef1">T</text>
+              <circle id="es-led-ok-svg" cx="46" cy="198" r="3" fill="#152027"/>
+              <circle id="es-led-gnss-svg" cx="55" cy="198" r="3" fill="#152027"/>
+              <circle id="es-led-fault-svg" cx="50.5" cy="210" r="3" fill="#152027"/>
+              <rect x="14" y="246" width="52" height="14" rx="5" fill="#2a3540"/>
+              <circle cx="29" cy="262" r="2.8" fill="#b9c2c9"/><circle cx="51" cy="262" r="2.8" fill="#b9c2c9"/>
+            </g>
+          </g>
+          <g id="es-strap">
+            <rect x="52" y="214" width="110" height="10" rx="3" style="fill:var(--es-bracket-dark)"/>
+            <circle cx="164" cy="219" r="16" style="fill:var(--es-bracket);stroke:var(--es-bracket-dark)" stroke-width="3"/>
+            <text x="164" y="222" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="9" font-weight="700" style="fill:var(--es-hull)">HRU</text>
+          </g>
+          <g id="es-homing" transform="translate(105 54)">
+            <path d="M-10 -6 Q0 -16 10 -6" fill="none" style="stroke:var(--teal)" stroke-width="2.2"/>
+            <path d="M-18 -10 Q0 -28 18 -10" fill="none" style="stroke:var(--teal)" stroke-width="2.2"/>
+            <path d="M-26 -14 Q0 -40 26 -14" fill="none" style="stroke:var(--teal)" stroke-width="2.2"/>
+          </g>
+          <g id="ae-rship" style="transform:translate(420px,360px) scale(.25);opacity:0">
+            <path d="M0 -2 L10 -16 H104 L100 0 Z" style="fill:var(--es-hull)"/>
+            <rect x="60" y="-36" width="32" height="20" rx="2" style="fill:var(--es-bracket)"/>
+            <rect x="64" y="-32" width="24" height="5" style="fill:var(--es-sea2)" opacity=".6"/>
+            <line x1="70" y1="-36" x2="70" y2="-66" style="stroke:var(--es-antenna)" stroke-width="2.5"/>
+            <line x1="82" y1="-36" x2="82" y2="-56" style="stroke:var(--es-antenna)" stroke-width="2"/>
+            <rect x="96" y="-30" width="7" height="14" style="fill:var(--coral)"/>
+          </g>
+          <text id="ae-ship-t" x="410" y="100" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)"></text>
+          <line id="ae-ping" x1="0" y1="0" x2="0" y2="0" style="stroke:var(--teal)" stroke-width="2.5" stroke-dasharray="4 6" opacity="0"/>
+          <g id="es-fx"></g>
+          <g id="es-ripples"><ellipse cx="330" cy="362" rx="30" ry="5" fill="none" stroke="#ffffff" stroke-opacity=".7"/><ellipse cx="330" cy="362" rx="30" ry="5" fill="none" stroke="#ffffff" stroke-opacity=".7"/></g>
+          <rect x="0" y="360" width="420" height="80" fill="url(#es-g-sea)" opacity=".9"/>
+          <path id="es-waves" d="M0 360 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V368 H0 Z" style="fill:var(--es-sea1)" opacity=".95"/>
+          <g id="es-depth" opacity="0">
+            <rect x="12" y="372" width="140" height="28" rx="14" style="fill:var(--surface)" opacity=".94"/>
+            <text id="es-depth-t" x="82" y="390" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="700" style="fill:var(--ink)">HRU depth 0.0 m</text>
+          </g>
+          <text id="es-loc-t" x="408" y="428" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" fill="#ffffff" letter-spacing="1">IN BRACKET</text>
+        </svg>
+        <p class="es-sr" id="es-scene-cap">A vessel's rail with an AIS-EPIRB in its float-free bracket, the sea below, a satellite above and a nearby ship on the horizon.</p>
+        <div class="es-actions">
+          <button type="button" class="btn ghost" id="es-btn-remove">Remove from bracket</button>
+          <button type="button" class="btn ghost" id="es-btn-water">Put in the water</button>
+          <button type="button" class="btn ghost danger" id="es-btn-sink">Vessel sinks</button>
+          <button type="button" class="btn ghost" id="es-btn-reset">Reset</button>
+        </div>
+        <p class="es-feedback" id="es-feedback" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="es-panel" aria-label="Unit controls">
+        <span class="es-mini" id="es-sw-lbl">Mode switch</span>
+        <div class="es-switch" role="radiogroup" aria-labelledby="es-sw-lbl" id="es-switch">
+          <span class="es-knob" id="es-knob"></span>
+          <button type="button" class="es-pos" role="radio" data-pos="OFF" aria-checked="false">OFF</button>
+          <button type="button" class="es-pos" role="radio" data-pos="READY" aria-checked="true">READY</button>
+          <button type="button" class="es-pos" role="radio" data-pos="ON" aria-checked="false">ON</button>
+          <button type="button" class="es-guard" id="es-guard" aria-label="Lift the safety guard over ON">GUARD</button>
+        </div>
+        <div class="es-sw-help"><span id="es-sw-help">READY: activates by itself when floating in water.</span><button type="button" class="es-link" id="es-guard-close" hidden>Close guard</button></div>
+        <div class="es-panel-row">
+          <div class="es-leds" aria-label="Indicator lights">
+            <span class="es-led" data-c="white" id="es-l-strobe"><i></i>Strobe</span>
+            <span class="es-led" data-c="green" id="es-l-ok"><i></i>Tx / Pass</span>
+            <span class="es-led" data-c="blue" id="es-l-gnss"><i></i>GNSS</span>
+            <span class="es-led" data-c="red" id="es-l-fault"><i></i>Fault</span>
+            <span class="es-led" data-c="amber" id="ae-l-ais"><i></i>AIS</span>
+          </div>
+          <div class="es-test">
+            <button type="button" class="es-test-btn" id="es-test" aria-describedby="es-test-help">TEST</button>
+            <small id="es-test-help">Hold 1 s: self-test<br>Hold 5 s: GNSS</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="es-card ae-radar-card" aria-label="AIS display">
+        <div class="ae-radar-head">
+          <h2 class="es-label" id="ae-radar-h">Nearby ship's AIS display</h2>
+          <div class="ae-radar-meta"><span id="ae-radar-sub">North up</span><span id="ae-radar-hdg">HDG 090°</span></div>
+        </div>
+        <div class="ae-alarm" id="ae-alarm" role="alert" hidden><span id="ae-alarm-t">AIS-EPIRB ACTIVE</span><button type="button" id="ae-ack">ACK</button></div>
+        <div class="ae-scope">
+          <canvas id="ae-plot" aria-label="AIS display. Tap a target to see its details." role="img"></canvas>
+          <span class="ae-scope-tag tl">AIS</span>
+          <span class="ae-scope-tag tr" id="ae-tag-range">12 NM</span>
+          <span class="ae-scope-tag bl" id="ae-tag-rings">RINGS 4 NM</span>
+          <span class="ae-scope-tag br" id="ae-tag-mark">TAP = INFO</span>
+        </div>
+        <div class="ae-rctl">
+          <div><span class="es-mini">Range</span><div class="es-seg" role="group" aria-label="Range scale" data-ctl="range"><button type="button" data-v="3">3 nm</button><button type="button" data-v="6">6 nm</button><button type="button" data-v="12">12 nm</button></div></div>
+        </div>
+        <div class="ae-target" id="ae-target" hidden></div>
+        <p class="ae-hint" id="ae-hint">Tap a target to see its details.</p>
+      </section>
+    </div>
+
+    <div class="es-strip" aria-label="Beacon state">
+      <span class="es-chip" id="es-mode" data-s="armed">Armed</span>
+      <span class="es-strip-info"><span>Next <b id="es-strip-next">—</b></span><span><b id="es-clock">T+0:00</b></span></span>
+      <button type="button" class="btn ghost es-strip-up" id="es-up" aria-label="Back to the beacon" title="Back to the beacon">↑</button>
+    </div>
+
+    <div class="es-info">
+      <div class="es-tabs" role="tablist" aria-label="Simulator panels">
+        <button type="button" class="es-tab" role="tab" data-tab="steps" aria-selected="true">Steps<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="status" aria-selected="false">Status<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="alert" aria-selected="false">Alert<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="log" aria-selected="false">Log<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="label" aria-selected="false">Label<span class="dot"></span></button>
+        <button type="button" class="es-tab" role="tab" data-tab="facts" aria-selected="false">Facts<span class="dot"></span></button>
+      </div>
+      <div class="es-panes">
+        <section class="es-card es-pane" data-pane="steps" role="tabpanel">
+          <h2 class="es-label" id="es-sc-h">Free practice</h2>
+          <p class="es-brief" id="es-brief"></p>
+          <ol class="es-steps" id="es-steps"></ol>
+          <div id="es-banner" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="status" role="tabpanel">
+          <h2 class="es-label">Beacon status</h2>
+          <div class="es-stats">
+            <div class="es-stat"><b id="es-r-bursts">0</b><span>406 MHz bursts</span></div>
+            <div class="es-stat"><b id="es-r-next">—</b><span>Next burst</span></div>
+            <div class="es-stat"><b id="es-r-since">—</b><span>Transmitting for</span></div>
+            <div class="es-stat"><b id="es-r-batt">48 h</b><span>Battery</span></div>
+          </div>
+          <dl class="es-dl">
+            <div><dt>Location</dt><dd id="es-r-loc">In bracket</dd></div>
+            <div><dt>AIS locator</dt><dd>As well as 406 and 121.5 MHz, it sends its GNSS position on the two AIS channels (161.975 and 162.025 MHz) once a minute. Nearby ships see it on their AIS display, chart plotter or ECDIS, with an alarm: EPIRB ACTIVE.</dd></div>
+            <div><dt>MMSI 974</dt><dd>The AIS part has its own ID starting 974 (for example 974 01 2345). 970 is an AIS-SART, 972 an AIS man-overboard device. The 406 MHz message still carries the vessel's own ID.</dd></div>
+            <div><dt>Two ways to be found</dt><dd>406 MHz reaches the RCC through Cospas-Sarsat, wherever you are. AIS reaches ships within about 5 nm straight away, so a ship nearby may get to you first.</dd></div>
+            <div><dt>New EPIRBs</dt><dd>EPIRBs fitted on SOLAS ships from 1 July 2022 must include the AIS locator.</dd></div>
+            <div><dt>121.5 MHz</dt><dd id="es-r-homing">Off</dd></div>
+            <div><dt>GNSS</dt><dd id="es-r-gnss">Off</dd></div>
+            <div><dt>AIS</dt><dd id="ae-r-ais">Off</dd></div>
+            <div><dt>AIS MMSI</dt><dd>974 01 2345</dd></div>
+            <div><dt>Self-tests run</dt><dd id="es-r-tests">0</dd></div>
+          </dl>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="alert" role="tabpanel">
+          <h2 class="es-label">Alert chain</h2>
+          <ol class="es-chain" id="es-chain"></ol>
+          <p class="es-note" id="es-chain-note">Nothing sent yet.</p>
+          <button type="button" class="btn" id="es-cancel">Call RCC to cancel false alert</button>
+          <h2 class="es-label ae-chain-h">AIS: nearby ships</h2>
+          <ol class="es-chain" id="ae-chain"></ol>
+          <p class="es-note" id="ae-chain-note">The AIS locator is off.</p>
+          <div class="ae-guide" id="ae-guide">
+            <div data-g="ship"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#0b2036"/><path d="M28 12 L37 42 L28 37 L19 42 Z" fill="none" stroke="#9fe0ff" stroke-width="2.4" stroke-linejoin="round"/><path d="M28 12 V4" stroke="#9fe0ff" stroke-width="2"/></svg><b>Ship</b>MMSI starts with a country code (Israel 428)</div>
+            <div data-g="active"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#0b2036"/><circle cx="28" cy="28" r="15" fill="none" stroke="#ff5a4a" stroke-width="3"/><path d="M17.4 17.4 L38.6 38.6 M38.6 17.4 L17.4 38.6" stroke="#ff5a4a" stroke-width="3"/></svg><b>EPIRB ACTIVE</b>circle with a cross, MMSI 974…</div>
+            <div data-g="test"><svg viewBox="0 0 56 56" aria-hidden="true"><rect width="56" height="56" rx="8" fill="#0b2036"/><circle cx="28" cy="28" r="15" fill="none" stroke="#ffc94d" stroke-width="3" stroke-dasharray="6 4"/><path d="M17.4 17.4 L38.6 38.6 M38.6 17.4 L17.4 38.6" stroke="#ffc94d" stroke-width="3"/></svg><b>EPIRB TEST</b>during a self-test only</div>
+          </div>
+          <h3 class="es-sub-h">Decoded 406 MHz message</h3>
+          <div id="es-msg"></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="log" role="tabpanel">
+          <div class="es-log-head"><h2 class="es-label">Event log</h2></div>
+          <button type="button" class="btn small" id="es-record" style="margin-bottom:10px">Record in radio log</button>
+          <ul class="es-log" id="es-log"></ul>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="label" role="tabpanel">
+          <h2 class="es-label">Unit label</h2>
+          <p class="es-brief">Tap a line to check it.</p>
+          <div class="es-plate">
+            <div class="es-plate-top"><span>406 MHz AIS-EPIRB · CAT I · AIS 974 01 2345</span><span>SV AMALIA · 428 123 456</span></div>
+            <div id="es-label-rows"></div>
+          </div>
+          <div id="es-report-wrap" class="es-report" hidden></div>
+        </section>
+
+        <section class="es-card es-pane is-off" data-pane="facts" role="tabpanel">
+          <h2 class="es-label">Key facts</h2>
+          <dl class="es-facts">
+            <div><dt>406 MHz</dt><dd>5 W digital burst about every 50 seconds. Carries the beacon's unique ID, and its GNSS position when it has a fix.</dd></div>
+            <div><dt>121.5 MHz</dt><dd>Low-power homing signal. Aircraft and ships use it to find the beacon in the final stage of the search.</dd></div>
+            <div><dt>Strobe</dt><dd>High-intensity white light flashing 20–30 times a minute to help searchers see the beacon at night.</dd></div>
+            <div><dt>Battery</dt><dd>At least 48 hours of operation. Replace by the expiry date on the label.</dd></div>
+            <div><dt>HRU</dt><dd>Hydrostatic release unit. Frees the EPIRB at 1.5–4 m depth so it floats up and activates. Usually replaced every 2 years.</dd></div>
+            <div><dt>Category I / II</dt><dd>Cat I is float-free and activates automatically. Cat II is manual only.</dd></div>
+            <div><dt>Testing</dt><dd>Self-test monthly, annual test, and shore-based maintenance at intervals of no more than 5 years.</dd></div>
+            <div><dt>Registration</dt><dd>Register the beacon with the national authority. The RCC uses it to identify the vessel and call its emergency contacts.</dd></div>
+            <div><dt>False alert</dt><dd>Switch the beacon off and immediately tell the nearest RCC or coast station. Never just switch off and say nothing. Ships nearby will also have seen EPIRB ACTIVE on their AIS.</dd></div>
+            <div><dt>AIS test</dt><dd>The self-test sends a short AIS test message: your own AIS shows EPIRB TEST, not a distress alarm.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="js/ais-epirb.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>

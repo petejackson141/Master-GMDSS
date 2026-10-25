@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AIS · Master GMDSS</title>
+<meta name="description" content="How AIS works and what it looks like on a ship's display: targets, MMSI numbers, Class A and B, and the AIS-SART and AIS-EPIRB alerts.">
+<meta name="theme-color" content="#16324F">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../icons/favicon-32.png">
+<link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../shared/css/base.css">
+<link rel="stylesheet" href="css/ais.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a><a class="mg-home mg-up" href="../simulators/"><span aria-hidden="true">‹</span><span>Simulators</span></a></nav>
+  <header class="top">
+    <h1>AIS</h1>
+    <p class="sub">Automatic Identification System: how it works and what it looks like on a ship's display. Tap any target to see what it is sending.</p>
+  </header>
+
+  <section class="card" aria-label="Example AIS display">
+    <div class="disp-head">
+      <h2 class="label">Your AIS display</h2>
+      <div class="disp-meta"><span>North up · own ship at centre</span><span>HDG 000° · 10 kn</span></div>
+    </div>
+    <div class="scope">
+      <canvas id="plot" role="img" aria-label="Example AIS display with several ships, a dangerous target and two distress devices. Tap a target to see its details."></canvas>
+      <span class="stag tl">AIS</span>
+      <span class="stag tr" id="tag-range">12 NM</span>
+      <span class="stag bl" id="tag-rings">RINGS 4 NM</span>
+      <span class="stag br">TAP = INFO</span>
+    </div>
+    <div class="rng"><span class="mini">Range</span><div class="seg" role="group" aria-label="Range scale" id="range"><button type="button" data-v="3">3 nm</button><button type="button" data-v="6">6 nm</button><button type="button" data-v="12" aria-pressed="true">12 nm</button></div></div>
+    <div class="target" id="target" aria-live="polite"><p class="empty">Tap a target on the display to see what it sends.</p></div>
+    <div class="legend">
+      <div><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="8" fill="#0b2036"/><path d="M24 14 L31 36 L24 32 L17 36 Z" fill="none" stroke="#9fe0ff" stroke-width="2.2" stroke-linejoin="round"/><path d="M24 14 V4" stroke="#9fe0ff" stroke-width="2"/></svg><b>Ship</b>Line ahead shows its course and speed</div>
+      <div><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="8" fill="#0b2036"/><path d="M24 14 L31 36 L24 32 L17 36 Z" fill="none" stroke="#ff5a4a" stroke-width="3" stroke-linejoin="round"/><path d="M24 14 V4" stroke="#ff5a4a" stroke-width="2.4"/></svg><b>Dangerous</b>Will pass too close (small CPA)</div>
+      <div><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="8" fill="#0b2036"/><path d="M24 16 L30 34 L24 31 L18 34 Z" fill="none" stroke="#7d93a6" stroke-width="2" stroke-linejoin="round"/><path d="M13 35 L35 13" stroke="#7d93a6" stroke-width="2"/></svg><b>Lost</b>No report received for a while</div>
+      <div><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="8" fill="#0b2036"/><circle cx="24" cy="24" r="12" fill="none" stroke="#ff5a4a" stroke-width="2.6"/><path d="M15.5 15.5 L32.5 32.5 M32.5 15.5 L15.5 32.5" stroke="#ff5a4a" stroke-width="2.6"/></svg><b>Distress device</b>AIS-SART, MOB or AIS-EPIRB</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="label">What AIS is</h2>
+    <p>AIS is an automatic tracking system on VHF. Every AIS-equipped ship keeps broadcasting who it is, where it is and where it is going, and receives the same from every ship around it. Nobody has to press anything or speak on the radio.</p>
+    <p>The ship's AIS display, chart plotter, ECDIS or radar overlay turns those messages into targets on the screen, so you can see a ship's name and course before you can even see it by eye. Its main job is <b>collision avoidance</b> and traffic monitoring by shore stations.</p>
+    <div class="facts">
+      <div><b>87B</b><span>AIS 1 · 161.975 MHz</span></div>
+      <div><b>88B</b><span>AIS 2 · 162.025 MHz</span></div>
+      <div><b>2–10 s</b><span>Report underway</span></div>
+      <div><b>3 min</b><span>Report at anchor</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="label">What each ship sends</h2>
+    <div class="three">
+      <div><h3>Static</h3><p>Set once when the AIS is installed.</p><ul><li>MMSI</li><li>Vessel name</li><li>Call sign</li><li>Type and size</li></ul></div>
+      <div><h3>Dynamic</h3><p>From the ship's GPS and compass, updated all the time.</p><ul><li>GPS position</li><li>SOG (speed over ground)</li><li>COG (course over ground)</li><li>Heading</li><li>Navigation status</li></ul></div>
+      <div><h3>Voyage</h3><p>Typed in by the crew for each trip.</p><ul><li>Destination</li><li>ETA</li></ul></div>
+    </div>
+    <p class="small">How often it reports depends on what it's doing: every 2 to 10 seconds underway (faster when it's fast or turning), and every 3 minutes at anchor.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="label">Class A and Class B</h2>
+    <table class="tbl">
+      <thead><tr><th></th><th>Class A</th><th>Class B</th></tr></thead>
+      <tbody>
+        <tr><th>Who fits it</th><td>Commercial ships (required by SOLAS)</td><td>Yachts and small craft</td></tr>
+        <tr><th>Power</th><td>12.5 W</td><td>2–5 W</td></tr>
+        <tr><th>Range</th><td>About 20–30 NM</td><td>About 10–15 NM, line of sight</td></tr>
+        <tr><th>Power supply</th><td colspan="2">Ship's mains power: no emergency battery</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2 class="label">Reading the MMSI</h2>
+    <p>Every AIS target has a 9-digit MMSI. The first digits tell you what kind of station it is.</p>
+    <table class="tbl mmsi">
+      <tbody>
+        <tr><th>Ship</th><td><span class="mono">428 123 456</span></td><td>Starts with the country code (MID). 428 = Israel</td></tr>
+        <tr><th>Coast station</th><td><span class="mono">004 281 234</span></td><td>00 + MID</td></tr>
+        <tr><th>SAR aircraft</th><td><span class="mono">111 428 123</span></td><td>111 + MID</td></tr>
+        <tr><th>Nav aid</th><td><span class="mono">994 281 234</span></td><td>99 + MID</td></tr>
+        <tr class="hot"><th>AIS-SART</th><td><span class="mono">970 721 234</span></td><td>970, no MID</td></tr>
+        <tr class="hot"><th>MOB device</th><td><span class="mono">972 721 234</span></td><td>972, no MID</td></tr>
+        <tr class="hot"><th>AIS-EPIRB</th><td><span class="mono">974 721 234</span></td><td>974, no MID</td></tr>
+      </tbody>
+    </table>
+    <p class="hook">Memory hook for the 97x devices: <b>0 = SART, 2 = MOB, 4 = EPIRB</b>.</p>
+  </section>
+
+  <section class="card">
+    <h2 class="label">Distress devices on AIS</h2>
+    <p>AIS-SARTs, MOB devices and AIS-EPIRBs use the same AIS channels to put survivors on every nearby ship's screen. They show as a <b>circle with a cross</b> and set off an alarm with a message like SART ACTIVE or EPIRB ACTIVE, plus their exact GPS position. In a self-test you see SART TEST or EPIRB TEST instead.</p>
+    <div class="go">
+      <a class="gobtn" href="../ais-sart/"><b>AIS-SART Simulator</b><small>Switch it on, mount it, and watch the rescue ship find it on AIS</small><span aria-hidden="true">›</span></a>
+      <a class="gobtn" href="../ais-epirb/"><b>AIS-EPIRB Simulator</b><small>406 MHz to the rescue centre, plus EPIRB ACTIVE on nearby ships</small><span aria-hidden="true">›</span></a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="label">Don't rely on AIS alone</h2>
+    <ul class="warn">
+      <li>Not every vessel has AIS, and it can be switched off. Small boats, some fishing boats and warships may not show at all.</li>
+      <li>Positions come from the other ship's own GPS. If its GPS or settings are wrong, its target is wrong too.</li>
+      <li>Voyage data such as destination is typed by the crew and is often out of date.</li>
+      <li>Keep a proper lookout and use radar as well. AIS helps you avoid collisions; it doesn't replace the Colregs.</li>
+    </ul>
+  </section>
+</div>
+
+<script src="js/ais.js"></script>
+<script src="../shared/js/app.js"></script>
+</body>
+</html>
