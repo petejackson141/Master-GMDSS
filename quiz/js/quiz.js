@@ -1,7 +1,11 @@
-/* Running the quiz: home screen, exams, topic practice, mistakes list, results (progress saved on this device) */
+/* Running the quiz: home screen, random exams, topic practice, mistakes list, results (progress saved on this device).
+   The 24 fixed exams are still here but hidden (SHOW_FIXED_EXAMS); set it to true to bring them back. */
+const SHOW_FIXED_EXAMS = false;
+const RANDOM_SIZE = 20, RANDOM_MIN_PER_GROUP = 2;
 // ---------- storage ----------
 const SKEY = "gmdss-practice-en-v1";
-function loadStore() { try { const s = JSON.parse(localStorage.getItem(SKEY)); if (s && s.results) { s.topics = s.topics || {}; return s; } } catch (e) {} return { results: {}, wrong: [], topics: {} }; }
+function loadStore() { try { const s = JSON.parse(localStorage.getItem(SKEY)); if (s && s.results) { s.topics = s.topics || {}; s.random = s.random || { taken: 0, passed: 0, best: null, last: null }; return s; } } catch (e) {} return freshStore(); }
+function freshStore() { return { results: {}, wrong: [], topics: {}, random: { taken: 0, passed: 0, best: null, last: null } }; }
 function saveStore() { try { localStorage.setItem(SKEY, JSON.stringify(store)); } catch (e) {} }
 let store = loadStore();
 const wid = (e, q) => e + "-" + q;
@@ -21,7 +25,7 @@ function home() {
   clearTimeout(timer); quiz = null;
   const done = Object.keys(store.results).length;
   const passed = Object.values(store.results).filter(r => pct(r.score, r.total) >= PASS).length;
-  const nW = store.wrong.length;
+  const nW = store.wrong.length, rs = store.random;
   let tiles = "";
   for (let e = 0; e < EXAMS.length; e++) {
     const r = store.results[e];
@@ -38,21 +42,24 @@ function home() {
   <div class="stack">
     <header>
       <h1>Multiple-choice exams</h1>
-      <div class="sub">SRC-GMDSS · Part A/2 · ${EXAMS.length} exams · ${EXAMS.flat().length} questions · pass mark <span class="mono">75</span></div>
+      <div class="sub">SRC-GMDSS · Part A/2 · <span class="mono">${UNIQUE.length}</span> questions · pass mark <span class="mono">${PASS}</span></div>
     </header>
+    <div class="practice exam-start">
+      <div><h2>Random exam</h2><p><span class="mono">${RANDOM_SIZE}</span> questions from the whole bank, spread across every topic. A new mix each time.</p></div>
+      <button class="btn" id="random">Start exam</button>
+    </div>
     <div class="stats">
-      <div class="stat"><b>${done}/${EXAMS.length}</b><span>Exams taken</span></div>
-      <div class="stat"><b style="color:var(--ok)">${passed}</b><span>Passed</span></div>
-      <div class="stat"><b style="color:var(--bad)">${done - passed}</b><span>Failed</span></div>
+      <div class="stat"><b>${rs.taken}</b><span>Exams taken</span></div>
+      <div class="stat"><b style="color:var(--ok)">${rs.passed}</b><span>Passed</span></div>
+      <div class="stat"><b>${rs.best == null ? "—" : rs.best}</b><span>Best score</span></div>
     </div>
     <div class="practice">
-      <div><h2>Mistake practice</h2><p>${nW ? `<span class="mono">${nW}</span> questions you got wrong. A correct answer removes a question from the list.` : "Questions you get wrong in the exams will appear here."}</p></div>
+      <div><h2>Mistake practice</h2><p>${nW ? `<span class="mono">${nW}</span> questions you got wrong. Answer one correctly and it leaves the list.` : "Questions you get wrong in exams and topic practice will appear here."}</p></div>
       <button class="btn" id="practice" ${nW ? "" : "disabled"}>Start practice</button>
     </div>
     <div class="label">Question banks by topic</div>
     <div class="grid">${topicTiles()}</div>
-    <div class="label">Exams</div>
-    <div class="grid">${tiles}</div>
+    ${SHOW_FIXED_EXAMS ? `<div class="label">Exams</div><div class="grid">${tiles}</div>` : ""}
     <div id="resetBox">${confirmReset
       ? `<div class="confirm row"><span>Delete all scores and the mistakes list?</span><button class="btn small" id="doReset">Delete</button><button class="btn ghost small" id="noReset">Cancel</button></div>`
       : `<button class="btn ghost small" id="reset">Reset progress</button>`}</div>
@@ -61,8 +68,9 @@ function home() {
   app.querySelectorAll("[data-exam]").forEach(b => b.onclick = () => startExam(+b.dataset.exam));
   app.querySelectorAll("[data-topic]").forEach(b => b.onclick = () => startTopic(b.dataset.topic));
   const p = document.getElementById("practice"); if (p) p.onclick = startPractice;
+  document.getElementById("random").onclick = startRandom;
   const r = document.getElementById("reset"); if (r) r.onclick = () => { confirmReset = true; home(); };
-  const d = document.getElementById("doReset"); if (d) d.onclick = () => { store = { results: {}, wrong: [], topics: {} }; saveStore(); confirmReset = false; home(); };
+  const d = document.getElementById("doReset"); if (d) d.onclick = () => { store = freshStore(); saveStore(); confirmReset = false; home(); };
   const n = document.getElementById("noReset"); if (n) n.onclick = () => { confirmReset = false; home(); };
   window.scrollTo(0, 0);
 }
@@ -82,6 +90,39 @@ function topicTiles() {
 }
 function startTopic(id) { quiz = { mode: "topic", topic: id, list: shuffle(BANK[id].slice()), i: 0, picks: [] }; confirmReset = false; question(); }
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+// ---------- random exam: 20 questions from the whole pool, spread over every topic ----------
+// Each question gets one group: its rarest topic if it has several (so small topics still get their share),
+// or "general" if it has none (AIS, GMDSS basics, publications).
+const GROUPS = (() => {
+  const g = {};
+  TOPICS.forEach(t => g[t.id] = []); g.general = [];
+  UNIQUE.forEach(Q => {
+    const tags = TOPICS.filter(t => BANK[t.id].includes(Q)).sort((a, b) => BANK[a.id].length - BANK[b.id].length);
+    g[tags.length ? tags[0].id : "general"].push(Q);
+  });
+  return g;
+})();
+const GROUP_NAME = id => id === "general" ? "General GMDSS" : TOPICS.find(t => t.id === id).name;
+function topicOf(Q) {
+  for (const id in GROUPS) if (GROUPS[id].includes(Q)) return GROUP_NAME(id);
+  return "";
+}
+function buildRandom() {
+  const ids = Object.keys(GROUPS).filter(id => GROUPS[id].length);
+  const quota = {}; let used = 0;
+  ids.forEach(id => { quota[id] = Math.min(RANDOM_MIN_PER_GROUP, GROUPS[id].length); used += quota[id]; });
+  // share the rest by group size (largest remainder), never more than a group has
+  const total = ids.reduce((n, id) => n + GROUPS[id].length, 0), rest = RANDOM_SIZE - used;
+  const share = ids.map(id => ({ id, x: rest * GROUPS[id].length / total }));
+  share.forEach(o => { const add = Math.min(Math.floor(o.x), GROUPS[o.id].length - quota[o.id]); quota[o.id] += add; used += add; });
+  share.sort((a, b) => (b.x - Math.floor(b.x)) - (a.x - Math.floor(a.x)));
+  for (let i = 0; used < RANDOM_SIZE && i < share.length * 3; i++) { const o = share[i % share.length]; if (quota[o.id] < GROUPS[o.id].length){ quota[o.id]++; used++; } }
+  let list = [];
+  ids.forEach(id => { list = list.concat(shuffle(GROUPS[id].slice()).slice(0, quota[id])); });
+  return shuffle(list);
+}
+function startRandom() { quiz = { mode: "random", list: buildRandom(), i: 0, picks: [] }; confirmReset = false; question(); }
+
 function startExam(e) { quiz = { mode: "exam", e, list: EXAMS[e], i: 0, picks: [] }; confirmReset = false; question(); }
 function startPractice() {
   const list = store.wrong.map(id => { const [e, q] = id.split("-").map(Number); return EXAMS[e][q]; });
@@ -94,8 +135,9 @@ function question() {
   const good = z.picks.filter(p => p && p.ok).length, bad = z.picks.filter(p => p && !p.ok).length;
   const left = n - good - bad;
   const dots = z.list.map((_, j) => { const p = z.picks[j]; return `<button class="dot${p ? (p.ok ? " ok" : " no") : ""}${j === z.i ? " cur" : ""}" data-go="${j}" aria-label="Question ${j + 1}">${j + 1}</button>`; }).join("");
-  const title = z.mode === "exam" ? `Exam ${z.e + 1}` : z.mode === "topic" ? `Topic: ${TOPICS.find(t => t.id === z.topic).name}` : "Mistake practice";
-  const src = z.mode !== "exam" ? ` · Exam ${Q.e + 1}, question ${Q.q + 1}` : "";
+  const title = z.mode === "exam" ? `Exam ${z.e + 1}` : z.mode === "random" ? "Random exam" : z.mode === "topic" ? `Topic: ${TOPICS.find(t => t.id === z.topic).name}` : "Mistake practice";
+  const num = z.mode === "exam" ? Q.q + 1 : z.i + 1;
+  const src = z.mode === "random" || z.mode === "practice" ? ` · ${topicOf(Q)}` : "";
   app.innerHTML = `
   <div class="stack">
     <div class="top"><h2>${title}</h2><div class="row"><button class="btn ghost small" id="end">Finish</button><button class="btn ghost small" id="exit">Exit</button></div></div>
@@ -103,7 +145,7 @@ function question() {
     <div class="top"><span class="mono">${z.i + 1}/${n}</span><span class="tally"><span class="g">✓ ${good}</span><span class="r">✗ ${bad}</span></span></div>
     <div class="bar"><i style="width:${(good + bad) / n * 100}%"></i></div>
     <div class="card">
-      <div class="qnum">Question ${Q.q + 1}${src}</div>
+      <div class="qnum">Question ${num}${src}</div>
       <div class="qtext">${esc(Q.text)}</div>
       <div class="opts">${Q.opts.map((o, k) => `<button class="opt" data-k="${k}"><span class="l">${L[k]}</span><span class="tx">${esc(o)}</span></button>`).join("")}</div>
       <div class="fb" id="fb"></div>
@@ -184,6 +226,17 @@ function finish() {
       <div class="big" style="color:var(${ok ? "--ok" : "--bad"})">${p}</div>
       <div class="sub"><span class="mono">${score}/${total}</span> correct answers</div>
       <div class="verdict ${ok ? "pass" : "fail"}">${ok ? "Pass" : "Fail"}</div></div>`;
+  } else if (z.mode === "random") {
+    const ok = p >= PASS, r = store.random;
+    r.taken++; if (ok) r.passed++; r.best = r.best == null ? p : Math.max(r.best, p); r.last = { score, total, at: Date.now() };
+    saveStore();
+    const by = {};
+    z.list.forEach((Q, j) => { const t = topicOf(Q); by[t] = by[t] || { n: 0, ok: 0 }; by[t].n++; if (z.picks[j] && z.picks[j].ok) by[t].ok++; });
+    head = `<div class="card result"><div class="label">Random exam</div>
+      <div class="big" style="color:var(${ok ? "--ok" : "--bad"})">${p}</div>
+      <div class="sub"><span class="mono">${score}/${total}</span> correct answers</div>
+      <div class="verdict ${ok ? "pass" : "fail"}">${ok ? "Pass" : "Fail"}</div></div>
+      <div class="label">By topic</div><div class="bytopic">${Object.keys(by).map(t => `<div class="${by[t].ok === by[t].n ? "all" : by[t].ok ? "" : "none"}"><span>${esc(t)}</span><b class="mono">${by[t].ok}/${by[t].n}</b></div>`).join("")}</div>`;
   } else if (z.mode === "topic") {
     const t = TOPICS.find(t => t.id === z.topic);
     store.topics[z.topic] = { score, total, at: Date.now() };
@@ -201,16 +254,18 @@ function finish() {
   if (skipped) head += `<div class="sub" style="text-align:center"><span class="mono">${skipped}</span> questions were left unanswered and counted as wrong</div>`;
   const wrongs = z.picks.filter(x => x && !x.ok);
   const review = wrongs.length ? `<div class="label">Questions you got wrong (${wrongs.length})</div><div class="review">${wrongs.map(x => `
-    <div class="rv"><div class="q">${x.Q.q + 1}. ${esc(x.Q.text)}</div>
+    <div class="rv"><div class="q">${z.mode === "exam" ? x.Q.q + 1 : z.list.indexOf(x.Q) + 1}. ${esc(x.Q.text)}</div>
     <div class="y">✗ ${L[x.k]}. ${esc(x.Q.opts[x.k])}</div>
     <div class="c">✓ ${L[x.Q.ans]}. ${esc(x.Q.opts[x.Q.ans])}</div>${x.Q.expl ? `<div class="expl"><b>Explanation:</b> ${esc(x.Q.expl)}</div>` : ""}</div>`).join("")}</div>` : "";
   const again = z.mode === "exam" ? `<button class="btn" id="again">Retake exam ${z.e + 1}</button>`
+    : z.mode === "random" ? `<button class="btn" id="again">New random exam</button>`
     : z.mode === "topic" ? `<button class="btn" id="again">Retake this topic</button>`
     : (store.wrong.length ? `<button class="btn" id="again">Another mistakes round</button>` : "");
   app.innerHTML = `<div class="stack">${head}
-    <div class="row">${again}<button class="btn ghost" id="back">All exams</button></div>${review}</div>`;
+    <div class="row">${again}${z.mode === "random" && store.wrong.length ? `<button class="btn ghost" id="mist">Practise my mistakes (${store.wrong.length})</button>` : ""}<button class="btn ghost" id="back">Back</button></div>${review}</div>`;
   const a = document.getElementById("again");
-  if (a) a.onclick = () => z.mode === "exam" ? startExam(z.e) : z.mode === "topic" ? startTopic(z.topic) : startPractice();
+  if (a) a.onclick = () => z.mode === "exam" ? startExam(z.e) : z.mode === "random" ? startRandom() : z.mode === "topic" ? startTopic(z.topic) : startPractice();
+  const m = document.getElementById("mist"); if (m) m.onclick = startPractice;
   document.getElementById("back").onclick = home;
   window.scrollTo(0, 0);
 }

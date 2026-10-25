@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0 — 25 October 2026
+- Multiple-choice exams: new **Random exam**. 20 questions from the whole bank (405 different questions), with every topic included: at least 2 from each of EPIRB, VHF, SART, DSC, NAVTEX, Voice procedures and General GMDSS, the rest shared by topic size. A new mix each time, with a score by topic at the end.
+- The 24 fixed exams are hidden (still in the app, set SHOW_FIXED_EXAMS to true in quiz/js/quiz.js to bring them back). Topic banks stay as they were.
+- Mistake practice now also collects mistakes from random exams. A correct answer removes the question from the list. After a random exam there's a button straight to your mistakes.
+- Questions show their topic instead of "Exam X, question Y".
+
 ## 1.6.1 — 25 October 2026
 - Written-answer exams: the Exam mode and Learn mode explanations on the list page are now plain text, so they no longer look like buttons. Pick an exam, then choose the mode.
 
