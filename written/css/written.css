@@ -27,11 +27,10 @@ h2{font-size:1.2rem;color:var(--heading);margin-bottom:10px}
 .prog{color:var(--ink-muted);font-size:.9rem}
 
 /* home */
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mode{background:var(--pastel-mint);border:1.5px solid var(--teal);border-radius:var(--radius-md);padding:12px 14px;display:grid;gap:4px}
-.mode:first-child{background:var(--pastel-blue);border-color:var(--navy-soft)}
-.mode b{font:700 15px var(--font-display);color:var(--heading)}
-.mode span{font-size:.85rem;color:var(--ink-muted);line-height:1.4}
+.modes{display:grid;gap:6px;font-size:.92rem;color:var(--ink-muted);line-height:1.45}
+.modes p{margin:0}
+.modes b{font:700 14.5px var(--font-display);color:var(--heading)}
+.modes .modes-pick{color:var(--ink)}
 .wlist{display:grid;gap:10px}
 .wtile{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:start;background:var(--surface-ivory);border:1.5px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow);padding:14px 16px;color:var(--ink)}
 .wtile:hover{border-color:var(--teal)}
@@ -129,4 +128,3 @@ label.ck:has(input:checked){background:var(--ok-soft)}
 @keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 @media (min-width:720px){.two{grid-template-columns:1fr 1fr}.choose{grid-template-columns:1fr 1fr}.choose .btn.ghost{grid-column:1/-1}}
-@media (max-width:420px){.modes{grid-template-columns:1fr}}

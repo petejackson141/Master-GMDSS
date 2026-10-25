@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.1 — 25 October 2026
+- Written-answer exams: the Exam mode and Learn mode explanations on the list page are now plain text, so they no longer look like buttons. Pick an exam, then choose the mode.
+
 ## 1.6.0 — 24 October 2026
 - New module: Written-answer exams (written/). The 8 scenario exams from the course (DEVORA, JASMIN, JASMIN mast fell, NESHER, TABOR, RAFSODY, AMALIA Strait of Gibraltar, PACIFIC / HORIZON), with the model answers exactly as on the answer sheets.
 - Exam mode: the exam paper, a 15-minute timer (keeps counting over time), a writing box per part (saved as you type, so you can leave and come back). Then "Finish and mark": your answer next to the model answer, tick each line you got for a score. Best score saved.

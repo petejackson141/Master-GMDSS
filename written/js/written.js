@@ -67,8 +67,9 @@ function home() {
     <header><h1>Written-answer exams</h1>
       <p class="sub">${WRITTEN.length} scenario exams like the real SRC paper: read the situation, then write the full procedure and radio messages.</p></header>
     <div class="modes">
-      <div class="mode"><b>Exam mode</b><span>15-minute timer. Write your answer, then tick it against the model answer for a score.</span></div>
-      <div class="mode"><b>Learn mode</b><span>Build the answer step by step: put the steps in order, then put each radio message together line by line.</span></div>
+      <p><b>Exam mode:</b> 15-minute timer. Write your answer, then tick it against the model answer for a score.</p>
+      <p><b>Learn mode:</b> build the answer step by step: put the steps in order, then put each radio message together line by line.</p>
+      <p class="modes-pick">Pick an exam below, then choose a mode.</p>
     </div>
     <div class="label">Exams · ${done}/${WRITTEN.length} tried</div>
     <div class="wlist">${WRITTEN.map(x => {
