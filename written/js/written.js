@@ -62,8 +62,7 @@ function countChecks(ex) {
 // ---------- home: the list of scenarios ----------
 function home() {
   stopClock();
-  const done = WRITTEN.filter(x => W.results[x.id] && W.results[x.id].best != null).length;
-  app.innerHTML = `<div class="stack">
+    app.innerHTML = `<div class="stack">
     <header><h1>Written-answer exams</h1>
       <p class="sub">${WRITTEN.length} scenario exams like the real SRC paper: read the situation, then write the full procedure and radio messages.</p></header>
     <div class="modes">
@@ -71,15 +70,20 @@ function home() {
       <p><b>Learn mode:</b> build the answer step by step: put the steps in order, then put each radio message together line by line.</p>
       <p class="modes-pick">Pick an exam below, then choose a mode.</p>
     </div>
-    <div class="label">Exams · ${done}/${WRITTEN.length} tried</div>
-    <div class="wlist">${WRITTEN.map(x => {
+    ${[['exam', 'Exam papers'], ['practice', 'Practice procedures (course book)']].map(([set, title]) => {
+      const list = WRITTEN.filter(x => (x.set || 'exam') === set);
+      if (!list.length) return '';
+      const n = list.filter(x => W.results[x.id] && W.results[x.id].best != null).length;
+      return `<div class="label">${title} · ${n}/${list.length} tried</div>
+    <div class="wlist">${list.map(x => {
       const r = W.results[x.id] || {};
       const chip = r.best != null ? `<span class="chip ${r.best >= 75 ? 'pass' : 'fail'}">Best <span class="mono">${r.best}%</span></span>` : '<span class="chip none">Not tried</span>';
       const lr = r.learned ? '<span class="chip learned">Learned</span>' : '';
       const draft = W.drafts[x.id] && W.drafts[x.id].startedAt && !W.drafts[x.id].marked ? '<span class="chip draft">In progress</span>' : '';
       return `<button class="wtile" data-open="${x.id}"><span class="wt"><b>${esc(x.name)}</b><small>${esc(x.what)}</small></span><span class="wchips">${chip}${lr}${draft}</span></button>`;
-    }).join('')}</div>
-    <p class="foot">Model answers are from the course answer sheets. Progress is saved in this browser only.</p>
+    }).join('')}</div>`;
+    }).join('')}
+    <p class="foot">Exam paper answers are from the course answer sheets; practice procedure answers are from the practice procedures answer sheet. Progress is saved in this browser only.</p>
   </div>`;
   app.querySelectorAll('[data-open]').forEach(b => b.onclick = () => go('#' + b.dataset.open));
   toTop();
@@ -113,7 +117,7 @@ function modelAnswer(ex) {
   stopClock();
   app.innerHTML = `<div class="stack">
     <div class="crumbs"><button class="btn ghost small" id="back">‹ ${esc(ex.name)}</button></div>
-    <header><h1>Model answer</h1><p class="sub">${esc(ex.name)} · from the course answer sheet</p></header>
+    <header><h1>Model answer</h1><p class="sub">${esc(ex.name)} · ${esc(ex.src || 'from the course answer sheet')}</p></header>
     ${ex.answer.map((a, i) => `<div class="card">${partQ(ex.parts[i])}<div class="ans">${answerHtml(a.blocks, false)}</div></div>`).join('')}
     <div class="choose"><button class="btn" id="exam">Try it in Exam mode</button></div>
   </div>`;
