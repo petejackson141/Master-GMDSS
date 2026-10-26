@@ -90,6 +90,9 @@ td .mono{font-weight:600}
 .legend .lp{background:var(--accent);border-color:var(--accent)}
 .legend .lm{background:var(--sea-soft);border-color:var(--sea)}
 
+/* Call signs */
+.callbox{font-family:var(--f-mono);font-size:.9rem;background:var(--bg);padding:12px 14px;line-height:1.6;border-radius:6px}
+
 /* VHF channels */
 .chans{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px}
 .ch{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:10px 14px 10px 10px;min-width:0}
@@ -120,7 +123,7 @@ footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);paddi
   .wrap>*{margin-bottom:28px} section{display:block} section>*{margin-bottom:16px}
   .panel,.m,.ch,.dev,.recall div,.gloss div,.tbl,tr{break-inside:avoid}
   h2,h3{break-after:avoid}
-  #channels,#glossary{break-before:page}
+  #callsigns,#channels,#glossary{break-before:page}
   .tbl{overflow:visible;break-before:page} table{min-width:0;font-size:10.5px}
 }
 </style>
@@ -140,9 +143,10 @@ h1,h2{color:var(--heading);letter-spacing:0}
   <header>
     <span class="eyebrow">GMDSS · Short Range Certificate study notes</span>
     <h1>Marine Radio Cheat Sheets</h1>
-    <p class="lede">MMSI formats, VHF channels and a glossary of abbreviations on one page.</p>
+    <p class="lede">MMSI formats, call signs, VHF channels and a glossary of abbreviations on one page.</p>
     <nav>
       <a href="#mmsi">MMSI formats</a>
+      <a href="#callsigns">Call signs</a>
       <a href="#channels">VHF channels</a>
       <a href="#glossary">Glossary</a>
     </nav>
@@ -164,6 +168,31 @@ h1,h2{color:var(--heading);letter-spacing:0}
       <div class="m"><h3>AIS EPIRB</h3><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">4</span><span>7</span><span>2</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>974, no MID. Example 974721234</p></div>
     </div>
     <p class="note">Memory hook for the 97x devices: <strong>0</strong> = SART, <strong>2</strong> = MOB, <strong>4</strong> = EPIRB.</p>
+  </section>
+
+  <!-- CALL SIGNS -->
+  <section id="callsigns">
+    <h2>Call signs</h2>
+    <p class="lede" style="margin-top:0">Call signs and identification tell you the <strong>type of station</strong>. A call sign is made of letters and numbers. The <strong>first two characters</strong> are the country (two letters, a letter and a number, or a number and a letter); Israel is <strong>4X</strong> or <strong>4Y</strong>.</p>
+    <div class="legend"><span><i class="lm"></i>Country code</span><span><i class="lp"></i>Lifeboat digits</span></div>
+    <div class="mmsi">
+      <div class="m"><h3>Coast station</h3><div class="digits"><span class="mid">4</span><span class="mid">X</span><span>O</span></div><p>Country code 4Y/4X + XXX digits (other than 1 or 0) + X additional letter. Example 4XO (RCC Haifa)</p></div>
+      <div class="m"><h3>Ship</h3><div class="digits"><span class="mid">4</span><span class="mid">X</span><span>B</span><span>G</span><span>8</span></div><p>Country code 4Y/4X + XX additional letters + X digit. Example 4XBG8</p></div>
+      <div class="m"><h3>Lifeboat</h3><div class="digits"><span class="mid">4</span><span class="mid">X</span><span>B</span><span>G</span><span>8</span><span class="p">5</span><span class="p">7</span></div><p>Mothership identification + XX additional digits. Example 4XBG857</p></div>
+      <div class="m"><h3>Airplane</h3><div class="digits"><span class="mid">4</span><span class="mid">X</span><span>G</span><span>S</span><span>K</span></div><p>Country code 4Y/4X + XXX additional letters. Example 4XGSK</p></div>
+      <div class="m"><h3>Airplane lifeboat</h3><div class="digits"><span class="mid">4</span><span class="mid">X</span><span>G</span><span>S</span><span>K</span><span class="p">6</span></div><p>Aircraft identification + X additional digit. Example 4XGSK6</p></div>
+    </div>
+    <p class="note">The digits <strong>1</strong> and <strong>0</strong> are never used, because they are easily confused with the letters <strong>I</strong> and <strong>O</strong>. So in a call sign, that shape is always the letter I or O.</p>
+    <p class="note">Lifeboats take their parent's call sign and add digits: ship 4XBG8 → lifeboat 4XBG8<strong>57</strong>; aircraft 4XGSK → aircraft lifeboat 4XGSK<strong>6</strong>.</p>
+    <div class="grid2">
+      <div class="panel"><h3>Calling on Channel 16</h3>
+        <div class="callbox">TAMI, TAMI, TAMI<br>THIS IS SOLARIS, SOLARIS, SOLARIS<br>OVER</div>
+        <dl class="kv"><dt>Full call</dt><dd>Station called ×3 + own identification ×3</dd><dt>Short call</dt><dd>Station called ×1 + own identification ×2. Used after first contact and in busy areas</dd></dl>
+      </div>
+      <div class="panel"><h3>Spelling out a call sign</h3>
+        <dl class="kv"><dt>Correct</dt><dd>“My call sign is 4X33 <b>Correct</b> 4X37”</dd><dt>In figures</dt><dd>What follows is numbers, in phonetic spelling</dd><dt>In letters</dt><dd>What follows is letters, in phonetic spelling</dd><dt>I spell</dt><dd>Switching to phonetic spelling</dd></dl>
+      </div>
+    </div>
   </section>
 
   <!-- CHANNELS -->

@@ -7,7 +7,7 @@ The home screen has four sections, each with its own menu page:
 
 | Section | Menu page | Modules |
 |---|---|---|
-| Study | `study/` | Cheat sheets (one section at a time), equipment cards, call signs & NAVTEX |
+| Study | `study/` | Cheat sheets (one section at a time, including call signs), equipment cards (including NAVTEX) |
 | Simulators | `simulators/` | VHF / DSC (`vhf/`), NAVTEX (`navtex/`), EPIRB (`epirb/`), Radar SART (`sart/`), portable VHF (`portable/`). Coming soon: AIS-SART / AIS-EPIRB / AIS |
 | Exams | `exams/` | Multiple-choice exams (`quiz/`), written-answer exams (`written/`) |
 | Scenarios | `scenarios/` | Coming soon: Mayday, abandon ship |

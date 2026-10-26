@@ -56,7 +56,41 @@ nav a:hover,nav a:focus-visible{border-color:var(--accent);color:var(--accent);o
 .digits span{height:28px;display:grid;place-items:center;font:600 .9rem var(--f-mono);border:1px solid var(--line);background:var(--paper)}
 .digits .p{background:var(--accent);border-color:var(--accent);color:var(--paper)}
 
+/* navtex */
+.msg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;font-size:.92rem}
+.msg div{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:baseline;padding:3px 0}
+.msg b{font:700 1rem var(--f-mono);color:var(--sea);text-align:center}
+.msg .keep b{background:var(--accent);color:var(--paper);border-radius:3px}
+.msg .keep span{font-weight:600}
+.msg .soft b{background:var(--accent-soft);color:var(--accent);border-radius:3px}
+.hdr{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.hdr .seg{display:grid;gap:4px;justify-items:center;text-align:center;border:1px solid var(--line);padding:10px 12px;min-width:0;flex:1 1 90px}
+.hdr .seg b{font:700 1.5rem/1 var(--f-mono)}
+.hdr .seg span{font-size:.78rem;color:var(--muted)}
+.hdr .seg.zc b{color:var(--muted)}
+.hdr .seg.b1 b{color:var(--c-let)} .hdr .seg.b2 b{color:var(--c-dig)} .hdr .seg.b34 b{color:var(--c-ext)}
+.urg{display:grid;gap:8px}
+.urg div{display:grid;grid-template-columns:100px 1fr;gap:12px;font-size:.9rem}
+.urg b{font:600 .8rem var(--f-mono);letter-spacing:.05em}
+.cer{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cer div{padding:10px 12px;font-size:.88rem;display:grid;gap:3px}
+.cer b{font:700 1.3rem var(--f-mono)}
+.cer .bad{background:var(--accent-soft)} .cer .bad b{color:var(--accent)}
+.cer .ok{background:var(--sea-soft)} .cer .ok b{color:var(--sea)}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:3px;font:600 1rem var(--f-display);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.zones div{background:var(--sea-soft);color:var(--sea);padding:12px 6px}
+.zones .il{grid-row:1/3;grid-column:3;background:var(--accent);color:var(--paper);display:grid;place-content:center}
+.zones .il small{display:block;font:500 .7rem var(--f-body);letter-spacing:0;text-transform:none;opacity:.9}
+.stations{display:flex;flex-wrap:wrap;gap:6px}
+.stations span{font-size:.85rem;border:1px solid var(--line);padding:3px 8px}
+.stations b{font-family:var(--f-mono);color:var(--c-let)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.85rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;display:inline-block;border-radius:2px}
+.let{color:var(--c-let)} .note{font-size:.85rem;color:var(--muted)} .lbl{font:600 .75rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block}
+
 @media (max-width:620px){
+  .msg{grid-template-columns:1fr}
   .card>*:not(.top){margin-inline:18px} .top{padding:22px 18px}
   .role{text-align:left;margin-left:0}
   .glance{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -68,9 +102,10 @@ nav a:hover,nav a:focus-visible{border-color:var(--accent);color:var(--accent);o
   .intro{display:none}
   .card{box-shadow:none;border:0;break-after:page;break-inside:avoid;gap:28px}
   .spec{padding:18px 20px} .sg{gap:20px}
-  .card:not(#vhf):not(#sart):not(#ais-sart){zoom:1.08}
+  .card:not(#vhf):not(#sart):not(#ais-sart):not(#navtex){zoom:1.08}
   #sart,#ais-sart{zoom:0.92}
   #vhf{gap:18px} #vhf .sg{gap:14px} #vhf .spec{padding:12px 16px} #vhf .top h2{font-size:3.4rem}
+  #navtex{zoom:0.8}
   .card:last-child{break-after:auto}
 }
 </style>
@@ -87,43 +122,90 @@ h1,h2{color:var(--heading);letter-spacing:0}
 <div class="mgbar"><nav class="mg-topnav"><a class="mg-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9.5h5v-5.5h3v5.5h5V10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg><span>Home</span></a><a class="mg-home mg-up" href="./"><span aria-hidden="true">‹</span><span>Study</span></a></nav></div>
 <style>.mgbar{max-width:1100px;margin:0 auto;padding:14px 16px 0;position:sticky;top:0;z-index:60}.mgbar .mg-topnav{position:static}.mgbar a{color:var(--teal,#17758F);text-decoration:none}@media print{.mgbar{display:none}}</style>
 <div class="wrap">
-<div class="intro"><span class="eyebrow">GMDSS study cards</span><h1>Equipment Cards</h1><p>One card per device: what it is, then the specs. Each card prints on its own A4 page.</p><nav><a href="#epirb">EPIRB</a><a href="#sart">SART</a><a href="#ais-sart">AIS-SART</a><a href="#ais">AIS</a><a href="#ais-epirb">AIS EPIRB</a><a href="#vhf">Portable VHF</a></nav></div>
+<div class="intro"><span class="eyebrow">GMDSS study cards</span><h1>Equipment Cards</h1><p>One card per device or system: what it is, then the specs. Each card prints on its own A4 page.</p><nav><a href="#epirb">EPIRB</a><a href="#sart">SART</a><a href="#ais-sart">AIS-SART</a><a href="#ais">AIS</a><a href="#ais-epirb">AIS EPIRB</a><a href="#vhf">Portable VHF</a><a href="#navtex">NAVTEX</a></nav></div>
 <article class="card" id="epirb">
-  <header class="top"><div><span class="num">1 / 6</span><h2>EPIRB</h2><p class="nm">Emergency Position Indicating Radio Beacon</p></div><p class="role">Alerts rescue centres anywhere in the world</p></header>
+  <header class="top"><div><span class="num">1 / 7</span><h2>EPIRB</h2><p class="nm">Emergency Position Indicating Radio Beacon</p></div><p class="role">Alerts rescue centres anywhere in the world</p></header>
   <div class="glance"><div><b>406 MHz</b><span>satellite alert</span></div><div><b>121.5 MHz</b><span>homing</span></div><div><b>48 h</b><span>min. operation</span></div><div><b>Global</b><span>coverage</span></div></div>
   <section class="def"><h3>Definition</h3><p>An EPIRB is a satellite-based distress beacon used on vessels to signal a life-threatening emergency to search and rescue authorities. When activated manually or automatically upon submersion, it transmits a <mark>406 MHz</mark> signal containing the ship's unique <strong>MMSI</strong>, allowing rescue centers to locate the vessel globally using the <strong>Cospas-Sarsat</strong> satellite system.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies</h3><ul><li><b>406.0–406.1 MHz</b>: satellite distress alert</li><li><b>121.5 MHz</b>: local homing signal</li><li>Modern EPIRBs also incorporate GNSS/GPS frequencies</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>48 hours</b> of continuous operation once activated</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>Global</b> coverage via the Cospas-Sarsat satellite system (MEOSAR / LEOSAR / GEOSAR)</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Transmits a <b>5 W</b> signal burst every <b>50 seconds</b> containing the vessel's MMSI</li><li>Activated automatically by water contact / hydrostatic release unit (<b>HRU</b>) at <b>1.5–4 m</b> depth, or manually</li></ul></div></div></section>
   <div class="mm"><span class="lbl">MMSI</span><span>Ship's own MMSI</span></div>
 </article><article class="card" id="sart">
-  <header class="top"><div><span class="num">2 / 6</span><h2>SART</h2><p class="nm">Search and Rescue Radar Transponder</p></div><p class="role">Shows the liferaft on the rescuer's radar</p></header>
+  <header class="top"><div><span class="num">2 / 7</span><h2>SART</h2><p class="nm">Search and Rescue Radar Transponder</p></div><p class="role">Shows the liferaft on the rescuer's radar</p></header>
   <div class="glance"><div><b>9 GHz</b><span>X-band radar</span></div><div><b>12 dots</b><span>on radar</span></div><div><b>96 h + 8 h</b><span>standby + active</span></div><div><b>8–10 NM</b><span>to ship radar</span></div></div>
   <section class="def"><h3>Definition</h3><p>A SART is a localized homing device designed to assist search-and-rescue vessels and aircraft in pinpointing lifeboats or rafts. When painted by a <mark>9 GHz X-band</mark> search radar, it automatically responds by generating a distinctive pattern of <strong>12 dots</strong> (turning into arcs and concentric circles at close range) on the rescuer's radar display.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies</h3><ul><li><b>9.2 GHz to 9.5 GHz</b> (X-band radar range)</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>96 hours</b> in standby, waiting for radar interrogation</li><li>Followed by at least <b>8 hours</b> of active continuous transmission</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>8–10 NM</b> to a ship's radar antenna (15 m high)</li><li>Up to <b>30–40 NM</b> to an airborne radar</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Responds to radar interrogation by sweeping back and forth, generating <b>12 distinct dots</b> on the target ship's radar screen</li></ul></div><div class="spec wide"><h3>How to check</h3><ul><li>Check the <b>battery expiry date</b> and look for damage to the case and bracket</li><li>Switch to <b>test mode</b> near your own ship's <b>X-band (3 cm) radar</b></li><li>Radar should show <b>concentric rings</b> around own ship; the SART light flashes / beeper sounds when it is interrogated</li><li>Keep the test <b>short</b> (a few seconds) so other ships don't take it as a real distress</li><li>Switch off and stow correctly</li></ul></div></div></section>
   <div class="mm"><span class="lbl">MMSI</span><span>No MMSI: it answers radar, it does not send data</span></div>
 </article><article class="card" id="ais-sart">
-  <header class="top"><div><span class="num">3 / 6</span><h2>AIS-SART</h2><p class="nm">AIS Search and Rescue Transmitter</p></div><p class="role">Shows the liferaft on nearby AIS screens</p></header>
+  <header class="top"><div><span class="num">3 / 7</span><h2>AIS-SART</h2><p class="nm">AIS Search and Rescue Transmitter</p></div><p class="role">Shows the liferaft on nearby AIS screens</p></header>
   <div class="glance"><div><b>970</b><span>MMSI prefix</span></div><div><b>96 h</b><span>min. transmission</span></div><div><b>8 / min</b><span>messages</span></div><div><b>5–10 NM</b><span>to vessel</span></div></div>
   <section class="def"><h3>Definition</h3><p>An AIS SART is a modern locator device that replaces traditional radar SARTs by broadcasting emergency positioning data over <mark>VHF AIS channels</mark>. Operating on a <strong>970-prefixed MMSI</strong>, it transmits the survival craft's exact GPS coordinates, UTC time, and an alert message directly to nearby AIS-equipped vessels up to 5 nautical miles away.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li><b>AIS 1</b>: Ch 87B</li><li><b>AIS 2</b>: Ch 88B</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>96 hours</b> of continuous operational transmission</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li>Typically <b>5–10 NM</b> to a vessel</li><li>Up to <b>30–40+ NM</b> to SAR aircraft</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Fixed MMSI prefix <b>970XXXXXX</b></li><li>Transmits <b>8 messages per minute</b>, alternating channels every minute</li><li>Built-in GPS, <b>~10 m</b> accuracy</li><li>Water resistant to <b>10 m</b>, drop-tested to <b>20 m</b></li></ul></div><div class="spec wide"><h3>How to check</h3><ul><li>Check the <b>battery expiry date</b> and look for damage to the case and lanyard</li><li>Press the <b>test</b> function: it sends a test message and checks its GPS</li><li>Your own AIS display / chart plotter should show the AIS-SART (970 MMSI) marked as a <b>test</b>, not a live alert</li><li>Check the indicator light shows a successful test, then switch off and stow</li></ul></div></div></section>
   <div class="mm"><span class="lbl">MMSI</span><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">0</span><span class="">7</span><span class="">2</span><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div><span>Prefix <b>970</b>, e.g. 970721234</span></div>
 </article><article class="card" id="ais">
-  <header class="top"><div><span class="num">4 / 6</span><h2>AIS</h2><p class="nm">Automatic Identification System</p></div><p class="role">Tracks ships to prevent collisions</p></header>
+  <header class="top"><div><span class="num">4 / 7</span><h2>AIS</h2><p class="nm">Automatic Identification System</p></div><p class="role">Tracks ships to prevent collisions</p></header>
   <div class="glance"><div><b>Ch 87B</b><span>AIS 1</span></div><div><b>Ch 88B</b><span>AIS 2</span></div><div><b>2–10 s</b><span>report underway</span></div><div><b>3 min</b><span>report at anchor</span></div></div>
   <section class="def"><h3>Definition</h3><p>AIS is an automated, <mark>VHF-based</mark> maritime tracking system used to prevent collisions and enhance situational awareness near ports and busy waterways. It automatically broadcasts and receives static and dynamic vessel data, such as position, course, speed over ground, heading, and MMSI, <strong>every few seconds</strong> to nearby ships and shore stations.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li><b>AIS 1</b>: Ch 87B</li><li><b>AIS 2</b>: Ch 88B</li></ul></div><div class="spec"><h3>Power / range</h3><ul><li><b>Class A</b> (commercial, 12.5 W): ~<b>20–30 NM</b></li><li><b>Class B</b> (recreational, 2–5 W): ~<b>10–15 NM</b> line-of-sight</li></ul></div><div class="spec"><h3>Reporting intervals</h3><ul><li>Underway: position every <b>2 to 10 seconds</b> (depending on speed and rate of turn)</li><li>At anchor: every <b>3 minutes</b></li></ul></div><div class="spec"><h3>Key data</h3><ul><li>Powered by vessel mains power (no emergency battery limitations)</li><li><b>Static:</b> MMSI, vessel name, call sign</li><li><b>Dynamic:</b> GPS position, SOG, COG, heading</li><li><b>Voyage:</b> destination, ETA</li></ul></div></div></section>
   <div class="mm"><span class="lbl">MMSI</span><span>Ship's own MMSI</span></div>
 </article><article class="card" id="ais-epirb">
-  <header class="top"><div><span class="num">5 / 6</span><h2>AIS EPIRB</h2><p class="nm">EPIRB with built-in AIS</p></div><p class="role">Global satellite alert plus local AIS homing</p></header>
+  <header class="top"><div><span class="num">5 / 7</span><h2>AIS EPIRB</h2><p class="nm">EPIRB with built-in AIS</p></div><p class="role">Global satellite alert plus local AIS homing</p></header>
   <div class="glance"><div><b>406 MHz</b><span>satellite alert</span></div><div><b>974</b><span>MMSI prefix (AIS)</span></div><div><b>48 h</b><span>min. operation</span></div><div><b>2022</b><span>SOLAS mandate</span></div></div>
   <section class="def"><h3>Definition</h3><p>An AIS EPIRB is an advanced distress beacon that combines long-range <mark>406 MHz satellite</mark> alerting with a localized <mark>VHF AIS</mark> transmitter. It alerts global Rescue Coordination Centers via satellite while simultaneously transmitting real-time AIS positioning signals to all nearby vessels, providing both <strong>wide-area rescue dispatch</strong> and <strong>immediate local vessel homing</strong>.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Frequencies &amp; channels</h3><ul><li><b>406 MHz</b>: satellite distress</li><li><b>121.5 MHz</b>: homing</li><li><b>AIS channels</b>: Ch 87B (AIS 1) and Ch 88B (AIS 2)</li></ul></div><div class="spec"><h3>Battery / transmission</h3><ul><li>Minimum <b>48 hours</b> of continuous operation across all frequencies</li><li>Battery life: <b>5 years</b></li></ul></div><div class="spec"><h3>Operating range</h3><ul><li><b>Global</b> satellite coverage (406 MHz)</li><li>Plus local VHF line-of-sight range of <b>4–10 NM</b> to surrounding vessels via AIS</li></ul></div><div class="spec"><h3>Key data</h3><ul><li>MMSI prefix <b>974XXXXXX</b> for the AIS component</li><li>Mandated for new <b>SOLAS</b> installations after <b>1 July 2022</b></li><li>Integrates long-range SAR dispatch with instant local-vessel collision avoidance and homing</li></ul></div></div></section>
   <div class="mm"><span class="lbl">MMSI</span><div class="digits"><span class="p">9</span><span class="p">7</span><span class="p">4</span><span class="">7</span><span class="">2</span><span class="">1</span><span class="">2</span><span class="">3</span><span class="">4</span></div><span>Prefix <b>974</b>, e.g. 974721234</span></div>
 </article><article class="card" id="vhf">
-  <header class="top"><div><span class="num">6 / 6</span><h2>Portable VHF</h2><p class="nm">Portable (handheld) GMDSS VHF radio</p></div><p class="role">Survival-craft and on-board voice radio</p></header>
+  <header class="top"><div><span class="num">6 / 7</span><h2>Portable VHF</h2><p class="nm">Portable (handheld) GMDSS VHF radio</p></div><p class="role">Survival-craft and on-board voice radio</p></header>
   <div class="glance"><div><b>Ch 16</b><span>must have</span></div><div><b>+1</b><span>other channel minimum</span></div><div><b>8 h</b><span>spare lithium battery</span></div><div><b>IPX7/8</b><span>waterproof</span></div></div>
   <section class="def"><h3>Definition</h3><p>A portable GMDSS VHF is a handheld marine radio for survival craft and on-board use. It must work on <mark>Channel 16</mark> and at least one other channel, runs on a rechargeable <strong>NiCd battery</strong>, carries a sealed <strong>spare lithium battery</strong> for emergencies, and must be waterproof and tough.</p></section>
   <section class="specs"><h3 class="sh">Specifications</h3><div class="sg"><div class="spec"><h3>Channels</h3><ul><li>Must operate on <b>Ch 16</b> (distress, safety, calling)</li><li>Plus <b>at least one other channel</b>, e.g. Ch 6 (inter-ship / SAR coordination)</li><li>Modern devices include all international VHF channels</li></ul></div><div class="spec"><h3>Output power &amp; modulation</h3><ul><li>Low power: <b>0.25 W</b> (or 1 W)</li><li>High power: <b>1 W to 2.5 W</b></li><li>Frequency Modulation (FM): <b>G3E / F3E</b> for voice</li></ul></div><div class="spec"><h3>Batteries</h3><ul><li><b>Primary:</b> rechargeable <b>NiCd</b> battery</li><li><b>Spare:</b> sealed, non-rechargeable <b>lithium</b> battery for emergency use</li><li>Spare gives a minimum <b>8 hours</b> at 10% transmit / 10% receive / 80% standby (many give 12–16+ h)</li><li>Spare storage life: <b>4 to 5 years</b></li></ul></div><div class="spec"><h3>Communication ranges</h3><ul><li>Handheld to handheld: <b>~3–5 NM</b></li><li>Handheld to vessel (antenna ~9 m): <b>~5–8 NM</b></li><li>Handheld to coast station / SAR aircraft: <b>~10–30+ NM</b></li></ul></div><div class="spec wide"><h3>IMO construction standards</h3><ul><li>Waterproof to <b>IPX7 / IPX8</b>: 1 m depth for at least 5 minutes</li><li>Survives a <b>1 m drop</b> onto a hard surface</li></ul></div></div></section>
   
+</article><article class="card" id="navtex">
+  <header class="top"><div><span class="num">7 / 7</span><h2>NAVTEX</h2><p class="nm">Navigational Telex</p></div><p class="role">Automatic maritime safety information (MSI) from coast stations</p></header>
+  <div class="glance">
+    <div><b>518 kHz</b><span>English, international</span></div>
+    <div><b>490 kHz</b><span>local language, national</span></div>
+    <div><b>400 NM</b><span>reception range</span></div>
+    <div><b>Every 4 h</b><span>up to 10 min per station</span></div>
+  </div>
+  <section class="def"><h3>Definition</h3><p>An international system for the automatic transmission and reception of safety and weather messages (<mark>MSI</mark>) from coast stations worldwide. Introduced in Boston in <strong>1983</strong> and part of GMDSS since <strong>1999</strong>, it carries SAR, navigational and safety warnings, meteorological and ice warnings, weather forecasts and special messages. After an EPIRB alert, the RCC may broadcast a distress message on NAVTEX to widen the search.</p></section>
+  <section class="specs"><h3 class="sh">Specifications</h3><div class="sg">
+    <div class="spec"><h3>Frequencies &amp; range</h3><ul>
+      <li><b>518 kHz</b>: English, international</li>
+      <li><b>490 kHz</b>: local language, national</li>
+      <li><b>4209.5 kHz</b>: tropical zone, international</li>
+      <li>Received up to <b>400 NM</b>; maximum range at <b>night</b></li>
+      <li>Stations with the same ID letter are ~<b>800 NM</b> apart, so you never receive both</li>
+      <li>Stations time-share and transmit every <b>4 hours</b>, up to <b>10 minutes</b> each</li>
+    </ul></div>
+    <div class="spec"><h3>Priority</h3><div class="urg">
+      <div><b class="let">VITAL</b><span>Immediate transmission (message number <b>00</b>)</span></div>
+      <div><b>IMPORTANT</b><span>Immediate when the frequency is free</span></div>
+      <div><b class="note">ROUTINE</b><span>When the frequency is free</span></div></div>
+      </div><div class="spec"><h3>Character Error Rate (CER)</h3>
+      <div class="cer"><div class="bad"><b>5%+</b>Auto-deleted, received again next broadcast</div><div class="ok"><b>≤4.9%</b>Kept; delete manually if unreadable</div></div></div>
+    <div class="spec wide"><h3>Message header: ZCZC B1 B2 B3 B4 … NNNN</h3>
+    <div class="hdr">
+      <div class="seg zc"><b>ZCZC</b><span>start</span></div>
+      <div class="seg b1"><b>P</b><span>B1: transmitting station (1 letter)</span></div>
+      <div class="seg b2"><b>A</b><span>B2: message type (1 letter)</span></div>
+      <div class="seg b34"><b>13</b><span>B3 B4: message number 01–99</span></div>
+      <div class="seg zc"><b>NNNN</b><span>end</span></div>
+    </div>
+    <p class="note">Example: <span class="mono">ZCZC PA13 · ROUTINE · 201908 UTC MAR 09</span> (date/time as ddHHmm) = Haifa Radio, navigational warning, number 13.</p>
+    <div class="stations"><span>Haifa Radio <b>P</b></span><span>Antalya <b>F</b></span><span>Cyprus <b>M</b></span><span>Iraklion <b>H</b></span></div></div>
+    <div class="spec wide"><h3>B2 message types</h3><div class="msg"><div class="keep"><b>A</b><span>Navigational warnings</span></div><div class="keep"><b>B</b><span>Meteorological warnings</span></div><div class=""><b>C</b><span>Ice reports</span></div><div class="keep"><b>D</b><span>Search &amp; rescue information</span></div><div class="soft"><b>E</b><span>Meteorological forecasts</span></div><div class=""><b>F</b><span>Pilot service messages</span></div><div class=""><b>G</b><span>Decca messages</span></div><div class=""><b>H</b><span>Loran messages (Long range Nav)</span></div><div class=""><b>I</b><span>Omega messages</span></div><div class=""><b>J</b><span>Satnav messages</span></div><div class=""><b>K</b><span>Other electronic navaid messages</span></div><div class="keep"><b>L</b><span>Additional navigational warnings</span></div><div class=""><b>V</b><span>Special services</span></div><div class=""><b>W</b><span>Special services (possible other languages use)</span></div><div class=""><b>X</b><span>Special services</span></div><div class=""><b>Y</b><span>Special services</span></div><div class=""><b>Z</b><span>No message on hand (QRU)</span></div></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i><b>A, B, D, L</b> cannot be deleted</span><span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i><b>E</b>: recommended not to delete</span></div></div>
+    <div class="spec wide"><h3>Areas &amp; using it</h3><ul>
+      <li><b>21 NAVAREAS</b>: 16 + 5 Arctic areas added 01.07.2010; stations in each lettered <b>A–Z</b></li>
+      <li>Before sailing, leave it on <b>4–12 hours</b> to receive a full round of messages</li>
+      <li>Screen-only or printer models; printer alarms when paper runs out</li>
+      <li>Program the station letter and message type (A–Z) to skip unwanted messages</li>
+      <li>In Area A1 but outside NAVTEX coverage: need MSI on HF, Telex or INMARSAT</li>
+    </ul>
+    <span class="lbl" style="margin:4px 0 0">East Med weather zones</span>
+    <div class="zones"><div>Jason</div><div>Taurus</div><div class="il">Crusade<small>off Israel</small></div><div>Matruch</div><div>Delta</div></div>
+    </div>
+  </div></section>
 </article>
 </div>
 <script src="../shared/js/study.js"></script>

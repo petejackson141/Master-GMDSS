@@ -1,7 +1,7 @@
 /* Master GMDSS service worker
    Saves the app on the phone so it opens without internet, and picks up new versions.
    IMPORTANT: change VERSION every time you publish changes, so phones download the new files. */
-const VERSION = 'v1.8.1';
+const VERSION = 'v1.8.3';
 const CACHE = 'master-gmdss-' + VERSION;
 
 // Everything the app needs to start offline (paths are relative to this file)
@@ -21,7 +21,7 @@ const FILES = [
   'ais-epirb/', 'ais-epirb/index.html', 'ais-epirb/css/ais-epirb.css', 'ais-epirb/js/ais-epirb.js',
   'quiz/', 'quiz/index.html', 'quiz/css/quiz.css', 'quiz/js/questions.js', 'quiz/js/quiz.js',
   'written/', 'written/index.html', 'written/css/written.css', 'written/js/data.js', 'written/js/written.js',
-  'study/cheat-sheets.html', 'study/equipment-cards.html', 'study/callsigns-navtex.html'
+  'study/cheat-sheets.html', 'study/equipment-cards.html'
 ];
 
 // 1. Install: download and save all files

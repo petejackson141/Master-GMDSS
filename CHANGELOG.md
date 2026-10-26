@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.3 — 26 October 2026
+- Call signs: coast station example corrected to 4XO (letter O). Added a note that 1 and 0 are never used, as they are confused with I and O.
+
+## 1.8.2 — 26 October 2026
+- Study: call signs and NAVTEX split up. Call signs is now its own section in the cheat sheets, with character-box cards like MMSI formats. NAVTEX is now card 7 in Equipment cards. The old combined page forwards to the new places.
+
 ## 1.8.1 — 26 October 2026
 - Study: removed three pages: Numbers to know by heart, Beacons and AIS compared, and Portable VHF. The portable VHF card is still in Equipment cards. The cheat sheets page now holds MMSI formats, VHF channels and the glossary.
 
