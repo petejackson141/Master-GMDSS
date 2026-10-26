@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.8.1 — 26 October 2026
+- Study: removed three pages: Numbers to know by heart, Beacons and AIS compared, and Portable VHF. The portable VHF card is still in Equipment cards. The cheat sheets page now holds MMSI formats, VHF channels and the glossary.
+
 ## 1.8.0 — 25 October 2026
 - New module: AIS-SART Simulator (ais-sart/). Built on the Radar SART simulator: OFF / ON switch under a safety tab, hold-1-second TEST, GNSS / Transmit / Pass / Fault lights. Take it into the liferaft, onto its pole or into the sea. The rescue ship's AIS display shows the SART ACTIVE alarm (ACK button) and a circle-with-cross target; tap it for MMSI 970, position, bearing and range. Six scenarios: free practice, monthly test (SART TEST on your own AIS), abandon ship, get it higher, on the rescue ship's AIS, pre-departure inspection.
 - New module: AIS-EPIRB Simulator (ais-epirb/). The EPIRB simulator with an AIS locator: EPIRB ACTIVE once a minute on the two AIS channels, a nearby ship (MV CARMEL STAR) that sees it, alters course and comes alongside, and a second "AIS: nearby ships" chain beside the satellite chain. Seven scenarios, including accidental activation (the nearby ship stands down when you cancel) and a new "On a nearby ship's AIS".

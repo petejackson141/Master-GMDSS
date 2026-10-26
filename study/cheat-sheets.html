@@ -120,7 +120,7 @@ footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);paddi
   .wrap>*{margin-bottom:28px} section{display:block} section>*{margin-bottom:16px}
   .panel,.m,.ch,.dev,.recall div,.gloss div,.tbl,tr{break-inside:avoid}
   h2,h3{break-after:avoid}
-  #beacons,#vhf,#mmsi,#channels,#glossary{break-before:page}
+  #channels,#glossary{break-before:page}
   .tbl{overflow:visible;break-before:page} table{min-width:0;font-size:10.5px}
 }
 </style>
@@ -140,149 +140,13 @@ h1,h2{color:var(--heading);letter-spacing:0}
   <header>
     <span class="eyebrow">GMDSS · Short Range Certificate study notes</span>
     <h1>Marine Radio Cheat Sheets</h1>
-    <p class="lede">Distress beacons, handheld VHF, MMSI formats and VHF channels on one page. Start with the quick-recall numbers, then use the tables to see how the devices differ.</p>
+    <p class="lede">MMSI formats, VHF channels and a glossary of abbreviations on one page.</p>
     <nav>
-      <a href="#recall">Quick recall</a>
-      <a href="#beacons">Beacons &amp; AIS</a>
-      <a href="#vhf">Portable VHF</a>
       <a href="#mmsi">MMSI formats</a>
       <a href="#channels">VHF channels</a>
       <a href="#glossary">Glossary</a>
     </nav>
   </header>
-
-  <!-- QUICK RECALL -->
-  <section id="recall">
-    <h2>Numbers to know by heart</h2>
-    <div class="recall">
-      <div><b>406 MHz</b><span>EPIRB satellite distress alert (Cospas-Sarsat)</span></div>
-      <div><b>121.5 MHz</b><span>EPIRB local homing signal</span></div>
-      <div><b>9 GHz</b><span>SART answers X-band radar (9.2–9.5 GHz)</span></div>
-      <div><b>12 dots</b><span>SART on radar; become arcs, then circles, up close</span></div>
-      <div><b>87B / 88B</b><span>AIS 1 / AIS 2 channels</span></div>
-      <div><b>970 · 972 · 974</b><span>AIS-SART · MOB device · AIS EPIRB</span></div>
-      <div><b>48 h</b><span>EPIRB and AIS EPIRB minimum operation</span></div>
-      <div><b>96 h</b><span>SART standby / AIS-SART transmission minimum</span></div>
-      <div><b>8 h</b><span>SART active and handheld VHF spare battery</span></div>
-      <div><b>Ch 16</b><span>Distress, urgency, safety, calling (156.800 MHz)</span></div>
-      <div><b>Ch 70</b><span>DSC alerts only (156.525 MHz)</span></div>
-      <div><b>428</b><span>Israel's MID (country code in the MMSI)</span></div>
-    </div>
-  </section>
-
-  <!-- BEACONS -->
-  <section id="beacons">
-    <h2>Distress beacons &amp; AIS</h2>
-    <div class="devices">
-      <div class="dev"><div class="devhead"><span class="tag">EPIRB</span><h3>Emergency Position Indicating Radio Beacon</h3></div><p>An EPIRB is a satellite-based distress beacon used on vessels to signal a life-threatening emergency to search and rescue authorities. When activated manually or automatically upon submersion, it transmits a <mark>406 MHz</mark> signal containing the ship's unique MMSI, allowing rescue centers to locate the vessel globally using the <strong>Cospas-Sarsat</strong> satellite system.</p></div>
-      <div class="dev"><div class="devhead"><span class="tag">SART</span><h3>Search and Rescue Radar Transponder</h3></div><p>A SART is a localized homing device designed to assist search-and-rescue vessels and aircraft in pinpointing lifeboats or rafts. When painted by a <mark>9 GHz X-band</mark> search radar, it automatically responds by generating a distinctive pattern of <strong>12 dots</strong> (turning into arcs and concentric circles at close range) on the rescuer's radar display.</p></div>
-      <div class="dev"><div class="devhead"><span class="tag">AIS-SART</span><h3>AIS Search and Rescue Transmitter</h3></div><p>An AIS SART is a modern locator device that replaces traditional radar SARTs by broadcasting emergency positioning data over <mark>VHF AIS channels</mark>. Operating on a <strong>970-prefixed MMSI</strong>, it transmits the survival craft's exact GPS coordinates, UTC time, and an alert message directly to nearby AIS-equipped vessels up to 5 nautical miles away.</p></div>
-      <div class="dev"><div class="devhead"><span class="tag">AIS</span><h3>Automatic Identification System</h3></div><p>AIS is an automated, <mark>VHF-based</mark> maritime tracking system used to prevent collisions and enhance situational awareness near ports and busy waterways. It automatically broadcasts and receives static and dynamic vessel data, such as position, course, speed over ground, heading, and MMSI, <strong>every few seconds</strong> to nearby ships and shore stations.</p></div>
-      <div class="dev"><div class="devhead"><span class="tag">AIS EPIRB</span><h3>AIS EPIRB</h3></div><p>An AIS EPIRB is an advanced distress beacon that combines long-range <mark>406 MHz satellite</mark> alerting with a localized <mark>VHF AIS</mark> transmitter. It alerts global Rescue Coordination Centers via satellite while simultaneously transmitting real-time AIS positioning signals to all nearby vessels, providing both <strong>wide-area rescue dispatch</strong> and <strong>immediate local vessel homing</strong>.</p></div>
-    </div>
-
-    <div class="tbl">
-      <table>
-        <thead><tr><th></th><th>EPIRB</th><th>SART</th><th>AIS-SART</th><th>AIS</th><th>AIS EPIRB</th></tr></thead>
-        <tbody>
-          <tr><th>Frequency</th>
-            <td><span class="mono">406.0–406.1 MHz</span> alert<br><span class="mono">121.5 MHz</span> homing<br>+ GNSS/GPS</td>
-            <td><span class="mono">9.2–9.5 GHz</span><br>X-band radar</td>
-            <td>AIS 1: <span class="mono">Ch 87B</span><br>AIS 2: <span class="mono">Ch 88B</span></td>
-            <td>AIS 1: <span class="mono">Ch 87B</span><br>AIS 2: <span class="mono">Ch 88B</span></td>
-            <td><span class="mono">406</span> + <span class="mono">121.5 MHz</span><br>+ AIS <span class="mono">Ch 87B / 88B</span></td></tr>
-          <tr><th>Battery</th>
-            <td><mark>48 h</mark> min. operation<br>Battery life 5 yrs</td>
-            <td><mark>96 h</mark> standby, then <mark>8 h</mark> active<br>Battery life 5 yrs</td>
-            <td><mark>96 h</mark> min. transmission<br>Battery life 5 yrs</td>
-            <td>Ship's mains power<br>No emergency battery</td>
-            <td><mark>48 h</mark> min., all frequencies<br>Battery life 5 yrs</td></tr>
-          <tr><th>Range</th>
-            <td>Global (Cospas-Sarsat: MEOSAR / LEOSAR / GEOSAR)</td>
-            <td>8–10 NM to ship radar (15 m antenna)<br>30–40 NM to aircraft</td>
-            <td>5–10 NM to vessel<br>30–40+ NM to SAR aircraft</td>
-            <td>Class A (12.5 W): ~20–30 NM<br>Class B (2–5 W): ~10–15 NM</td>
-            <td>Global via satellite<br>+ 4–10 NM local AIS</td></tr>
-          <tr><th>MMSI</th>
-            <td>Ship's MMSI</td>
-            <td>None (radar reply)</td>
-            <td><span class="pill">970</span>XXXXXX</td>
-            <td>Ship's MMSI</td>
-            <td><span class="pill">974</span>XXXXXX</td></tr>
-          <tr><th>Key facts</th>
-            <td>5 W burst every 50 s. Hydrostatic release (HRU) frees it at 1.5–4 m depth.</td>
-            <td>Sweeps back and forth to create 12 dots on radar.</td>
-            <td>8 messages/min, alternating channels. GPS ~10 m accuracy. Waterproof to 10 m, drop-tested 20 m.</td>
-            <td>Underway: every 2–10 s. At anchor: every 3 min. Sends static, dynamic and voyage data.</td>
-            <td>Mandatory for new SOLAS installations from 1 July 2022.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="grid2">
-      <div class="panel">
-        <h3>Minimum battery / operating time</h3>
-        <div class="bars">
-          <div class="bar"><span>SART standby</span><i style="--w:100%"></i><span class="mono">96 h</span></div>
-          <div class="bar"><span>AIS-SART</span><i style="--w:100%"></i><span class="mono">96 h</span></div>
-          <div class="bar"><span>EPIRB</span><i style="--w:50%"></i><span class="mono">48 h</span></div>
-          <div class="bar"><span>AIS EPIRB</span><i style="--w:50%"></i><span class="mono">48 h</span></div>
-          <div class="bar"><span>SART active</span><i style="--w:8.33%"></i><span class="mono">8 h</span></div>
-          <div class="bar"><span>Handheld VHF</span><i style="--w:8.33%"></i><span class="mono">8 h</span></div>
-        </div>
-      </div>
-      <div class="panel">
-        <h3>What AIS broadcasts</h3>
-        <dl class="kv">
-          <dt>Static</dt><dd>MMSI, vessel name, call sign</dd>
-          <dt>Dynamic</dt><dd>GPS position, SOG, COG, heading</dd>
-          <dt>Voyage</dt><dd>Destination, ETA</dd>
-        </dl>
-        <p class="note">Tell them apart: <strong>EPIRB</strong> tells the world, <strong>SART</strong> shows up on radar, <strong>AIS-SART</strong> shows up on AIS screens, <strong>AIS EPIRB</strong> does both the global alert and the local AIS position.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- PORTABLE VHF -->
-  <section id="vhf">
-    <h2>Portable (handheld) GMDSS VHF</h2>
-    <div class="grid2">
-      <div class="panel">
-        <h3>Channels &amp; power</h3>
-        <dl class="kv">
-          <dt>Must have</dt><dd>Ch 16 plus at least one other channel (e.g. Ch 6)</dd>
-          <dt>Low power</dt><dd class="mono">0.25 W (or 1 W)</dd>
-          <dt>High power</dt><dd class="mono">1–2.5 W</dd>
-          <dt>Modulation</dt><dd>FM voice: <span class="mono">G3E / F3E</span></dd>
-        </dl>
-      </div>
-      <div class="panel">
-        <h3>Batteries</h3>
-        <dl class="kv">
-          <dt>Primary</dt><dd>Rechargeable <strong>NiCd</strong></dd>
-          <dt>Spare</dt><dd>Sealed, non-rechargeable <strong>lithium</strong>. Emergency use only.</dd>
-          <dt>Spare runtime</dt><dd><mark>8 h minimum</mark> at 10% TX / 10% RX / 80% standby (many give 12–16 h)</dd>
-          <dt>Spare shelf life</dt><dd>4–5 years</dd>
-        </dl>
-      </div>
-      <div class="panel">
-        <h3>Typical range</h3>
-        <dl class="kv">
-          <dt>Handheld ↔ handheld</dt><dd class="mono">3–5 NM</dd>
-          <dt>Handheld ↔ vessel (~9 m antenna)</dt><dd class="mono">5–8 NM</dd>
-          <dt>Handheld ↔ coast / aircraft</dt><dd class="mono">10–30+ NM</dd>
-        </dl>
-        <p class="note">VHF is line of sight: the higher the other antenna, the further you reach.</p>
-      </div>
-      <div class="panel">
-        <h3>IMO build standards</h3>
-        <ul>
-          <li>Waterproof <strong>IPX7 / IPX8</strong>: 1 m for at least 5 min</li>
-          <li>Survives a <strong>1 m drop</strong> onto a hard surface</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
   <!-- MMSI -->
   <section id="mmsi">
