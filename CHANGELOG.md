@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.5 — 28 October 2026
+- NAVTEX simulator is now only about receiving. Removed the "On the air" broadcast buttons and the Navtex key that showed them. Messages now come in on their own: in free practice every so often while the set is on, and in the exercises a few seconds after a step starts waiting for one (sent again until the step is done).
+- NAVTEX: removed the Reception log. The decoding quiz stays.
+- NAVTEX exercises: removed "SAR alert received", "Why didn't it print?" and "Local language on 490 kHz". Five exercises left: switch on and self-test, prepare for a passage, filter what you receive, find/read/delete a message, error rate (CER).
+- NAVTEX instruction book: section 6 rewritten for receiving only.
+
 ## 1.8.4 — 26 October 2026
 - Written-answer exams: added the 13 practice procedures from the course book (BRIGIT, BONNY, SONDRA, DAGGER, RAFSODY, NESHER fire, SHOSHI, ZODIAK, SAUTE, RUNNER, VERA, DRYX MARIOS, RITA) with the model answers exactly as on the practice procedures answer sheet. Exam mode and Learn mode work for all of them.
 - The exams list is now in two groups: Exam papers (the original 8) and Practice procedures (course book).

@@ -1,4 +1,5 @@
-/* NAVTEX simulator: page wiring, broadcasts, reception log, free practice, exercises and the decoding quiz */
+/* NAVTEX simulator: page wiring, incoming messages, free practice, exercises and the decoding quiz.
+   The simulator is only about receiving: messages reach the aerial on their own and the receiver's settings decide what prints. */
 
 (() => {
   const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -22,31 +23,28 @@
     e.preventDefault(); RX.key(m);
   });
 
-  // ---------- broadcasts ----------
-  function bcLabel(id) {
-    const msg = NX.messages[id], s = NX.stationName(id[0]).replace(' (Turkish)', ''), t = NX.typeShort(id);
-    return `<b>${id}</b><small>${esc(s)} · ${esc(t)} · ${msg.freq}</small>`;
+  // ---------- incoming messages ----------
+  // Free practice: while the set is on, a message reaches the aerial every so often.
+  let freeT = null;
+  function freeTraffic(run) {
+    clearInterval(freeT); freeT = null;
+    if (run) freeT = setInterval(() => { if (RX.isOn) RX.incoming(pick(NX.traffic)); }, 25000);
   }
-  function drawBroadcasts(want = []) {
-    $('#bcs').innerHTML = NX.broadcasts.map(id => `<button class="bc${want.includes(id) ? ' want' : ''}" data-bc="${id}"><i></i>${bcLabel(id)}</button>`).join('');
+  // Exercises: when the current step is waiting for a message, it arrives a few seconds later,
+  // and again every few seconds (the next broadcast) until the step is done.
+  let arrT = null, arrKey = '';
+  function stopArrivals() { clearTimeout(arrT); arrT = null; arrKey = ''; }
+  function arrivals() {
+    const i = cur ? cur.done.indexOf(false) : -1, step = i >= 0 ? cur.ex.steps[i] : null;
+    if (!step || !step.bc) return stopArrivals();
+    const key = cur.i + ':' + i; if (key === arrKey) return;
+    stopArrivals(); arrKey = key; let n = 0;
+    const tick = () => { if (arrKey !== key) return; RX.incoming(step.bc[n++ % step.bc.length]); if (arrKey === key) arrT = setTimeout(tick, 8000); };
+    arrT = setTimeout(tick, 3000);
   }
-  $('#bcs').addEventListener('click', e => { const b = e.target.closest('[data-bc]'); if (b) RX.transmit(b.dataset.bc); });
-
-  // ---------- reception log ----------
-  const rl = [];
-  function drawLog() {
-    $('#rlog').innerHTML = rl.length ? rl.map(r => `<li class="${r.ok ? 'ok' : 'no'}"><span class="ic">${r.ok ? '✓' : '✗'}</span><b>${r.id}</b><span>${esc(r.reason)}</span></li>`).join('')
-      : '<li class="empty">Nothing transmitted yet.</li>';
-  }
-  $('#clearLog').addEventListener('click', () => { rl.length = 0; drawLog(); });
 
   RX.on((type, d) => {
-    if (type === 'received' || type === 'rejected') {
-      rl.unshift(d); if (rl.length > 30) rl.pop(); drawLog();
-      const am = $('#airMsg'); am.hidden = false; am.className = 'airmsg ' + (d.ok ? 'ok' : 'no'); am.textContent = (d.ok ? '✓ ' : '✗ Not printed. ') + d.reason;
-      if (d.ok && window.innerWidth < 980) $('.unit').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    if (type === 'navtexKey') { const a = $('#air'); a.hidden = !a.hidden; if (!a.hidden) a.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    if (type === 'received' && window.innerWidth < 980) $('.unit').scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (tab === 'free' && type !== 'render') drawFree();
     if (tab === 'ex' && cur && type !== 'render') exEvent(type, d);
   });
@@ -62,9 +60,10 @@
   $$('.tab').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
   function setTab(t) {
     tab = t; $$('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
-    if (t === 'free') { cur = null; drawBroadcasts(); drawFree(); }
+    freeTraffic(t === 'free'); if (t !== 'ex') stopArrivals();
+    if (t === 'free') { cur = null; drawFree(); }
     if (t === 'ex') { cur ? drawEx() : drawExList(); }
-    if (t === 'quiz') { cur = null; drawBroadcasts(); startQuiz(); }
+    if (t === 'quiz') { cur = null; startQuiz(); }
   }
 
   // ---------- free practice ----------
@@ -72,7 +71,7 @@
     const s = RX.state;
     const ign = s.tyIgnore.length ? s.tyIgnore.join(', ') : 'none';
     $('#panel').innerHTML = `<h2>Free practice</h2>
-      <p>Use the receiver like the real set: switch on with <b>Power</b>, set it up with <b>MENU</b>, read stored messages with <b>DISPL</b>. Transmit broadcasts from <b>On the air</b> and see what your settings let through.</p>
+      <p>Use the receiver like the real set: switch on with <b>Power</b>, set it up with <b>MENU</b>, read stored messages with <b>DISPL</b>. While it is on, new messages come in every so often. Your settings decide which ones print.</p>
       <h3>Receiver now</h3>
       <ul>
         <li>Power: <b>${RX.isOn ? 'on' : 'off'}</b> · Frequency: <b>${s.freq} kHz</b></li>
@@ -84,9 +83,10 @@
       <h3>Things to try</h3>
       <ul>
         <li>Read the SAR message <b>PD00</b> in the message log.</li>
-        <li>Switch off pilot messages (F), then transmit <b>PF10</b>.</li>
+        <li>Switch off pilot messages (F). The Haifa pilot message <b>PF10</b> won't print when it comes in.</li>
         <li>Try to switch off navigational warnings (A). Why can't you?</li>
-        <li>Transmit <b>PA25</b>, then raise the error rate and try again.</li>
+        <li>The garbled warning <b>PA25</b> isn't kept. Raise the error rate and wait for it to come in again.</li>
+        <li>Switch to MANUAL station selection to get messages from stations further away, like Iraklion (H).</li>
       </ul>
       <div class="row"><button class="btn" data-doc="book">Instruction book</button><button class="btn" data-doc="map">Station map</button><button class="btn" id="resetRx">Reset receiver</button></div>`;
     $('#resetRx').onclick = () => { if (confirm('Reset the receiver to how it came out of the box? Stored messages and settings go back to the start.')) RX.reset(); };
@@ -108,33 +108,19 @@
         { q: 'Which frequency carries the international NAVTEX broadcasts in English?', o: ['518 kHz', '490 kHz', '4209.5 kHz', '2182 kHz'], ex: '518 kHz: English, international. 490 kHz: local language. 4209.5 kHz: tropical zone.' }
       ] },
     { id: 'prep', title: 'Prepare for a passage', sub: 'Delete old messages, 518 kHz, AUTO, alarm',
-      scenario: "Tomorrow you sail from Herzliya to Limassol. Last trip's messages are still in memory. Set the receiver up and let it collect the latest broadcasts.",
+      scenario: "Tomorrow you sail from Herzliya to Limassol. Last trip's messages are still in memory. Set the receiver up and let it collect the latest messages.",
       steps: [
         { t: 'Switch the receiver on.', hint: 'Press Power.', ok: c => isOn() },
         { t: 'Delete all the old messages.', hint: 'MENU › SYSTEM MENU › DELETE ALL MSGS › YES › ENTER.', ok: c => c.has('deleteAll') || c.has('allClear') },
         { t: 'Set the frequency to 518 kHz.', hint: 'Press FRQ, choose 518 with ▲▼, press ENTER.', ok: c => c.has('setting', d => d.what === 'freq' && d.value === 518) && S().freq === 518 },
         { t: 'Set station selection to AUTO.', hint: 'MENU › STATION SELECTION › AUTO › ENTER.', ok: c => c.has('setting', d => d.what === 'stMode' && d.value === 'auto') && S().stMode === 'auto' },
         { t: 'Make sure the alarm is on.', hint: 'MENU › FUNCTIONS › RCVR ALARM › ON › ENTER.', ok: c => c.has('screen', d => d.screen === 'alarm') && S().alarm },
-        { t: 'Receive the latest broadcasts PA24 and MB03.', hint: 'Tap PA24 and MB03 under On the air.', bc: ['PA24', 'MB03'], ok: c => c.has('received', d => d.id === 'PA24') && c.has('received', d => d.id === 'MB03') }
+        { t: 'Receive the latest messages PA24 and MB03.', hint: 'They come in on their own once the receiver is set up. Watch the screen.', bc: ['PA24', 'MB03'], ok: c => c.has('received', d => d.id === 'PA24') && c.has('received', d => d.id === 'MB03') }
       ],
       qs: [
         { q: 'How long before sailing do the course notes say to switch NAVTEX on?', o: ['4–12 hours, to get a full round of broadcasts', '10 minutes', 'Only once you are at sea', 'Exactly 24 hours'], ex: 'Each station transmits every 4 hours, so leaving it on 4–12 hours catches a full round of messages.' },
         { q: 'Which station sent MB03?', o: ['Cyprus (M)', 'Haifa (P)', 'Antalya (F)', 'Iraklion (H)'], ex: 'B1, the first letter after ZCZC, is the station: M = Cyprus.' },
         { q: 'Roughly how far out can you receive NAVTEX?', o: ['About 400 NM', 'About 40 NM', 'About 1,000 NM', 'Only in sight of the station'], ex: 'About 400 NM, with the longest range at night.' }
-      ] },
-    { id: 'sar', title: 'SAR alert received', sub: 'Receive PD00, stop the alarm, read it',
-      scenario: 'You are at sea off Haifa with the alarm on. Haifa Radio is about to broadcast a distress message.',
-      steps: [
-        { t: 'Receiver on, tuned to 518 kHz.', hint: 'Power, then FRQ › 518 › ENTER if needed.', ok: c => isOn() && S().freq === 518 },
-        { t: 'Receive the broadcast PD00.', hint: 'Tap PD00 under On the air.', bc: ['PD00'], ok: c => c.has('received', d => d.id === 'PD00') },
-        { t: 'Silence the alarm.', hint: 'Press MENU once ("Menu > Stop Beep").', ok: c => c.has('stopBeep') || (c.has('received', d => d.id === 'PD00') && !S().alarm) }
-      ],
-      qs: [
-        { q: 'Who sent PD00?', o: ['Haifa Radio MRCC (station P)', 'Cyprus Radio (station M)', 'The vessel Galit', 'Antalya (station D)'], ex: 'P = Haifa. The text says HAIFARADIO MRCC.' },
-        { q: 'What type of message is it?', o: ['D: search and rescue information', 'A: navigational warning', 'B: meteorological warning', 'E: meteorological forecast'], ex: 'B2 = D: search and rescue. It can never be switched off.' },
-        { q: 'PD00 may already be in memory. Why is it printed again?', o: ['Number 00 is a VITAL message, so it is always printed', 'Because the alarm was on', 'Because it came from Haifa', 'SAR messages are never stored'], ex: 'Message number 00 = VITAL priority: transmitted immediately and always printed.' },
-        { q: 'The EPIRB signals are from which vessel?', o: ['Galit, MMSI 428000798', 'Sea Breeze, MMSI 428123456', 'A vessel flooding off Cyprus', 'Haifa Radio'], ex: 'RECEIVING EPIRB SIGNALS FROM GALIT MMSI 428000798.' },
-        { q: 'What does the message ask ships nearby to do?', o: ['Assist and report to Haifa Radio MRCC', 'Keep clear of the area', 'Switch off their EPIRB', 'Call the vessel on channel 70'], ex: 'After an EPIRB alert, the RCC may broadcast on NAVTEX to widen the search.' }
       ] },
     { id: 'filter', title: 'Filter what you receive', sub: 'Message selection: Ignore and the fixed types',
       scenario: "You're not going into Haifa port, so you don't need pilot messages. Switch them off, and find out what the set won't let you switch off.",
@@ -142,47 +128,19 @@
         { t: 'Switch the receiver on.', hint: 'Press Power.', ok: c => isOn() },
         { t: 'Set pilot service messages (F) to Ignore.', hint: 'MENU › MESSAGE SELECTION. Press ▶ until F, choose Ignore with ▼, press ENTER.', ok: c => S().tyIgnore.includes('F') },
         { t: 'Try to switch off meteorological warnings (B).', hint: 'In MESSAGE SELECTION press ◀ until B, then ENTER. It stays on Receive.', ok: c => c.has('fixedType', d => d.type === 'B') || c.has('screen', d => d.screen === 'tyList' && d.i === 1) },
-        { t: 'Transmit PF10, a Haifa pilot message.', hint: 'Tap PF10 under On the air.', bc: ['PF10'], ok: c => c.has('rejected', d => d.id === 'PF10' && d.code === 'type') },
-        { t: 'Transmit PL05, an additional navigational warning.', hint: 'Tap PL05 under On the air.', bc: ['PL05'], ok: c => c.has('received', d => d.id === 'PL05') || c.has('rejected', d => d.id === 'PL05' && d.code === 'dup') }
+        { t: 'Wait for PF10, a Haifa pilot message, to come in.', hint: 'It arrives in a few seconds. Does it print?', bc: ['PF10'], ok: c => c.has('rejected', d => d.id === 'PF10' && d.code === 'type') },
+        { t: 'Wait for PL05, an additional navigational warning.', hint: 'It arrives in a few seconds.', bc: ['PL05'], ok: c => c.has('received', d => d.id === 'PL05') || c.has('rejected', d => d.id === 'PL05' && d.code === 'dup') }
       ],
       qs: [
         { q: "Why wasn't PF10 printed?", o: ['Type F (pilot) is set to Ignore', 'Haifa is out of range', 'It had too many errors', 'Wrong frequency'], ex: 'You switched type F off in Message Selection.' },
         { q: 'Which message types can never be switched off?', o: ['A, B, D and L', 'A, B, C and E', 'D only', 'E and F'], ex: 'A, B, D and L are always received.' },
         { q: 'Which type is it recommended NOT to switch off, even though you can?', o: ['E: meteorological forecasts', 'F: pilot messages', 'G: Decca messages', 'Z: no message on hand'], ex: 'The course notes: E, recommended not to delete.' }
       ] },
-    { id: 'why', title: "Why didn't it print?", sub: 'Range, error rate, frequency, duplicates',
-      scenario: 'Several broadcasts go out but your receiver stays quiet. Start from the default settings and work out why each one was not printed. The Reception log will help.',
-      steps: [
-        { t: 'Switch on and restore the default settings.', hint: 'Power, then MENU › SYSTEM MENU › DEFAULT SETTING › YES › ENTER.', ok: c => isOn() && (c.has('default') || c.has('allClear')) },
-        { t: 'Transmit HE30 (Iraklion weather forecast).', hint: 'Tap HE30.', bc: ['HE30'], ok: c => c.has('rejected', d => d.id === 'HE30') },
-        { t: 'Transmit PA25 (Haifa navigational warning).', hint: 'Tap PA25.', bc: ['PA25'], ok: c => c.has('rejected', d => d.id === 'PA25') },
-        { t: 'Transmit DA41 (Antalya, 490 kHz).', hint: 'Tap DA41.', bc: ['DA41'], ok: c => c.has('rejected', d => d.id === 'DA41') },
-        { t: 'Transmit PA24 until it is not printed.', hint: 'The first time it may print. Tap it again.', bc: ['PA24'], ok: c => c.has('rejected', d => d.id === 'PA24' && d.code === 'dup') }
-      ],
-      qs: [
-        { q: "HE30 from Iraklion wasn't printed. Why?", o: ['In AUTO the set only takes nearby stations, and Iraklion is out of range', 'Forecasts are never received', 'Wrong frequency', 'It had too many errors'], ex: 'AUTO takes P, M, F and D off Israel. To get Iraklion (H) you would choose MANUAL.' },
-        { q: "PA25 wasn't printed. Why?", o: ['Too many errors: CER 7.2% is above the 4.9% limit', 'Haifa is set to Ignore', 'It was a duplicate', 'Navigational warnings need the alarm on'], ex: 'Character Error Rate of 5% or more: not kept.' },
-        { q: 'What happens to PA25 now?', o: ['It will be received again at the next broadcast', 'It is lost for good', 'It is saved to the PC', 'It prints with stars'], ex: 'Its ID was not stored, so the set will take it next time it is broadcast.' },
-        { q: "DA41 wasn't printed. Why?", o: ['It was sent on 490 kHz (local language) and the set is on 518 kHz', 'Antalya is out of range', 'Type A is switched off', 'The memory is full'], ex: 'D is Antalya on 490 kHz, in Turkish.' },
-        { q: "The second PA24 wasn't printed. Why?", o: ['Its ID was already in memory: each message prints only once', 'The first one was still NEW', 'Haifa only transmits once a day', 'The error rate was too high'], ex: 'The set remembers B1B2B3B4 codes, so repeats are not printed. Only number 00 is printed every time.' }
-      ] },
-    { id: 'national', title: 'Local language on 490 kHz', sub: 'FRQ, receive DA41, back to 518',
-      scenario: 'Antalya also broadcasts in Turkish on 490 kHz, as station D. Receive it, then go back to the international frequency.',
-      steps: [
-        { t: 'Switch the receiver on.', hint: 'Press Power.', ok: c => isOn() },
-        { t: 'Tune to 490 kHz.', hint: 'FRQ › 490 › ENTER.', ok: c => c.has('setting', d => d.what === 'freq' && d.value === 490) },
-        { t: 'Receive DA41.', hint: 'Tap DA41. If it says out of range, set STATION SELECTION to AUTO.', bc: ['DA41'], ok: c => c.has('received', d => d.id === 'DA41') || c.has('rejected', d => d.id === 'DA41' && d.code === 'dup') },
-        { t: 'Tune back to 518 kHz.', hint: 'FRQ › 518 › ENTER.', ok: c => c.has('received', d => d.id === 'DA41') || c.has('rejected', d => d.id === 'DA41' && d.code === 'dup') ? S().freq === 518 && c.after(d => d.id === 'DA41', 'setting', d => d.what === 'freq' && d.value === 518) : false }
-      ],
-      qs: [
-        { q: 'What is 490 kHz used for?', o: ['Local (national) language broadcasts', 'English international broadcasts', 'NAVTEX in the tropical zone', 'DSC distress alerts'], ex: '490 kHz: local language, national.' },
-        { q: 'What is 4209.5 kHz used for?', o: ['NAVTEX in the tropical zone (HF)', 'Local-language NAVTEX', 'Weather fax', 'Ship-to-ship safety calls'], ex: '4209.5 kHz: tropical zone, international.' }
-      ] },
     { id: 'manage', title: 'Find, read and delete a message', sub: 'DISPL, open, DELETE MSG',
       scenario: 'A crew member asks where the buoy that is off station is. Find the warning, read it, then delete it once you have plotted it.',
       steps: [
         { t: 'Switch the receiver on.', hint: 'Press Power.', ok: c => isOn() },
-        { t: 'Make sure PA24 is in memory.', hint: 'If it is not in the DISPL list, tap PA24 under On the air.', bc: ['PA24'], ok: c => !!RX.findMsg('PA24') || c.has('deleted', d => d.id === 'PA24') },
+        { t: 'Make sure PA24 is in memory.', hint: 'If it is not in the DISPL list, wait: it is sent again and will come in.', bc: ['PA24'], ok: c => !!RX.findMsg('PA24') || c.has('deleted', d => d.id === 'PA24') },
         { t: 'Open PA24 from the message list.', hint: 'Press DISPL, ▼ to PA24, ENTER.', ok: c => c.has('openMsg', d => d.id === 'PA24') },
         { t: 'Delete PA24, and only PA24.', hint: 'MENU › SYSTEM MENU › DELETE MSG, ▼ to PA24, ENTER.', ok: c => c.has('deleted', d => d.id === 'PA24') && !c.has('deleteAll') }
       ],
@@ -194,9 +152,9 @@
       scenario: 'PA25 keeps arriving garbled. See how the error-rate limit decides what is kept.',
       steps: [
         { t: 'Switch the receiver on.', hint: 'Press Power.', ok: c => isOn() },
-        { t: 'Transmit PA25 with the limit at 4.9%.', hint: 'Check the limit in MENU › FUNCTIONS › ERROR RATE, then tap PA25.', bc: ['PA25'], ok: c => c.has('rejected', d => d.id === 'PA25' && d.code === 'cer') },
+        { t: 'Let PA25 come in with the limit at 4.9%.', hint: 'Check the limit in MENU › FUNCTIONS › ERROR RATE. PA25 arrives in a few seconds. Does it print?', bc: ['PA25'], ok: c => c.has('rejected', d => d.id === 'PA25' && d.code === 'cer') },
         { t: 'Raise the error rate to 7.5% or more.', hint: 'MENU › FUNCTIONS › ERROR RATE, ▲ to raise it, ENTER.', ok: c => S().err >= 7.5 || c.has('received', d => d.id === 'PA25') },
-        { t: 'Transmit PA25 again and read it.', hint: 'Tap PA25.', bc: ['PA25'], ok: c => c.has('received', d => d.id === 'PA25') },
+        { t: 'Wait for PA25 to come in again, and read it.', hint: 'It is sent again in a few seconds.', bc: ['PA25'], ok: c => c.has('received', d => d.id === 'PA25') },
         { t: 'Set the error rate back to 4.9%.', hint: 'MENU › FUNCTIONS › ERROR RATE, ▼ to 4.9, ENTER. (Or SYSTEM MENU › DEFAULT SETTING.)', ok: c => c.has('received', d => d.id === 'PA25') && Math.abs(S().err - 4.9) < 0.05 }
       ],
       qs: [
@@ -235,7 +193,7 @@
   }
 
   function drawExList() {
-    drawBroadcasts();
+    stopArrivals();
     $('#panel').innerHTML = `<h2>Exercises</h2><p>Each exercise gives you a situation and a few tasks on the receiver. Ticks appear as you do them. Then a few questions check you understood what happened.</p>
       <div class="exlist">${EX.map((e, i) => `<button class="excard" data-ex="${i}"><span class="n">${i + 1}</span><b>${esc(e.title)}</b><small>${esc(e.sub)}</small>${prog[e.id] ? `<span class="ok" title="Best score">✓ ${prog[e.id]}</span>` : '<span></span>'}</button>`).join('')}</div>`;
     $$('[data-ex]').forEach(b => b.onclick = () => startEx(+b.dataset.ex));
@@ -249,8 +207,6 @@
   function drawEx() {
     const ex = cur.ex, allDone = cur.done.every(Boolean);
     const firstOpen = cur.done.indexOf(false);
-    const wantBc = firstOpen >= 0 ? (ex.steps[firstOpen].bc || []) : [];
-    drawBroadcasts(wantBc);
     if (allDone && cur.qi < 0) cur.qi = 0;
     let qhtml = '';
     if (allDone) {
@@ -279,12 +235,13 @@
     const en = $('#exNext'); if (en) en.onclick = () => startEx(cur.i + 1);
     const ea = $('#exAgain'); if (ea) ea.onclick = () => { cur.ex.qs.forEach(q => delete q.sh); startEx(cur.i); };
     const el = $('#exList'); if (el) el.onclick = () => { cur = null; drawExList(); };
+    arrivals();
   }
-  // if the current step wants a broadcast that was just turned away, say why
+  // if the current step is waiting for a message, say whether the last one printed and why not
   function lastWhy(s) {
     if (!s.bc) return '';
     const last = [...cur.ev].reverse().find(e => (e.type === 'rejected' || e.type === 'received') && s.bc.includes(e.d.id));
-    return last ? `<span class="why">${last.type === 'rejected' ? 'Not printed: ' : ''}${esc(last.d.reason)}</span>` : '';
+    return last ? `<span class="why">${last.type === 'rejected' ? 'Not printed: ' : ''}${esc(last.d.reason)}</span>` : '<span class="why">Waiting for the message to come in…</span>';
   }
 
   // ---------- decoding quiz ----------
@@ -346,5 +303,5 @@
   }
 
   // ---------- start ----------
-  drawBroadcasts(); drawLog(); setTab('free'); RX.render();
+  setTab('free'); RX.render();
 })();

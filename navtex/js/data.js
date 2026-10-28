@@ -1,4 +1,4 @@
-/* NAVTEX simulator: stations, message types, stored messages and the broadcasts you can "put on the air".
+/* NAVTEX simulator: stations, message types, stored messages and the messages that arrive at the receiver.
    Facts follow the Yam Sailing GMDSS course notes (NAVTEX slides). Message texts are the ones from the
    course's Flash simulator, with typos fixed. A few '*' characters are left in on purpose: that is how a
    receiver shows characters it could not decode, and it is what the CER (character error rate) measures. */
@@ -120,7 +120,7 @@ NX.messages = {
     'VERY ROUGH SEA, POOR VISIBILITY',
     'NNNN'] },
 
-  // extra broadcasts used by the exercises
+  // extra messages that arrive during free practice and the exercises
   PA24: { freq: 518, cer: 0.8, lines: [
     'ZCZC PA24',
     '201015 UTC JUNE 2007',
@@ -190,8 +190,8 @@ NX.messages = {
 NX.factoryLog = ['PA23', 'PD00', 'MD00', 'MB02', 'PE55', 'FA13', 'IE21', 'PB02'];
 NX.factoryNew = ['PA23', 'PD00'];
 
-// broadcasts shown under the receiver; tap one to "transmit" it
-NX.broadcasts = ['PD00', 'PA23', 'PA24', 'PA25', 'MB03', 'PF10', 'PL05', 'HE30', 'DA41', 'MZ00'];
+// messages that reach the aerial now and then in free practice (the receiver's settings decide what prints)
+NX.traffic = ['PA24', 'PA25', 'MB03', 'PF10', 'PL05', 'HE30', 'DA41', 'MZ00'];
 
 NX.idParts = id => ({ b1: id[0], b2: id[1], nr: id.slice(2) });
 NX.typeShort = id => (NX.types[id[1]] || {}).short || '';

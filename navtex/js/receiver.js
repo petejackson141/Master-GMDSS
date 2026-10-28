@@ -153,7 +153,6 @@ const RX = (() => {
 
   function key(k) {
     if (k === 'power') return power(!on);
-    if (k === 'navtex') return emit('navtexKey');
     if (!on) return;
     // keys that work from any screen
     if (k === 'dim') { dim = (dim + 1) % 3; render(); emit('dim', { level: dim }); return; }
@@ -342,7 +341,8 @@ const RX = (() => {
       : `${id} received and stored (${tn} from ${sn}).` };
   }
 
-  function transmit(id) {
+  // a message reaches the aerial: the receiver decides whether to print it
+  function incoming(id) {
     const r = check(id);
     if (r.ok) {
       st.log = st.log.filter(m => m.id !== id);
@@ -359,7 +359,7 @@ const RX = (() => {
   function reset() { stopBeep(); st = factory(); save(); on = false; dim = 0; ui = { s: 'off' }; render(); emit('reset'); }
 
   return {
-    key, transmit, check, reset, render, power,
+    key, incoming, check, reset, render, power,
     on: fn => listeners.push(fn),
     get state() { return st; }, get isOn() { return on; }, get screen() { return ui.s; }, get ui() { return ui; },
     stationOk, typeOk, findMsg, FREQS

@@ -29,10 +29,9 @@ const DOCS = (() => {
   <ul><li><b>Rcvd msg log:</b> the list of all messages in memory.</li>
   <li><b>Time display:</b> 12 or 24 hour clock.</li>
   <li><b>All clear:</b> deletes all messages and returns the maker's settings.</li></ul></li></ul>
-<h3>6. Receiving a message (demo)</h3>
-<ul><li>Under the receiver, <b>On the air</b> lists broadcasts. Tap one to transmit it. The <b>Navtex</b> key shows or hides that list.</li>
-<li>If the set accepts it, the message appears with an alarm (if switched on). Press <b>MENU</b> to stop the beep.</li>
-<li>The <b>Reception log</b> explains why a broadcast was or wasn't printed.</li></ul>`;
+<h3>6. Receiving a message</h3>
+<ul><li>While the set is on, messages arrive on their own. If the settings accept one, it appears on the screen with an alarm (if switched on). Press <b>MENU</b> to stop the beep.</li>
+<li>If the settings don't accept it (wrong frequency, station or type set to Ignore, already in memory, too many errors), nothing is printed.</li></ul>`;
 
   // ---- map: simple equirectangular sketch of the Eastern Mediterranean ----
   const W = 640, LON0 = 22, LON1 = 37, LAT0 = 30, LAT1 = 41.5;
