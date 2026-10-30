@@ -1,7 +1,9 @@
 # Master GMDSS
 
+Backup and restore steps: see `RESTORE.md`.
+
 A suite of GMDSS training tools, built as one installable web app (PWA).
-Version 1.6.0. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
+Version 1.8.5. Styled like Sail la Vie (Space Grotesk, Inter, Playfair Display; navy, teal and coral).
 
 The home screen has four sections, each with its own menu page:
 
